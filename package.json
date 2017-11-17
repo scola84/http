@@ -9,6 +9,7 @@
   "jsnext:main": "./index.js",
   "dependencies": {
     "@scola/worker": "^1.0.0",
+    "buffer": "^5.0.8",
     "qs": "^6.5.1"
   }
 }
