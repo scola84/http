@@ -2,14 +2,25 @@ import Message from './message';
 import Response from './response';
 import qs from 'qs';
 
+let defaultHeaders = null;
+
 export default class Request extends Message {
   constructor(options = {}) {
+    if (defaultHeaders !== null) {
+      options.headers = Object.assign({},
+        defaultHeaders, options.headers);
+    }
+
     super(options);
 
     this.method = options.method;
     this.url = options.url;
 
     this._url = null;
+  }
+
+  static setHeaders(value) {
+    defaultHeaders = Object.assign(defaultHeaders || {}, value);
   }
 
   createResponse(options = {}) {
