@@ -54,7 +54,7 @@ export default class Message {
         value = '';
       } else if (char === '"') {
         continue;
-      } else if (char === ' ' && (key === 0 || key === '')) {
+      } else if (char === ' ' && value === '') {
         continue;
       } else {
         value += char;
