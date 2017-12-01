@@ -2,7 +2,7 @@ import Message from './message';
 import Response from './response';
 import qs from 'qs';
 
-let defaultHeaders = null;
+const defaultHeaders = {};
 
 export default class Request extends Message {
   constructor(options = {}) {
@@ -19,8 +19,14 @@ export default class Request extends Message {
     this._url = null;
   }
 
-  static setHeaders(value) {
-    defaultHeaders = Object.assign(defaultHeaders || {}, value);
+  static setHeaders(headers) {
+    Object.keys(headers).forEach((name) => {
+      if (headers[name] === null) {
+        delete defaultHeaders[name];
+      } else {
+        defaultHeaders[name] = headers[name];
+      }
+    });
   }
 
   createResponse(options = {}) {

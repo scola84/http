@@ -1,5 +1,6 @@
 export default class Message {
   constructor(options = {}) {
+    this.auth = {};
     this.body = {};
     this.box = options.box;
     this.headers = options.headers || {};
