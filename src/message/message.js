@@ -1,6 +1,5 @@
 export default class Message {
   constructor(options = {}) {
-    this.auth = {};
     this.body = {};
     this.box = options.box;
     this.headers = options.headers || {};
@@ -8,6 +7,7 @@ export default class Message {
     this.protocol = { name: null, version: null };
     this.socket = options.socket;
     this.state = {};
+    this.user = null;
   }
 
   deleteHeader(name) {
