@@ -31,10 +31,10 @@ import TransferEncodingDecoder from './src/decoder/transfer-encoding';
 import TransferEncodingEncoder from './src/encoder/transfer-encoding';
 import TransferEncodingHeader from './src/header/transfer-encoding';
 import UpgradeResponder from './src/responder/upgrade';
-
 import createBrowser from './src/factory/create-browser';
 import createClient from './src/factory/create-client';
 import createServer from './src/factory/create-server';
+import locale from './src/locale/strings';
 
 export {
   BodyParser,
@@ -73,4 +73,5 @@ export {
   createBrowser,
   createClient,
   createServer,
+  locale
 };
