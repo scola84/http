@@ -14,7 +14,9 @@ import DateHeader from './src/header/date';
 import ErrorResponder from './src/responder/error';
 import HeaderFieldsParser from './src/parser/header-fields';
 import HeaderFieldsWriter from './src/writer/header-fields';
+import ListResolver from './src/resolver/list';
 import MethodRouter from './src/router/method';
+import ObjectResolver from './src/resolver/object';
 import PathRouter from './src/router/path';
 import Request from './src/message/request';
 import RequestLineParser from './src/parser/request-line';
@@ -51,7 +53,9 @@ export {
   ErrorResponder,
   HeaderFieldsParser,
   HeaderFieldsWriter,
+  ListResolver,
   MethodRouter,
+  ObjectResolver,
   PathRouter,
   Request,
   RequestLineParser,

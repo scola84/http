@@ -46,6 +46,10 @@ export default class BodyParser extends Worker {
       throw new Error('413 Body length exceeds maximum');
     }
 
+    if (data.length === 0) {
+      data = {};
+    }
+
     this.pass(message, data, callback);
   }
 
