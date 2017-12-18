@@ -23,6 +23,11 @@ export default class ObjectResolver extends Worker {
     const response = request.createResponse();
     response.status = this._status;
 
+    if (data === null) {
+      response.setHeader('Content-Type', 'application/octet-stream');
+      data = '';
+    }
+
     this.pass(response, data, callback);
   }
 
