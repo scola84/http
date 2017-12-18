@@ -3,7 +3,7 @@ import { Worker } from '@scola/worker';
 export default class ErrorResponder extends Worker {
   err(message, error, callback) {
     const response = message.createResponse();
-    const match = error.message.match(/(\d{3})/);
+    const match = error.message.match(/^(\d{3})/);
 
     let data = '';
 
