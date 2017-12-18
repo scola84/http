@@ -1,12 +1,14 @@
 import { Worker } from '@scola/worker';
 
 export default class BodyParser extends Worker {
-  constructor(methods) {
-    super(methods);
-    this._maxLength = 1024 * 1024;
+  constructor(options = {}) {
+    super(options);
+
+    this._maxLength = null;
+    this.setMaxLength(options.maxLength);
   }
 
-  setMaxLength(maxLength) {
+  setMaxLength(maxLength = 1024 * 1024) {
     this._maxLength = maxLength;
     return this;
   }

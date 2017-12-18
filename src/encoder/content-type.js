@@ -1,12 +1,14 @@
 import { Manager } from '@scola/worker';
 
 export default class ContentTypeEncoder extends Manager {
-  constructor(methods) {
-    super(methods);
-    this._strict = true;
+  constructor(options = {}) {
+    super(options);
+
+    this._strict = null;
+    this.setStrict(options.strict);
   }
 
-  setStrict(value) {
+  setStrict(value = true) {
     this._strict = value;
     return this;
   }

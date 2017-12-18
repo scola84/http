@@ -1,12 +1,14 @@
 import { Worker } from '@scola/worker';
 
 export default class ListResolver extends Worker {
-  constructor(methods) {
-    super(methods);
-    this._status = 200;
+  constructor(options = {}) {
+    super(options);
+
+    this._status = null;
+    this.setStatus(options.status);
   }
 
-  setStatus(value) {
+  setStatus(value = 200) {
     this._status = value;
     return this;
   }
