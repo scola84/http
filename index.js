@@ -34,7 +34,7 @@ import UpgradeResponder from './src/responder/upgrade';
 import createBrowser from './src/factory/create-browser';
 import createClient from './src/factory/create-client';
 import createServer from './src/factory/create-server';
-import locale from './src/locale/strings';
+import locale from './src/locale';
 
 export {
   BodyParser,
