@@ -69,9 +69,15 @@ export {
   TransferEncodingDecoder,
   TransferEncodingEncoder,
   TransferEncodingHeader,
-  UpgradeResponder,
+  UpgradeResponder
+};
+
+export {
   createBrowser,
   createClient,
-  createServer,
+  createServer
+};
+
+export {
   locale
 };
