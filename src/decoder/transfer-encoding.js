@@ -13,7 +13,7 @@ export default class TransferEncodingDecoder extends Manager {
     }
 
     for (let i = 0; i < transfer.length; i += 1) {
-      if (typeof this._workers[transfer[i][0]] === 'undefined') {
+      if (typeof this._pool[transfer[i][0]] === 'undefined') {
         throw new Error(`501 Decoder not implemented (${transfer[i][0]})`);
       }
     }

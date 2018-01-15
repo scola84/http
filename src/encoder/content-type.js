@@ -28,7 +28,7 @@ export default class ContentTypeEncoder extends Manager {
 
     const type = message.parseHeader('Content-Type', true);
 
-    if (typeof this._workers[type[0]] === 'undefined') {
+    if (typeof this._pool[type[0]] === 'undefined') {
       if (this._strict === true) {
         throw new Error(`406 Encoder not implemented (${type[0]})`);
       }

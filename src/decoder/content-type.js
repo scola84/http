@@ -24,7 +24,7 @@ export default class ContentTypeDecoder extends Manager {
       return false;
     }
 
-    if (typeof this._workers[type[0]] === 'undefined') {
+    if (typeof this._pool[type[0]] === 'undefined') {
       if (this._strict === true) {
         throw new Error(`415 Decoder not implemented (${type[0]})`);
       }

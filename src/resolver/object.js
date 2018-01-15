@@ -36,6 +36,6 @@ export default class ObjectResolver extends Worker {
       return this._filter(request, data);
     }
 
-    return data.object;
+    return request.method === 'GET' ? data.object : null;
   }
 }

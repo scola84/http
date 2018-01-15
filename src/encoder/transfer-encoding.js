@@ -17,7 +17,7 @@ export default class TransferEncodingEncoder extends Manager {
     const transfer = message.headers['Transfer-Encoding'];
 
     for (let i = 0; i < transfer.length; i += 1) {
-      if (typeof this._workers[transfer[i]] === 'undefined') {
+      if (typeof this._pool[transfer[i]] === 'undefined') {
         throw new Error(`501 Encoder not implemented (${transfer[i]})`);
       }
     }

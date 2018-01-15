@@ -17,7 +17,7 @@ export default class ContentEncodingEncoder extends Manager {
     const content = message.headers['Content-Encoding'];
 
     for (let i = 0; i < content.length; i += 1) {
-      if (typeof this._workers[content[i]] === 'undefined') {
+      if (typeof this._pool[content[i]] === 'undefined') {
         throw new Error(`501 Encoder not implemented (${content[i]})`);
       }
     }

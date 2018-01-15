@@ -17,6 +17,7 @@ import HeaderFieldsWriter from './src/writer/header-fields';
 import ListResolver from './src/resolver/list';
 import MethodRouter from './src/router/method';
 import ObjectResolver from './src/resolver/object';
+import PasswordChecker from './src/checker/password';
 import PathRouter from './src/router/path';
 import Request from './src/message/request';
 import RequestLineParser from './src/parser/request-line';
@@ -24,6 +25,7 @@ import RequestLineWriter from './src/writer/request-line';
 import Response from './src/message/response';
 import ResponseLineParser from './src/parser/response-line';
 import ResponseLineWriter from './src/writer/response-line';
+import RoleChecker from './src/checker/role';
 import ServerConnector from './src/connector/server';
 import TrailerFieldsParser from './src/parser/trailer-fields';
 import TrailerFieldsWriter from './src/writer/trailer-fields';
@@ -31,6 +33,8 @@ import TransferEncodingDecoder from './src/decoder/transfer-encoding';
 import TransferEncodingEncoder from './src/encoder/transfer-encoding';
 import TransferEncodingHeader from './src/header/transfer-encoding';
 import UpgradeResponder from './src/responder/upgrade';
+import User from './src/user/user';
+import UserChecker from './src/checker/user';
 import createBrowser from './src/factory/create-browser';
 import createClient from './src/factory/create-client';
 import createServer from './src/factory/create-server';
@@ -56,6 +60,7 @@ export {
   ListResolver,
   MethodRouter,
   ObjectResolver,
+  PasswordChecker,
   PathRouter,
   Request,
   RequestLineParser,
@@ -63,13 +68,16 @@ export {
   Response,
   ResponseLineParser,
   ResponseLineWriter,
+  RoleChecker,
   ServerConnector,
   TrailerFieldsParser,
   TrailerFieldsWriter,
   TransferEncodingDecoder,
   TransferEncodingEncoder,
   TransferEncodingHeader,
-  UpgradeResponder
+  UpgradeResponder,
+  User,
+  UserChecker
 };
 
 export {

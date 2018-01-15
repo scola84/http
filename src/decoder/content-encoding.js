@@ -13,7 +13,7 @@ export default class ContentEncodingDecoder extends Manager {
     }
 
     for (let i = 0; i < content.length; i += 1) {
-      if (typeof this._workers[content[i][0]] === 'undefined') {
+      if (typeof this._pool[content[i][0]] === 'undefined') {
         throw new Error(`501 Decoder not implemented (${content[i][0]})`);
       }
     }
