@@ -26,9 +26,11 @@ export default class BrowserMediator extends Worker {
       this.pass(message.createResponse(), Buffer.from(responseData));
     };
 
-    Object.keys(message.headers || {}).forEach((name) => {
-      message.socket.setRequestHeader(name, message.headers[name]);
-    });
+    const names = Object.keys(message.headers || {});
+
+    for (let i = 0; i < names.length; i += 1) {
+      message.socket.setRequestHeader(names[i], message.headers[names[i]]);
+    }
 
     message.socket.send(data);
   }

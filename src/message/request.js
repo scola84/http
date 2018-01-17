@@ -20,13 +20,15 @@ export default class Request extends Message {
   }
 
   static setHeaders(headers) {
-    Object.keys(headers).forEach((name) => {
-      if (headers[name] === null) {
-        delete defaultHeaders[name];
+    const names = Object.keys(headers);
+
+    for (let i = 0; i < names.length; i += 1) {
+      if (headers[names[i]] === null) {
+        delete defaultHeaders[names[i]];
       } else {
-        defaultHeaders[name] = headers[name];
+        defaultHeaders[names[i]] = headers[names[i]];
       }
-    });
+    }
   }
 
   createResponse(options = {}) {
