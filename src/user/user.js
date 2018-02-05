@@ -2,16 +2,16 @@ import get from 'lodash-es/get';
 let masks = {};
 
 export default class User {
+  static setMasks(value) {
+    masks = value;
+  }
+
   constructor() {
     this._id = null;
     this._parents = {};
     this._permissions = {};
     this._person = {};
     this._token = null;
-  }
-
-  static setMasks(value) {
-    masks = value;
   }
 
   getId() {
@@ -66,29 +66,21 @@ export default class User {
     return this;
   }
 
-  may(name = '') {
-    name = name.split('.');
+  may(names) {
+    names = Array.isArray(names) ? names : [names];
+    let name = null;
 
-    if (name[name.length - 1] === '*') {
-      return this._mayWildcard(name.slice(0, -1));
+    for (let i = 0; i < names.length; i += 1) {
+      name = names[i].split('.');
+
+      const permission = this._permissions[name[0]];
+      const mask = get(masks, name);
+
+      if ((permission & mask) !== 0) {
+        return true;
+      }
     }
 
-    return this._may(name);
-  }
-
-  _may(name) {
-    const permission = this._permissions[name[0]];
-    const mask = get(masks, name);
-
-    return (permission & mask) > 0;
-  }
-
-  _mayWildcard(name) {
-    const permission = this._permissions[name[0]];
-    const mask = get(masks, name);
-
-    return Object.keys(mask).some((key) => {
-      return (permission & mask[key]) > 0;
-    });
+    return false;
   }
 }

@@ -2,7 +2,7 @@ import { Worker } from '@scola/worker';
 import { Buffer } from 'buffer/';
 
 export default class BrowserMediator extends Worker {
-  act(message, data) {
+  act(message, data, callback) {
     message.socket.onerror = () => {
       message.socket.onerror = null;
       message.socket.onload = null;
@@ -23,7 +23,7 @@ export default class BrowserMediator extends Worker {
         message.socket.getAllResponseHeaders() + '\r\n' +
         message.socket.responseText;
 
-      this.pass(message.createResponse(), Buffer.from(responseData));
+      this.pass(message.createResponse(), Buffer.from(responseData), callback);
     };
 
     const names = Object.keys(message.headers || {});

@@ -5,6 +5,18 @@ import qs from 'qs';
 const defaultHeaders = {};
 
 export default class Request extends Message {
+  static setHeaders(headers) {
+    const names = Object.keys(headers);
+
+    for (let i = 0; i < names.length; i += 1) {
+      if (headers[names[i]] === null) {
+        delete defaultHeaders[names[i]];
+      } else {
+        defaultHeaders[names[i]] = headers[names[i]];
+      }
+    }
+  }
+
   constructor(options = {}) {
     if (defaultHeaders !== null) {
       options.headers = Object.assign({},
@@ -17,18 +29,6 @@ export default class Request extends Message {
     this.url = options.url;
 
     this._url = null;
-  }
-
-  static setHeaders(headers) {
-    const names = Object.keys(headers);
-
-    for (let i = 0; i < names.length; i += 1) {
-      if (headers[names[i]] === null) {
-        delete defaultHeaders[names[i]];
-      } else {
-        defaultHeaders[names[i]] = headers[names[i]];
-      }
-    }
   }
 
   createResponse(options = {}) {

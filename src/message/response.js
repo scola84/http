@@ -2,6 +2,10 @@ import Message from './message';
 let defaultHeaders = null;
 
 export default class Response extends Message {
+  static setHeaders(value) {
+    defaultHeaders = Object.assign(defaultHeaders || {}, value);
+  }
+
   constructor(options = {}) {
     if (defaultHeaders !== null) {
       options.headers = Object.assign({},
@@ -18,10 +22,6 @@ export default class Response extends Message {
     if (typeof connection !== 'undefined') {
       this.headers.Connection = connection;
     }
-  }
-
-  static setHeaders(value) {
-    defaultHeaders = Object.assign(defaultHeaders || {}, value);
   }
 
   createResponse() {

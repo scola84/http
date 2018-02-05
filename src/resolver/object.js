@@ -30,12 +30,4 @@ export default class ObjectResolver extends Worker {
 
     this.pass(response, data, callback);
   }
-
-  filter(request, data) {
-    if (this._filter) {
-      return this._filter(request, data);
-    }
-
-    return request.method === 'GET' ? data.object : null;
-  }
 }
