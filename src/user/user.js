@@ -66,7 +66,7 @@ export default class User {
     return this;
   }
 
-  may(names) {
+  may(names = '') {
     names = Array.isArray(names) ? names : [names];
     let name = null;
 
