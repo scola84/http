@@ -76,11 +76,24 @@ export default class User {
       const permission = this._permissions[name[0]];
       const mask = get(masks, name);
 
-      if ((permission & mask) !== 0) {
+      if ((this._and(permission, mask)) !== 0) {
         return true;
       }
     }
 
     return false;
+  }
+
+  _and(v1, v2) {
+    // https://stackoverflow.com/a/43666199
+    const hi = 0x80000000;
+    const low = 0x7fffffff;
+    const hi1 = ~~(v1 / hi);
+    const hi2 = ~~(v2 / hi);
+    const low1 = v1 & low;
+    const low2 = v2 & low;
+    const h = hi1 & hi2;
+    const l = low1 & low2;
+    return h * hi + l;
   }
 }
