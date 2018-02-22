@@ -36,6 +36,18 @@ export default class User {
     return this._person;
   }
 
+  getPersonName() {
+    let name = '';
+
+    name += this._person.given_name;
+    name += this._person.additional_name ?
+      ' ' + this._person.additional_name : '';
+    name += this._person.family_name ?
+      ' ' + this._person.family_name : '';
+
+    return name;
+  }
+
   setPerson(value) {
     this._person = {
       honorific_prefix: value.honorific_prefix,
