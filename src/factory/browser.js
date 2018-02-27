@@ -12,7 +12,7 @@ import TrailerFieldsParser from '../parser/trailer-fields';
 import TransferEncodingDecoder from '../decoder/transfer-encoding';
 import TransferEncodingEncoder from '../encoder/transfer-encoding';
 
-export default function createBrowser(codec) {
+export default function createBrowser(...codecs) {
   const bodyParser = new BodyParser();
   const browserConnector = new BrowserConnector();
   const browserMediator = new BrowserMediator();
@@ -27,14 +27,14 @@ export default function createBrowser(codec) {
   const transferEncodingDecoder = new TransferEncodingDecoder();
   const transferEncodingEncoder = new TransferEncodingEncoder();
 
-  if (typeof codec !== 'undefined') {
+  for (let i = 0; i < codecs.length; i += 1) {
     contentTypeDecoder
       .setStrict(false)
-      .manage(codec.type, new codec.Decoder());
+      .manage(codecs[i].type, new codecs[i].Decoder());
 
     contentTypeEncoder
       .setStrict(false)
-      .manage(codec.type, new codec.Encoder());
+      .manage(codecs[i].type, new codecs[i].Encoder());
   }
 
   browserConnector
