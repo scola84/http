@@ -26,7 +26,12 @@ export default class HeaderFieldsWriter extends Worker {
       headers += key + ': ' + message.headers[key] + '\r\n';
     }
 
-    data = headers + '\r\n' + data;
+    if (data instanceof Buffer) {
+      data = Buffer.concat([Buffer.from(headers + '\r\n'), Buffer.from(data)]);
+    } else {
+      data = headers + '\r\n' + data;
+    }
+
     message.state.headers = true;
 
     return data;

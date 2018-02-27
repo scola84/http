@@ -17,11 +17,16 @@ export default class ResponseLineWriter extends Worker {
   }
 
   _write(message, data) {
-    data = 'HTTP/1.1 ' +
+    const line = 'HTTP/1.1 ' +
       (message.status || 200) + ' ' +
       STATUS_CODES[message.status || 200] +
-      '\r\n' +
-      data;
+      '\r\n';
+
+    if (data instanceof Buffer) {
+      data = Buffer.concat([Buffer.from(line), data]);
+    } else {
+      data = line + data;
+    }
 
     message.state.line = true;
 
