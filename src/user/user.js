@@ -8,9 +8,9 @@ export default class User {
 
   constructor() {
     this._id = null;
-    this._parents = {};
-    this._permissions = {};
-    this._person = {};
+    this._parents = null;
+    this._permissions = null;
+    this._person = null;
     this._token = null;
   }
 
