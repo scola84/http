@@ -22,9 +22,12 @@ export default class Message {
       value;
   }
 
-  parseHeader(name, first = false) {
+  parseHeader(name, first) {
     const header = this.getHeader(name);
+    return this.parseHeaderValue(header, first);
+  }
 
+  parseHeaderValue(header, first = false) {
     if (typeof header === 'undefined') {
       return header;
     }

@@ -5,6 +5,10 @@ import qs from 'qs';
 const defaultHeaders = {};
 
 export default class Request extends Message {
+  static getHeaders() {
+    return defaultHeaders;
+  }
+
   static setHeaders(headers) {
     const names = Object.keys(headers);
 
