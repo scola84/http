@@ -9,9 +9,11 @@ export default class User {
   constructor() {
     this._id = null;
     this._parents = null;
+    this._password = null;
     this._permissions = null;
     this._person = null;
     this._token = null;
+    this._username = null;
   }
 
   getId() {
@@ -55,9 +57,17 @@ export default class User {
       given_name: value.given_name,
       additional_name: value.additional_name,
       family_name: value.family_name,
-      tel: value.tel,
-      username: value.username
+      tel: value.tel
     };
+  }
+
+  getPassword() {
+    return this._password;
+  }
+
+  setPassword(value) {
+    this._password = value;
+    return this;
   }
 
   getPermissions() {
@@ -75,6 +85,15 @@ export default class User {
 
   setToken(value) {
     this._token = value;
+    return this;
+  }
+
+  getUsername() {
+    return this._username;
+  }
+
+  setUsername(value) {
+    this._username = value;
     return this;
   }
 
