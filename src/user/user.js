@@ -7,13 +7,39 @@ export default class User {
   }
 
   constructor() {
+    this._code = null;
+    this._details = null;
     this._id = null;
     this._parents = null;
-    this._password = null;
-    this._permissions = null;
-    this._person = null;
+    this._role = null;
     this._token = null;
-    this._username = null;
+  }
+
+  getCode() {
+    return this._code;
+  }
+
+  setCode(value) {
+    this._code = value;
+    return this;
+  }
+
+  getDetail(name) {
+    return this._details[name];
+  }
+
+  getDetails() {
+    return this._person;
+  }
+
+  setDetail(name, value) {
+    this._details[name] = value;
+    return this;
+  }
+
+  setDetails(value) {
+    this._details = value;
+    return this;
   }
 
   getId() {
@@ -25,6 +51,20 @@ export default class User {
     return this;
   }
 
+  getName() {
+    let name = '';
+
+    if (this._details !== null) {
+      name += this._details.given_name;
+      name += this._details.additional_name ?
+        ' ' + this._details.additional_name : '';
+      name += this._details.family_name ?
+        ' ' + this._details.family_name : '';
+    }
+
+    return name;
+  }
+
   getParents() {
     return this._parents;
   }
@@ -34,48 +74,21 @@ export default class User {
     return this;
   }
 
-  getPerson() {
-    return this._person;
+  getRole() {
+    return this._role;
   }
 
-  getPersonName() {
-    let name = '';
-
-    name += this._person.given_name;
-    name += this._person.additional_name ?
-      ' ' + this._person.additional_name : '';
-    name += this._person.family_name ?
-      ' ' + this._person.family_name : '';
-
-    return name;
+  getRoleDetail(name) {
+    return this._role[name];
   }
 
-  setPerson(value) {
-    this._person = {
-      honorific_prefix: value.honorific_prefix,
-      honorific_suffix: value.honorific_suffix,
-      given_name: value.given_name,
-      additional_name: value.additional_name,
-      family_name: value.family_name,
-      tel: value.tel
-    };
-  }
-
-  getPassword() {
-    return this._password;
-  }
-
-  setPassword(value) {
-    this._password = value;
+  setRoleDetail(name, value) {
+    this._role[name] = value;
     return this;
   }
 
-  getPermissions() {
-    return this._permissions;
-  }
-
-  setPermissions(value) {
-    this._permissions = value;
+  setRole(value) {
+    this._role = value;
     return this;
   }
 
@@ -88,15 +101,6 @@ export default class User {
     return this;
   }
 
-  getUsername() {
-    return this._username;
-  }
-
-  setUsername(value) {
-    this._username = value;
-    return this;
-  }
-
   may(names = '') {
     names = Array.isArray(names) ? names : [names];
     let name = null;
@@ -104,7 +108,7 @@ export default class User {
     for (let i = 0; i < names.length; i += 1) {
       name = names[i].split('.');
 
-      const permission = this._permissions[name[0]];
+      const permission = this._role[name[0]];
       const mask = get(masks, name);
 
       if ((this._and(permission, mask)) !== 0) {

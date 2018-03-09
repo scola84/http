@@ -2,7 +2,7 @@ import { Worker } from '@scola/worker';
 
 export default class UserChecker extends Worker {
   act(request, data, callback) {
-    if (request.user.getId() === null) {
+    if (request.user === null) {
       throw new Error('401 User not found');
     }
 

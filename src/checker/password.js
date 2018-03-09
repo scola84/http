@@ -3,7 +3,10 @@ import { compare } from 'bcrypt';
 
 export default class PasswordChecker extends Worker {
   act(request, data, callback) {
-    compare(data.password, request.user.getPassword(), (error, result) => {
+    const password = data.password;
+    const hash = request.user.getDetail('password');
+
+    compare(password, hash, (error, result) => {
       if (error) {
         this.fail(request, error);
         return;
@@ -19,7 +22,7 @@ export default class PasswordChecker extends Worker {
   }
 
   decide(request) {
-    if (typeof request.user === 'undefined') {
+    if (request.user === null) {
       throw new Error('401 User not found');
     }
 
