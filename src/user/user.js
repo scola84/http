@@ -7,21 +7,11 @@ export default class User {
   }
 
   constructor() {
-    this._code = null;
-    this._details = null;
+    this._details = {};
     this._id = null;
     this._parents = null;
     this._role = null;
     this._token = null;
-  }
-
-  getCode() {
-    return this._code;
-  }
-
-  setCode(value) {
-    this._code = value;
-    return this;
   }
 
   getDetail(name) {
@@ -30,6 +20,12 @@ export default class User {
 
   getDetails() {
     return this._person;
+  }
+
+  hasDetail(name) {
+    return typeof this._details[name] !== 'undefined' &&
+      this._details[name] !== null &&
+      this._details[name] !== '';
   }
 
   setDetail(name, value) {

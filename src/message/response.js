@@ -22,6 +22,12 @@ export default class Response extends Message {
     if (typeof connection !== 'undefined') {
       this.headers.Connection = connection;
     }
+
+    const setCookie = this.request.getHeader('Set-Cookie');
+
+    if (typeof setCookie !== 'undefined') {
+      this.headers['Set-Cookie'] = setCookie;
+    }
   }
 
   createResponse() {
