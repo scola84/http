@@ -17,8 +17,12 @@ export default class BrowserMediator extends Worker {
     };
 
     message.socket.onload = () => {
+      callback();
+
       message.socket.onerror = null;
       message.socket.onload = null;
+      message.socket.onprogress = null;
+      message.socket.upload.onprogress = null;
 
       const responseData = 'HTTP/1.1 ' +
         message.socket.status + ' ' + message.socket.statusText + '\r\n' +
