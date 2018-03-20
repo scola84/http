@@ -31,7 +31,9 @@ export default class ObjectResolver extends Streamer {
     }
 
     const response = request.createResponse();
+
     response.status = this._status;
+    response.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
 
     if (data === null) {
       this._resolveEmpty(response, data, callback);

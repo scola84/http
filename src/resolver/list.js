@@ -17,7 +17,9 @@ export default class ListResolver extends Worker {
     data = this.filter(request, data);
 
     const response = request.createResponse();
+
     response.status = this._status;
+    response.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
 
     this.pass(response, data, callback);
   }
