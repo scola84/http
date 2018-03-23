@@ -17,7 +17,11 @@ export default class BrowserMediator extends Worker {
     };
 
     message.socket.onload = () => {
-      callback();
+      callback({
+        lengthComputable: true,
+        loaded: 1,
+        total: 1
+      });
 
       message.socket.onerror = null;
       message.socket.onload = null;
@@ -49,5 +53,11 @@ export default class BrowserMediator extends Worker {
     }
 
     message.socket.send(data);
+
+    callback({
+      lengthComputable: true,
+      loaded: 1,
+      total: 10
+    });
   }
 }
