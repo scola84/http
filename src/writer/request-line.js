@@ -3,7 +3,7 @@ import { Worker } from '@scola/worker';
 export default class RequestLineWriter extends Worker {
   act(message, data, callback) {
     data = message.method + ' ' +
-      message.url + ' HTTP/1.1' +
+      message.formatRelativeUrl() + ' HTTP/1.1' +
       '\r\n' +
       data;
 
