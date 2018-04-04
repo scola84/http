@@ -8,21 +8,30 @@ export default class ClientConnector extends Worker {
     const message = new Request(options);
 
     if (typeof message.socket === 'undefined') {
-      message.socket = this._createSocket(message);
+      this._connect(message, data, callback);
+    } else {
+      this.pass(message, data, callback);
     }
-
-    this.pass(message, data, callback);
   }
 
-  _createSocket(message) {
+  _connect(message, data, callback) {
+    const library = message.url.scheme === 'http' ? net : tls;
+    const event = library === net ? 'connect' : 'secureConnect';
+
     message.headers.Host = message.formatHost();
 
-    if (message.url.scheme === 'https') {
-      return tls.connect(message.url.port, message.url.hostname,
-        message.options);
-    }
+    const socket = library.connect(Object.assign({
+      host: message.url.hostname,
+      port: message.url.port || 443
+    }, message.options));
 
-    return net.connect(message.url.port, message.url.hostname,
-      message.options);
+    socket.once('error', (error) => {
+      this.log('error', message, error);
+    });
+
+    socket.once(event, () => {
+      message.socket = socket;
+      this.pass(message, data, callback);
+    });
   }
 }
