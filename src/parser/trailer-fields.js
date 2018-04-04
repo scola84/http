@@ -9,8 +9,10 @@ export default class TrailerFieldsParser extends HeaderFieldsParser {
     super.act(message, data, callback);
   }
 
-  decide(message) {
-    return message.state.body === true && message.state.headers === false;
+  decide(message, data) {
+    return data !== null &&
+      message.state.body === true &&
+      message.state.headers === false;
   }
 
   pass(message, data, callback) {

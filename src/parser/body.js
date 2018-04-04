@@ -33,7 +33,9 @@ export default class BodyParser extends Worker {
     }
 
     data = data.slice(message.parser.begin);
+
     message.body.length = (message.body.length || 0) + data.length;
+    message.parser.begin = 0;
 
     if (message.body.length > contentLength) {
       data = data.slice(0, contentLength - message.body.length);
@@ -55,8 +57,8 @@ export default class BodyParser extends Worker {
     this.pass(message, data, callback);
   }
 
-  decide(message) {
-    return message.state.body !== true &&
+  decide(message, data) {
+    return data !== null && message.state.body !== true &&
       message.getHeader('Transfer-Encoding', '').indexOf('chunked') === -1;
   }
 }

@@ -15,6 +15,10 @@ export default class HeaderFieldsWriter extends Worker {
     return message.state.headers !== true;
   }
 
+  _isEmpty(data) {
+    return typeof data === 'undefined' || data === null;
+  }
+
   _write(message, data) {
     const keys = Object.keys(message.headers);
 
@@ -29,7 +33,7 @@ export default class HeaderFieldsWriter extends Worker {
     if (data instanceof Buffer) {
       data = Buffer.concat([Buffer.from(headers + '\r\n'), Buffer.from(data)]);
     } else {
-      data = headers + '\r\n' + data;
+      data = headers + '\r\n' + (this._isEmpty(data) ? '' : data);
     }
 
     message.state.headers = true;

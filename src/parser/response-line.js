@@ -14,6 +14,10 @@ export default class ResponseLineParser extends Worker {
   }
 
   act(message, data, callback) {
+    if (data.length === 0) {
+      throw new Error('Empty reply from server');
+    }
+
     for (; message.parser.end < data.length; message.parser.end += 1) {
       if (message.state.line === true) {
         break;
