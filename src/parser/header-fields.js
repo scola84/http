@@ -83,7 +83,9 @@ export default class HeaderFieldsParser extends Worker {
       message.parser.end - message.parser.spaces - 1);
 
     if (typeof message.headers[key] !== 'undefined') {
-      value = message.headers[key] + ', ' + value;
+      if (message.headers[key].indexOf(value) === -1) {
+        value = message.headers[key] + ', ' + value;
+      }
     }
 
     message.headers[key] = value;
