@@ -62,6 +62,7 @@ import {
 } from './src/responder';
 
 import {
+  AgentRouter,
   MethodRouter,
   PathRouter
 } from './src/router';
@@ -154,6 +155,7 @@ export {
 };
 
 export {
+  AgentRouter,
   MethodRouter,
   PathRouter
 };
