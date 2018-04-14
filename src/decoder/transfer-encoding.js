@@ -1,11 +1,7 @@
 import { Manager } from '@scola/worker';
 
 export default class TransferEncodingDecoder extends Manager {
-  decide(message, data) {
-    if (data === null) {
-      return false;
-    }
-
+  decide(message) {
     if (typeof message.body.transfer !== 'undefined') {
       return true;
     }

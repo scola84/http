@@ -13,11 +13,7 @@ export default class ContentTypeDecoder extends Manager {
     return this;
   }
 
-  decide(message, data) {
-    if (data === null) {
-      return false;
-    }
-
+  decide(message) {
     if (typeof message.body.type !== 'undefined') {
       return true;
     }
