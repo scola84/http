@@ -51,7 +51,7 @@ export default class BodyParser extends Worker {
     }
 
     if (data.length === 0) {
-      data = {};
+      data = '';
     }
 
     this.pass(message, data, callback);
