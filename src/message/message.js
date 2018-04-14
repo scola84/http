@@ -7,7 +7,7 @@ export default class Message {
     this.parser = { begin: 0, end: 0 };
     this.protocol = { name: null, version: null };
     this.socket = options.socket;
-    this.state = {};
+    this.state = options.state || {};
     this.user = null;
   }
 
