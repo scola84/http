@@ -27,14 +27,30 @@ export default function createBrowser(...codec) {
   const transferEncodingDecoder = new TransferEncodingDecoder();
   const transferEncodingEncoder = new TransferEncodingEncoder();
 
-  for (let i = 0; i < codec.length; i += 1) {
-    contentTypeDecoder
-      .setStrict(false)
-      .manage(codec[i].type, new codec[i].Decoder());
+  const decoders = [
+    'application/json',
+    'application/msgpack'
+  ];
 
-    contentTypeEncoder
-      .setStrict(false)
-      .manage(codec[i].type, new codec[i].Encoder());
+  const encoders = [
+    'multipart/form-data',
+    'application/json',
+    'application/msgpack',
+    'application/x-www-form-urlencoded'
+  ];
+
+  for (let i = 0; i < codec.length; i += 1) {
+    if (decoders.indexOf(codec[i].type) > -1) {
+      contentTypeDecoder
+        .setStrict(false)
+        .manage(codec[i].type, new codec[i].Decoder());
+    }
+
+    if (encoders.indexOf(codec[i].type) > -1) {
+      contentTypeEncoder
+        .setStrict(false)
+        .manage(codec[i].type, new codec[i].Encoder());
+    }
   }
 
   browserConnector
