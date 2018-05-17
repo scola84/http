@@ -4,6 +4,14 @@ import tls from 'tls';
 import Request from '../message/request';
 
 export default class ClientConnector extends Worker {
+  constructor(options = {}) {
+    options.err = options.err || ((message, error) => {
+      this.log('error', message, error);
+    });
+
+    super(options);
+  }
+
   act(options, data, callback) {
     const message = new Request(options);
 
@@ -26,7 +34,7 @@ export default class ClientConnector extends Worker {
     }, message.options));
 
     socket.once('error', (error) => {
-      this.log('error', message, error);
+      this.err(message, error, callback);
     });
 
     socket.once(event, () => {
