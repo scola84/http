@@ -20,7 +20,7 @@ import TransferEncodingDecoder from '../decoder/transfer-encoding';
 import TransferEncodingEncoder from '../encoder/transfer-encoding';
 import UpgradeResponder from '../responder/upgrade';
 
-export default function createClient() {
+export default function createClient(setup = () => {}, config = {}) {
   const bodyParser = new BodyParser();
   const bodyWriter = new BodyWriter();
   const clientConnector = new ClientConnector();
@@ -64,6 +64,8 @@ export default function createClient() {
     .connect(trailerFieldsParser)
     .connect(contentEncodingDecoder)
     .connect(contentTypeDecoder);
+
+  setup(clientConnector, config);
 
   return [
     clientConnector,
