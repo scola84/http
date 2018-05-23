@@ -30,7 +30,8 @@ export default class ClientConnector extends Worker {
 
     const socket = library.connect(Object.assign({
       host: message.url.hostname,
-      port: message.url.port || 443
+      port: message.url.port || 443,
+      servername: message.url.hostname
     }, message.options));
 
     socket.once('error', (error) => {
