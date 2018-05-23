@@ -14,6 +14,7 @@ import HeaderFieldsParser from '../parser/header-fields';
 import HeaderFieldsWriter from '../writer/header-fields';
 import RequestLineWriter from '../writer/request-line';
 import ResponseLineParser from '../parser/response-line';
+import ResponseTransformer from '../transformer/response';
 import TrailerFieldsParser from '../parser/trailer-fields';
 import TrailerFieldsWriter from '../writer/trailer-fields';
 import TransferEncodingDecoder from '../decoder/transfer-encoding';
@@ -37,6 +38,7 @@ export default function createClient(setup = () => {}, config = {}) {
   const headerFieldsWriter = new HeaderFieldsWriter();
   const requestLineWriter = new RequestLineWriter();
   const responseLineParser = new ResponseLineParser();
+  const responseTransformer = new ResponseTransformer();
   const trailerFieldsParser = new TrailerFieldsParser();
   const trailerFieldsWriter = new TrailerFieldsWriter();
   const transferEncodingDecoder = new TransferEncodingDecoder();
@@ -63,12 +65,13 @@ export default function createClient(setup = () => {}, config = {}) {
     .connect(transferEncodingDecoder)
     .connect(trailerFieldsParser)
     .connect(contentEncodingDecoder)
-    .connect(contentTypeDecoder);
+    .connect(contentTypeDecoder)
+    .connect(responseTransformer);
 
   setup(clientConnector, config);
 
   return [
     clientConnector,
-    contentTypeDecoder
+    responseTransformer
   ];
 }
