@@ -6,6 +6,18 @@ export default class User {
     masks = value;
   }
 
+  static formatName(details) {
+    let name = '';
+
+    name += details.given_name;
+    name += details.additional_name ?
+      ' ' + details.additional_name : '';
+    name += details.family_name ?
+      ' ' + details.family_name : '';
+
+    return name;
+  }
+
   constructor() {
     this._details = {};
     this._id = null;
@@ -48,17 +60,8 @@ export default class User {
   }
 
   getName() {
-    let name = '';
-
-    if (this._details !== null) {
-      name += this._details.given_name;
-      name += this._details.additional_name ?
-        ' ' + this._details.additional_name : '';
-      name += this._details.family_name ?
-        ' ' + this._details.family_name : '';
-    }
-
-    return name;
+    return this._details === null ?
+      '' : User.formatName(this._details);
   }
 
   getParents() {
