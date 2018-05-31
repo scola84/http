@@ -4,7 +4,7 @@ import { compare } from 'bcrypt';
 export default class PasswordChecker extends Worker {
   act(request, data, callback) {
     const password = data.password;
-    const hash = request.user.getDetail('password');
+    const hash = request.user.getDetail('password') || '';
 
     compare(password, hash, (error, result) => {
       if (error) {

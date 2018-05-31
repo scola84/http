@@ -28,6 +28,6 @@ export default class PathRouter extends Router {
     }
 
     this.fail(request.createResponse(),
-      new Error('404 Path not found'), callback);
+      new Error(`404 Path not found (${url.path})`), callback);
   }
 }

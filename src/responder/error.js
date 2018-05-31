@@ -7,12 +7,27 @@ export default class ErrorResponder extends Worker {
     const response = message.createResponse();
     const match = error.message.match(/(\d{3})?([^\(]*)/);
 
-    let data = '';
-
     response.status = match === null ? 500 : Number(match[1] || 500);
-    data = response.status === 500 ? '' : match[2].trim();
-
     response.state.body = true;
+
+    response.setHeader('Content-Type', 'application/json');
+
+    if (response.status === 500) {
+      match[2] = 'Internal Server Error';
+    }
+
+    let data = {
+      error: {
+        status: response.status,
+        message: match[2].trim()
+      }
+    };
+
+    if (error.field) {
+      data.error.field = error.field;
+    }
+
+    data = JSON.stringify(data);
 
     this.fail(response, data, callback);
   }
