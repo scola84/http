@@ -27,7 +27,8 @@ export default class ObjectResolver extends Streamer {
     data = this.filter(request, data);
 
     if (typeof data === 'undefined') {
-      throw new Error('404 Object not found');
+      throw new Error('404 Object not found' +
+        ` (${request.method} ${request.parseUrl().path})`);
     }
 
     const response = request.createResponse();
