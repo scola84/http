@@ -18,13 +18,16 @@ export default class ErrorResponder extends Worker {
 
     let data = {
       error: {
-        status: response.status,
         message: match[2].trim()
       }
     };
 
     if (error.field) {
       data.error.field = error.field;
+    }
+
+    if (error.reason) {
+      data.error.reason = error.reason;
     }
 
     data = JSON.stringify(data);

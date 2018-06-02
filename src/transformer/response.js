@@ -6,10 +6,15 @@ export default class ResponseTransformer extends Worker {
     box.response = response;
 
     if (response.status >= 300) {
-      const error = new Error(
-        String(response.status) + (data.error && data.error.message ?
-          ' ' + data.error.message : '')
-      );
+      let error = null;
+
+      if (data.error) {
+        error = new Error(`${response.status} ${data.error.message}`.trim());
+        error.field = data.error.field;
+        error.reason = data.error.reason;
+      } else {
+        error = new Error(String(response.status));
+      }
 
       this.fail(box, error, callback);
       return;
