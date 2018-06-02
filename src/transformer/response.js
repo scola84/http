@@ -9,7 +9,7 @@ export default class ResponseTransformer extends Worker {
       let error = null;
 
       if (data.error) {
-        error = new Error(`${response.status} ${data.error.message}`.trim());
+        error = new Error(`${response.status} ${data.error.message}`);
         error.field = data.error.field;
         error.reason = data.error.reason;
       } else {
