@@ -1,6 +1,8 @@
 /*eslint no-useless-escape: 0 */
 
 import { Worker } from '@scola/worker';
+import { STATUS_CODES } from 'http';
+const filter = [401, 403, 500];
 
 export default class ErrorResponder extends Worker {
   err(message, error, callback) {
@@ -12,8 +14,8 @@ export default class ErrorResponder extends Worker {
 
     response.setHeader('Content-Type', 'application/json');
 
-    if (response.status === 500) {
-      match[2] = 'Internal Server Error';
+    if (filter.indexOf(response.status) > -1) {
+      match[2] = STATUS_CODES[response.status];
     }
 
     let data = {
