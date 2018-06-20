@@ -5,10 +5,10 @@ export default class ResponseTransformer extends Worker {
     const box = response.request.box;
     box.response = response;
 
-    if (response.status >= 300) {
+    if (response.status >= 400) {
       let error = null;
 
-      if (data.error) {
+      if (data && data.error) {
         error = new Error(`${response.status} ${data.error.message}`);
         error.field = data.error.field;
         error.reason = data.error.reason;
