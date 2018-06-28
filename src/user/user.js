@@ -100,7 +100,33 @@ export default class User {
     return this;
   }
 
-  may(names = '') {
+  may(permission, route, data) {
+    if (typeof permission === 'string' || Array.isArray(permission)) {
+      return this._mayRole(permission);
+    }
+
+    if (typeof permission === 'function') {
+      return permission(route, data);
+    }
+
+    if (typeof permission.scope === 'undefined') {
+      return this._mayRole(permission.name);
+    }
+
+    const scope = data && data.meta && data.meta.scope ||
+      data && data.data && data.data.scope;
+
+    const found = this._mayScope(route, data,
+      permission.scope, scope, true);
+
+    if (typeof permission.name === 'undefined') {
+      return found;
+    }
+
+    return this._mayRole(permission.name) && found;
+  }
+
+  _mayRole(names) {
     names = Array.isArray(names) ? names : [names];
     let name = null;
 
@@ -118,16 +144,43 @@ export default class User {
     return false;
   }
 
+  _mayScope(box, data, scopes, actual, bool) {
+    let desired = null;
+    let found = null;
+
+    for (let i = 0; i < scopes.length; i += 1) {
+      desired = scopes[i];
+
+      if (Array.isArray(desired)) {
+        found = this._mayScope(box, data, desired, actual, false);
+      } else if (typeof desired === 'function') {
+        found = desired(box, data);
+      } else {
+        found = desired === actual;
+      }
+
+      if (found === bool) {
+        return bool;
+      }
+    }
+
+    return !bool;
+  }
+
   _and(v1, v2) {
     // https://stackoverflow.com/a/43666199
     const hi = 0x80000000;
     const low = 0x7fffffff;
+
     const hi1 = ~~(v1 / hi);
     const hi2 = ~~(v2 / hi);
+
     const low1 = v1 & low;
     const low2 = v2 & low;
+
     const h = hi1 & hi2;
     const l = low1 & low2;
+
     return h * hi + l;
   }
 }
