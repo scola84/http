@@ -3,12 +3,12 @@ import { compare } from 'bcrypt';
 
 export default class PasswordChecker extends Worker {
   act(request, data, callback) {
-    const password = data.password;
     const hash = request.user.getDetail('password') || '';
+    request.user.unsetDetail('password');
 
-    compare(password, hash, (error, result) => {
+    compare(data.password, hash, (error, result) => {
       if (error) {
-        this.fail(request, error);
+        this.fail(request, error, callback);
         return;
       }
 

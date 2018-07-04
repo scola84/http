@@ -50,6 +50,11 @@ export default class User {
     return this;
   }
 
+  unsetDetail(name) {
+    this._details[name] = null;
+    return this;
+  }
+
   getId() {
     return this._id;
   }
