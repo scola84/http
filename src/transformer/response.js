@@ -14,6 +14,7 @@ export default class ResponseTransformer extends Worker {
         error.reason = data.error.reason;
       } else {
         error = new Error(String(response.status));
+        error.data = data;
       }
 
       this.fail(box, error, callback);
