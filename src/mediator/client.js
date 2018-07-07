@@ -5,6 +5,10 @@ export default class ClientMediator extends Streamer {
     this.read(request.createResponse());
   }
 
+  err(request, error, callback) {
+    this.fail(request.createResponse(), error, callback);
+  }
+
   stream(response) {
     return response.socket;
   }
