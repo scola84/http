@@ -3,7 +3,7 @@ import { Buffer } from 'buffer/';
 
 export default class BrowserMediator extends Worker {
   act(message, data, callback = () => {}) {
-    message.socket.onerror = () => {
+    const error = () => {
       message.socket.onerror = null;
       message.socket.onload = null;
       message.socket.onprogress = null;
@@ -16,7 +16,7 @@ export default class BrowserMediator extends Worker {
       this.fail(message, new Error(errorText));
     };
 
-    message.socket.onload = () => {
+    const load = () => {
       callback({
         lengthComputable: true,
         loaded: 1,
@@ -39,8 +39,18 @@ export default class BrowserMediator extends Worker {
       this.pass(message.createResponse(), Buffer.from(responseData), callback);
     };
 
-    message.socket.onprogress = callback;
-    message.socket.upload.onprogress = callback;
+    const progress = (event) => {
+      callback({
+        lengthComputable: event.lengthComputable,
+        loaded: message.method === 'GET' ? event.loaded : 1,
+        total: message.method === 'GET' ? event.total : 10
+      });
+    };
+
+    message.socket.onerror = error;
+    message.socket.onload = load;
+    message.socket.onprogress = progress;
+    message.socket.upload.onprogress = progress;
 
     const names = Object.keys(message.headers || {});
 
