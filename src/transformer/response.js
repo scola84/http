@@ -31,8 +31,12 @@ export default class ResponseTransformer extends Worker {
   }
 
   err(response, error, callback) {
-    const box = response.request.box;
-    box.response = response;
+    let box = response;
+
+    if (box.request) {
+      box = box.request.box;
+      box.response = box;
+    }
 
     this.fail(box, error, callback);
   }
