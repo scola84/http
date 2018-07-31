@@ -35,7 +35,7 @@ export default class ResponseTransformer extends Worker {
 
     if (box.request) {
       box = box.request.box;
-      box.response = box;
+      box.response = response;
     }
 
     this.fail(box, error, callback);
