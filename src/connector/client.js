@@ -4,43 +4,35 @@ import tls from 'tls';
 import Request from '../message/request';
 
 export default class ClientConnector extends Worker {
-  constructor(options = {}) {
-    options.err = options.err || ((message, error) => {
-      this.log('error', message, error);
-    });
-
-    super(options);
-  }
-
   act(options, data, callback) {
-    const message = new Request(options);
+    const request = new Request(options);
 
-    if (typeof message.socket === 'undefined') {
-      this._connect(message, data, callback);
+    if (typeof request.socket === 'undefined') {
+      this._connect(request, data, callback);
     } else {
-      this.pass(message, data, callback);
+      this.pass(request, data, callback);
     }
   }
 
-  _connect(message, data, callback) {
-    const library = message.url.scheme === 'http' ? net : tls;
+  _connect(request, data, callback) {
+    const library = request.url.scheme === 'http' ? net : tls;
     const event = library === net ? 'connect' : 'secureConnect';
 
-    message.headers.Host = message.formatHost();
+    request.headers.Host = request.formatHost();
 
     const socket = library.connect(Object.assign({
-      host: message.url.hostname,
-      port: message.url.port || 443,
-      servername: message.url.hostname
-    }, message.options));
+      host: request.url.hostname,
+      port: request.url.port || 443,
+      servername: request.url.hostname
+    }, request.options));
 
     socket.once('error', (error) => {
-      this.err(message, error, callback);
+      this.fail(request.createResponse(), error, callback);
     });
 
     socket.once(event, () => {
-      message.socket = socket;
-      this.pass(message, data, callback);
+      request.socket = socket;
+      this.pass(request, data, callback);
     });
   }
 }
