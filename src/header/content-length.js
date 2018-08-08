@@ -1,4 +1,5 @@
 import { Worker } from '@scola/worker';
+import { Buffer } from 'buffer/';
 
 export default class ContentLengthHeader extends Worker {
   act(message, data, callback) {
@@ -22,7 +23,7 @@ export default class ContentLengthHeader extends Worker {
 
   _setHeader(message, data) {
     message.headers['Content-Length'] = message.body.length ||
-      (data && data.length) ||
+      (data && Buffer.byteLength(data)) ||
       0;
   }
 }
