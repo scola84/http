@@ -23,7 +23,7 @@ import TransferEncodingEncoder from '../encoder/transfer-encoding';
 import TransferEncodingHeader from '../header/transfer-encoding';
 import UpgradeResponder from '../responder/upgrade';
 
-export default function createServer() {
+export default function createServer(log = false) {
   const bodyParser = new BodyParser();
   const bodyWriter = new BodyWriter();
   const connectionHeader = new ConnectionHeader();
@@ -74,6 +74,11 @@ export default function createServer() {
     .connect(responseLineWriter)
     .connect(trailerFieldsWriter)
     .connect(bodyWriter);
+
+  if (log === true) {
+    bodyWriter.setLog('data');
+    serverConnector.setLog('data');
+  }
 
   return [
     serverConnector,

@@ -1,6 +1,6 @@
 import { Worker } from '@scola/worker';
 
-export default class ObjectResolver extends Worker {
+export default class OptionsResolver extends Worker {
   constructor(options = {}) {
     super(options);
 
@@ -30,6 +30,8 @@ export default class ObjectResolver extends Worker {
       this._resolveEmpty(response, data, callback);
       return;
     }
+
+    response.setHeader('Allow', Object.keys(data));
 
     this.pass(response, data, callback);
   }

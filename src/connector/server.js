@@ -7,6 +7,11 @@ export default class ServerConnector extends Streamer {
   }
 
   data(box, data) {
+    if (this._log === 'data') {
+      console.log(String(data));
+      console.log();
+    }
+
     const create = typeof box.message === 'undefined' ||
       box.message.state.body === true &&
       box.message.state.headers === true &&

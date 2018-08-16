@@ -51,8 +51,10 @@ import {
 } from './src/parser';
 
 import {
+  FileResolver,
   ListResolver,
-  ObjectResolver
+  ObjectResolver,
+  OptionsResolver
 } from './src/resolver';
 
 import {
@@ -144,8 +146,10 @@ export {
 };
 
 export {
+  FileResolver,
   ListResolver,
-  ObjectResolver
+  ObjectResolver,
+  OptionsResolver
 };
 
 export {
