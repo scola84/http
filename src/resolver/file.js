@@ -25,6 +25,7 @@ export default class FileResolver extends Streamer {
 
     const response = request.createResponse();
 
+    response.body.dataType = data.file.type;
     response.status = this._status;
     response.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
 
