@@ -18,8 +18,8 @@ export default class ResponseTransformer extends Worker {
       }
 
       box.error = true;
-
       this.fail(box, error, callback);
+
       return;
     }
 
@@ -45,7 +45,6 @@ export default class ResponseTransformer extends Worker {
     }
 
     box.error = true;
-
     this.fail(box, error, callback);
   }
 }
