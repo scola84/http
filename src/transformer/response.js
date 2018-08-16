@@ -17,6 +17,8 @@ export default class ResponseTransformer extends Worker {
         error.data = data;
       }
 
+      box.error = true;
+
       this.fail(box, error, callback);
       return;
     }
@@ -37,6 +39,12 @@ export default class ResponseTransformer extends Worker {
       box = box.request.box;
       box.response = response;
     }
+
+    if (box.error === true) {
+      return;
+    }
+
+    box.error = true;
 
     this.fail(box, error, callback);
   }
