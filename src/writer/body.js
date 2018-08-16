@@ -16,7 +16,9 @@ export default class BodyWriter extends Streamer {
   }
 
   _write(message, data, callback) {
-    this.write(message, data, callback);
+    if (data !== null) {
+      this.write(message, data, callback);
+    }
 
     if (message.state.body === true) {
       if (message.headers.Connection === 'close') {
