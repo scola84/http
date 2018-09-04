@@ -32,6 +32,20 @@ export default class ResponseTransformer extends Worker {
     this.pass(box, data, callback);
   }
 
+  decide(response, data) {
+    if (data === null) {
+      if (typeof response.getHeader('Content-Type') === 'undefined') {
+        return null;
+      }
+
+      if (response.getHeader('Content-Length') === 0) {
+        return null;
+      }
+    }
+
+    return true;
+  }
+
   err(response, error, callback) {
     let box = response;
 
