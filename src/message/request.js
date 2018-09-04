@@ -70,6 +70,10 @@ export default class Request extends Message {
     return this._url;
   }
 
+  mustEnd() {
+    return false;
+  }
+
   parseUrl() {
     if (this._url === null) {
       this._url = this._parseUrl();

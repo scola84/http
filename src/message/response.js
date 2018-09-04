@@ -34,6 +34,10 @@ export default class Response extends Message {
     return this;
   }
 
+  mustEnd() {
+    return this.getHeader('Connection') === 'close';
+  }
+
   parseAcceptable(header, base = '') {
     const acceptable = this.request.parseHeader(header) || [{ 0: base }];
     let entry = null;
