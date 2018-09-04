@@ -18,9 +18,15 @@ export default class Message {
   }
 
   getHeader(name, value) {
-    return this.headers[name] ||
-      this.headers[name.toLowerCase()] ||
-      value;
+    if (typeof this.headers[name] !== 'undefined') {
+      return this.headers[name];
+    }
+
+    if (typeof this.headers[name.toLowerCase()] !== 'undefined') {
+      return this.headers[name.toLowerCase()];
+    }
+
+    return value;
   }
 
   parseHeader(name, first) {
