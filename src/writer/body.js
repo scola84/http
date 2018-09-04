@@ -21,7 +21,7 @@ export default class BodyWriter extends Streamer {
     }
 
     if (message.state.body === true) {
-      if (message.headers.Connection === 'close') {
+      if (message.mustEnd()) {
         message.socket.end();
       }
     }
