@@ -24,12 +24,14 @@ export default class ErrorResponder extends Worker {
       }
     };
 
-    if (error.field) {
-      data.error.field = error.field;
-    }
+    if (response.status < 500) {
+      if (error.field) {
+        data.error.field = error.field;
+      }
 
-    if (error.reason) {
-      data.error.reason = error.reason;
+      if (error.reason) {
+        data.error.reason = error.reason;
+      }
     }
 
     data = JSON.stringify(data);
