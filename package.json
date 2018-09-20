@@ -8,11 +8,11 @@
   "main": "./index.js",
   "jsnext:main": "./index.js",
   "dependencies": {
-    "@scola/worker": "^2.6.4",
+    "@scola/worker": "^2.8.0",
     "bcrypt": "^3.0.0",
-    "buffer": "^5.2.0",
+    "buffer": "^5.2.1",
     "decode-uri-component": "^0.2.0",
-    "lodash-es": "^4.17.10",
+    "lodash-es": "^4.17.11",
     "qs": "^6.5.2"
   }
 }
