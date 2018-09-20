@@ -1,6 +1,6 @@
 {
   "name": "@scola/http",
-  "version": "5.1.3",
+  "version": "5.1.4",
   "description": "HTTP Server and Client",
   "repository": "github:scola84/http",
   "author": "M.C. van den Boogaart <scola@kvdb.name>",
