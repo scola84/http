@@ -1,4 +1,5 @@
 import get from 'lodash-es/get';
+const scopes = { read: 0, write: 1 };
 let masks = {};
 
 export default class User {
@@ -67,6 +68,15 @@ export default class User {
   getName() {
     return this._details === null ?
       '' : User.formatName(this._details);
+  }
+
+  getParentId(name, scope = 'write') {
+    return this._parents[scope][name] || [];
+  }
+
+  getParentScope(name, scope = 'write') {
+    return typeof this._parents[scope][name] !== 'undefined' ?
+      scope : null;
   }
 
   getParents() {
@@ -149,27 +159,12 @@ export default class User {
     return false;
   }
 
-  _mayScope(box, data, scopes, actual, bool) {
-    let desired = null;
-    let found = null;
-
-    for (let i = 0; i < scopes.length; i += 1) {
-      desired = scopes[i];
-
-      if (Array.isArray(desired)) {
-        found = this._mayScope(box, data, desired, actual, false);
-      } else if (typeof desired === 'function') {
-        found = desired(box, data);
-      } else {
-        found = desired === actual;
-      }
-
-      if (found === bool) {
-        return bool;
-      }
+  _mayScope(box, data, desired, actual) {
+    if (typeof desired === 'function') {
+      return desired(box, data, actual);
     }
 
-    return !bool;
+    return scopes[actual] >= scopes[desired];
   }
 
   _and(v1, v2) {
