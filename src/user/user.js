@@ -19,12 +19,18 @@ export default class User {
     return name;
   }
 
-  constructor() {
-    this._details = {};
+  constructor(options = {}) {
+    this._details = null;
     this._id = null;
     this._parents = null;
     this._role = null;
     this._token = null;
+
+    this.setDetails(options.details);
+    this.setId(options.id);
+    this.setParents(options.parents);
+    this.setRole(options.role);
+    this.setToken(options.token);
   }
 
   getDetail(name) {
@@ -46,7 +52,7 @@ export default class User {
     return this;
   }
 
-  setDetails(value) {
+  setDetails(value = {}) {
     this._details = value;
     return this;
   }
@@ -60,7 +66,7 @@ export default class User {
     return this._id;
   }
 
-  setId(value) {
+  setId(value = null) {
     this._id = value;
     return this;
   }
@@ -83,7 +89,7 @@ export default class User {
     return this._parents;
   }
 
-  setParents(value) {
+  setParents(value = null) {
     this._parents = value;
     return this;
   }
@@ -101,7 +107,7 @@ export default class User {
     return this;
   }
 
-  setRole(value) {
+  setRole(value = null) {
     this._role = value;
     return this;
   }
@@ -110,7 +116,7 @@ export default class User {
     return this._token;
   }
 
-  setToken(value) {
+  setToken(value = null) {
     this._token = value;
     return this;
   }
