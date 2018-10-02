@@ -3,6 +3,11 @@ import { Worker } from '@scola/worker';
 export default class ResponseTransformer extends Worker {
   act(response, data, callback) {
     const box = response.request.box;
+
+    if (typeof box.response !== 'undefined') {
+      throw new Error('Box has already been used');
+    }
+
     box.response = response;
 
     if (response.status >= 400) {
