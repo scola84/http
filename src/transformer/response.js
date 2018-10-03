@@ -2,13 +2,7 @@ import { Worker } from '@scola/worker';
 
 export default class ResponseTransformer extends Worker {
   act(response, data, callback) {
-    const box = response.request.box;
-
-    if (typeof box.response !== 'undefined') {
-      throw new Error('Box has already been used');
-    }
-
-    box.response = response;
+    const box = this._resolve(response);
 
     if (response.status >= 400) {
       let error = null;
@@ -52,12 +46,7 @@ export default class ResponseTransformer extends Worker {
   }
 
   err(response, error, callback) {
-    let box = response;
-
-    if (box.request) {
-      box = box.request.box;
-      box.response = response;
-    }
+    const box = this._resolve(response);
 
     if (box.error === true) {
       return;
@@ -65,5 +54,21 @@ export default class ResponseTransformer extends Worker {
 
     box.error = true;
     this.fail(box, error, callback);
+  }
+
+  _resolve(response) {
+    let box = response;
+
+    if (box.request && box.request.box) {
+      box = box.request.box;
+
+      if (typeof box.response !== 'undefined') {
+        throw new Error('Box has already been used');
+      }
+
+      box.response = response;
+    }
+
+    return box;
   }
 }
