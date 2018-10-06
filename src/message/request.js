@@ -1,6 +1,6 @@
+import qs from 'qs';
 import Message from './message';
 import Response from './response';
-import qs from 'qs';
 
 const defaultHeaders = {};
 
