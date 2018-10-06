@@ -1,4 +1,6 @@
 import get from 'lodash-es/get';
+import Long from 'long';
+
 const scopes = { read: 0, write: 1 };
 let masks = {};
 
@@ -154,10 +156,10 @@ export default class User {
     for (let i = 0; i < names.length; i += 1) {
       name = names[i].split('.');
 
-      const permission = this._role[name[0]];
-      const mask = get(masks, name);
+      const permission = Long.fromNumber(this._role[name[0]]);
+      const mask = Long.fromNumber(get(masks, name));
 
-      if ((this._and(permission, mask)) !== 0) {
+      if ((permission.and(mask)).toNumber() !== 0) {
         return true;
       }
     }
@@ -171,22 +173,5 @@ export default class User {
     }
 
     return scopes[actual] >= scopes[desired];
-  }
-
-  _and(v1, v2) {
-    // https://stackoverflow.com/a/43666199
-    const hi = 0x80000000;
-    const low = 0x7fffffff;
-
-    const hi1 = ~~(v1 / hi);
-    const hi2 = ~~(v2 / hi);
-
-    const low1 = v1 & low;
-    const low2 = v2 & low;
-
-    const h = hi1 & hi2;
-    const l = low1 & low2;
-
-    return h * hi + l;
   }
 }
