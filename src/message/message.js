@@ -8,6 +8,7 @@ export default class Message {
     this.protocol = { name: null, version: null };
     this.socket = options.socket;
     this.state = options.state || {};
+    this.timestamp = null;
     this.user = null;
   }
 
@@ -27,6 +28,14 @@ export default class Message {
     }
 
     return value;
+  }
+
+  getTimestamp() {
+    if (this.timestamp === null) {
+      this.timestamp = Date.now();
+    }
+
+    return this.timestamp;
   }
 
   parseHeader(name, first) {

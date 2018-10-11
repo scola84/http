@@ -14,6 +14,9 @@ export default class Response extends Message {
 
     super(options);
 
+    this._name = null;
+    this._timestamp = null;
+
     this.request = options.request;
     this.status = options.status;
 
@@ -32,6 +35,21 @@ export default class Response extends Message {
 
   createResponse() {
     return this;
+  }
+
+  getDuration() {
+    return this.getTimestamp() - this.request.getTimestamp();
+  }
+
+  getName() {
+    if (this._name === null) {
+      this._name = [
+        this.request.method.toLowerCase(),
+        ...this.request.parseUrl().path.split('/').slice(1)
+      ].join('.');
+    }
+
+    return this._name;
   }
 
   mustEnd() {

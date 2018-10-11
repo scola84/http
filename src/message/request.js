@@ -29,10 +29,11 @@ export default class Request extends Message {
 
     super(options);
 
-    this.method = options.method;
-    this.url = options.url;
-
     this._url = null;
+
+    this.method = options.method;
+    this.timestamp = Date.now();
+    this.url = options.url;
   }
 
   createResponse(options = {}) {
