@@ -29,6 +29,7 @@ export default class Request extends Message {
 
     super(options);
 
+    this._name = null;
     this._url = null;
 
     this.method = options.method;
@@ -69,6 +70,15 @@ export default class Request extends Message {
     }
 
     return this._url;
+  }
+
+  getName() {
+    if (this._name === null) {
+      this._name = this.method.toLowerCase() + '.' +
+        this.parseUrl().path.split('/').slice(1).join('.');
+    }
+
+    return this._name;
   }
 
   mustEnd() {
