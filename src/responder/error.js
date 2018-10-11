@@ -9,6 +9,7 @@ export default class ErrorResponder extends Worker {
     const response = message.createResponse();
     const match = error.message.match(/(\d{3})?([^\(]*)/);
 
+    response.error = error;
     response.status = match === null ? 500 : Number(match[1] || 500);
     response.state.body = true;
 

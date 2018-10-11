@@ -17,6 +17,7 @@ export default class Response extends Message {
     this._name = null;
     this._timestamp = null;
 
+    this.error = null;
     this.request = options.request;
     this.status = options.status;
 
