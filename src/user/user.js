@@ -44,7 +44,7 @@ export default class User {
   }
 
   getDetails() {
-    return this._person;
+    return this._details;
   }
 
   hasDetail(name) {
