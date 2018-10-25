@@ -1,4 +1,5 @@
 import get from 'lodash-es/get';
+import set from 'lodash-es/set';
 import Long from 'long';
 
 const scopes = { read: 0, write: 1 };
@@ -40,7 +41,7 @@ export default class User {
   }
 
   getDetail(name) {
-    return this._details[name];
+    return get(this._details, name);
   }
 
   getDetails() {
@@ -48,13 +49,12 @@ export default class User {
   }
 
   hasDetail(name) {
-    return typeof this._details[name] !== 'undefined' &&
-      this._details[name] !== null &&
-      this._details[name] !== '';
+    const value = this.getDetail(name);
+    return typeof value !== 'undefined' && value !== null && value !== '';
   }
 
   setDetail(name, value) {
-    this._details[name] = value;
+    set(this._details, name, value);
     return this;
   }
 
@@ -64,7 +64,7 @@ export default class User {
   }
 
   unsetDetail(name) {
-    this._details[name] = null;
+    set(this._details, name, null);
     return this;
   }
 
