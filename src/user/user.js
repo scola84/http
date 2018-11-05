@@ -14,16 +14,24 @@ export default class User {
     masks = value;
   }
 
-  static formatName(details) {
+  static formatName(details, parts = null) {
     let name = '';
 
-    name += details.given_name;
-    name += details.additional_name ?
-      ' ' + details.additional_name : '';
-    name += details.family_name ?
-      ' ' + details.family_name : '';
+    if (parts === null || parts.indexOf('given_name') > -1) {
+      name += details.given_name;
+    }
 
-    return name;
+    if (parts === null || parts.indexOf('additional_name') > -1) {
+      name += details.additional_name ?
+        ' ' + details.additional_name : '';
+    }
+
+    if (parts === null || parts.indexOf('family_name') > -1) {
+      name += details.family_name ?
+        ' ' + details.family_name : '';
+    }
+
+    return name.trim();
   }
 
   constructor(options = {}) {
