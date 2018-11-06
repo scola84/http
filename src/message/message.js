@@ -1,49 +1,19 @@
 export default class Message {
-  constructor(options = {}) {
-    this.body = {};
-    this.box = options.box;
-    this.extra = options.extra;
-    this.headers = options.headers || {};
-    this.parser = { begin: 0, end: 0 };
-    this.protocol = { name: null, version: null };
-    this.socket = options.socket;
-    this.state = options.state || {};
-    this.timestamp = null;
-    this.user = null;
-  }
+  static formatHeaders(headers, delimiter = ': ', lf = '\r\n') {
+    const keys = Object.keys(headers);
 
-  deleteHeader(name) {
-    delete this.headers[name];
-    delete this.headers[name.toLowerCase()];
-    return this;
-  }
+    let string = '';
+    let key = '';
 
-  getHeader(name, value) {
-    if (typeof this.headers[name] !== 'undefined') {
-      return this.headers[name];
+    for (let i = 0; i < keys.length; i += 1) {
+      key = keys[i];
+      string += key + delimiter + headers[key] + lf;
     }
 
-    if (typeof this.headers[name.toLowerCase()] !== 'undefined') {
-      return this.headers[name.toLowerCase()];
-    }
-
-    return value;
+    return string;
   }
 
-  getTimestamp() {
-    if (this.timestamp === null) {
-      this.timestamp = Date.now();
-    }
-
-    return this.timestamp;
-  }
-
-  parseHeader(name, first) {
-    const header = this.getHeader(name);
-    return this.parseHeaderValue(header, first);
-  }
-
-  parseHeaderValue(header, first = false) {
+  static parseHeader(header, first = false) {
     if (typeof header === 'undefined') {
       return header;
     }
@@ -84,6 +54,37 @@ export default class Message {
     return first === true ? parts[0] : parts;
   }
 
+  constructor(options = {}) {
+    this.body = {};
+    this.box = options.box;
+    this.extra = options.extra;
+    this.headers = options.headers || {};
+    this.parser = { begin: 0, end: 0 };
+    this.protocol = { name: null, version: null };
+    this.socket = options.socket;
+    this.state = options.state || {};
+    this.timestamp = null;
+    this.user = null;
+  }
+
+  deleteHeader(name) {
+    delete this.headers[name];
+    delete this.headers[name.toLowerCase()];
+    return this;
+  }
+
+  getHeader(name, value) {
+    if (typeof this.headers[name] !== 'undefined') {
+      return this.headers[name];
+    }
+
+    if (typeof this.headers[name.toLowerCase()] !== 'undefined') {
+      return this.headers[name.toLowerCase()];
+    }
+
+    return value;
+  }
+
   setHeader(name, value) {
     const lowerName = name.toLowerCase();
 
@@ -94,5 +95,22 @@ export default class Message {
 
     this.headers[name] = value;
     return this;
+  }
+
+  getTimestamp() {
+    if (this.timestamp === null) {
+      this.timestamp = Date.now();
+    }
+
+    return this.timestamp;
+  }
+
+  formatHeaders() {
+    return Message.formatHeaders(this.headers);
+  }
+
+  parseHeader(name, first) {
+    const header = this.getHeader(name);
+    return Message.parseHeader(header, first);
   }
 }

@@ -21,6 +21,95 @@ export default class Request extends Message {
     }
   }
 
+  static formatAuth(url) {
+    return url.auth ? url.auth + '@' : '';
+  }
+
+  static formatHost(url) {
+    return url.hostname + (url.port ? ':' + url.port : '');
+  }
+
+  static formatRelativeUrl(url) {
+    return url.path + (url.query ? '?' + qs.stringify(url.query) : '');
+  }
+
+  static formatScheme(url) {
+    return (url.scheme || 'https') + '://';
+  }
+
+  static formatUrl(url) {
+    return Request.formatScheme(url) +
+      Request.formatAuth(url) +
+      Request.formatHost(url) +
+      Request.formatRelativeUrl(url);
+  }
+
+  static parseUrl(url) {
+    const parsed = {};
+
+    let authPos = null;
+    let pathPos = null;
+    let portPos = null;
+    let queryPos = null;
+    let schemePos = null;
+
+    let begin = 0;
+    let end = 0;
+
+    let char = '';
+
+    for (; end < url.length; end += 1) {
+      char = url[end];
+
+      if (char === ':') {
+        if (schemePos === null) {
+          schemePos = end;
+          end += 3;
+        } else {
+          portPos = end;
+        }
+      } else if (char === '/') {
+        if (pathPos === null) {
+          pathPos = end;
+        }
+      } else if (char === '@') {
+        authPos = end;
+      } else if (char === '?') {
+        queryPos = end;
+        break;
+      }
+    }
+
+    if (schemePos !== null) {
+      parsed.scheme = url.slice(begin, schemePos);
+      begin = schemePos + 3;
+    }
+
+    if (authPos !== null) {
+      parsed.auth = url.slice(begin, authPos);
+      begin = authPos + 1;
+    }
+
+    if (portPos !== null) {
+      parsed.port = url.slice(portPos + 1, pathPos);
+    }
+
+    if (begin > 0) {
+      parsed.hostname = url.slice(begin, portPos || pathPos);
+      begin = pathPos;
+    }
+
+    if (queryPos !== null) {
+      parsed.query = qs.parse(url.slice(queryPos + 1));
+    } else {
+      parsed.query = {};
+    }
+
+    parsed.path = url.slice(pathPos, queryPos || url.length);
+
+    return parsed;
+  }
+
   constructor(options = {}) {
     if (defaultHeaders !== null) {
       options.headers = Object.assign({},
@@ -45,28 +134,24 @@ export default class Request extends Message {
   }
 
   formatAuth() {
-    return this.url.auth ? this.url.auth + '@' : '';
+    return Request.formatAuth(this.url);
   }
 
-  formatHost(url = {}) {
-    const hostname = this.url.hostname || url.hostname;
-    const port = this.url.port || url.port;
-
-    return hostname + (port ? ':' + port : '');
+  formatHost() {
+    return Request.formatHost(this.url);
   }
 
   formatRelativeUrl() {
-    return this.url.path +
-      (this.url.query ? '?' + qs.stringify(this.url.query) : '');
+    return Request.formatRelativeUrl(this.url);
   }
 
   formatScheme() {
-    return (this.url.scheme || 'https') + '://';
+    return Request.formatScheme(this.url);
   }
 
-  formatUrl(url) {
+  formatUrl() {
     if (this._url === null) {
-      this._url = this._formatUrl(url);
+      this._url = Request.formatUrl(this.url);
     }
 
     return this._url;
@@ -87,82 +172,9 @@ export default class Request extends Message {
 
   parseUrl() {
     if (this._url === null) {
-      this._url = this._parseUrl();
+      this._url = Request.parseUrl(this.url);
     }
 
     return this._url;
-  }
-
-  _formatUrl(url) {
-    return this.formatScheme() +
-      this.formatAuth() +
-      this.formatHost(url) +
-      this.formatRelativeUrl();
-  }
-
-  _parseUrl() {
-    const url = {};
-
-    let authPos = null;
-    let pathPos = null;
-    let portPos = null;
-    let queryPos = null;
-    let schemePos = null;
-
-    let begin = 0;
-    let end = 0;
-
-    let char = '';
-
-    for (; end < this.url.length; end += 1) {
-      char = this.url[end];
-
-      if (char === ':') {
-        if (schemePos === null) {
-          schemePos = end;
-          end += 3;
-        } else {
-          portPos = end;
-        }
-      } else if (char === '/') {
-        if (pathPos === null) {
-          pathPos = end;
-        }
-      } else if (char === '@') {
-        authPos = end;
-      } else if (char === '?') {
-        queryPos = end;
-        break;
-      }
-    }
-
-    if (schemePos !== null) {
-      url.scheme = this.url.slice(begin, schemePos);
-      begin = schemePos + 3;
-    }
-
-    if (authPos !== null) {
-      url.auth = this.url.slice(begin, authPos);
-      begin = authPos + 1;
-    }
-
-    if (portPos !== null) {
-      url.port = this.url.slice(portPos + 1, pathPos);
-    }
-
-    if (begin > 0) {
-      url.hostname = this.url.slice(begin, portPos || pathPos);
-      begin = pathPos;
-    }
-
-    if (queryPos !== null) {
-      url.query = qs.parse(this.url.slice(queryPos + 1));
-    } else {
-      url.query = {};
-    }
-
-    url.path = this.url.slice(pathPos, queryPos || this.url.length);
-
-    return url;
   }
 }
