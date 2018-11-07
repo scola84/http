@@ -34,7 +34,7 @@ export default class Request extends Message {
   }
 
   static formatScheme(url) {
-    return (url.scheme || 'https') + '://';
+    return url.scheme + '://';
   }
 
   static formatUrl(url) {

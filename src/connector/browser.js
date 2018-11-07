@@ -1,8 +1,18 @@
 import { Worker } from '@scola/worker';
+import defaults from 'lodash-es/defaultsDeep';
 import Request from '../message/request';
 
 export default class BrowserConnector extends Worker {
   act(options, data, callback) {
+    defaults(options, {
+      method: 'GET',
+      url: {
+        hostname: window.location.hostname,
+        port: options.url.scheme === 'http' ? 80 : 443,
+        scheme: 'https'
+      }
+    });
+
     const message = new Request(options);
 
     if (message.box && message.box.response) {
@@ -19,8 +29,7 @@ export default class BrowserConnector extends Worker {
   _createSocket(message) {
     const socket = new XMLHttpRequest();
 
-    socket.open(message.method || 'GET',
-      message.formatUrl(window.location));
+    socket.open(message.method, message.formatUrl());
 
     return socket;
   }

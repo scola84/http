@@ -1,10 +1,19 @@
 import { Worker } from '@scola/worker';
+import defaults from 'lodash-es/defaultsDeep';
 import net from 'net';
 import tls from 'tls';
 import Request from '../message/request';
 
 export default class ClientConnector extends Worker {
   act(options, data, callback) {
+    defaults(options, {
+      method: 'GET',
+      url: {
+        port: options.url.scheme === 'http' ? 80 : 443,
+        scheme: 'https'
+      }
+    });
+
     const request = new Request(options);
 
     if (typeof request.socket === 'undefined') {
@@ -22,7 +31,7 @@ export default class ClientConnector extends Worker {
 
     const socket = library.connect(Object.assign({
       host: request.url.hostname,
-      port: request.url.port || 443,
+      port: request.url.port,
       servername: request.url.hostname
     }, request.options));
 
