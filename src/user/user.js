@@ -85,9 +85,9 @@ export default class User {
     return this;
   }
 
-  getName() {
+  getName(parts) {
     return this._details === null ?
-      '' : User.formatName(this._details);
+      '' : User.formatName(this._details, parts);
   }
 
   getParentId(name, scope = 'write') {
