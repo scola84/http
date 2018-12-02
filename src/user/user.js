@@ -135,13 +135,13 @@ export default class User {
     return this;
   }
 
-  may(permission, route, data) {
+  may(permission, box, data) {
     if (typeof permission === 'string' || Array.isArray(permission)) {
       return this._mayRole(permission);
     }
 
     if (typeof permission === 'function') {
-      return permission(route, data);
+      return permission(box, data);
     }
 
     if (typeof permission.scope === 'undefined') {
@@ -151,8 +151,8 @@ export default class User {
     const scope = data && data.meta && data.meta.scope ||
       data && data.data && data.data.scope;
 
-    const found = this._mayScope(route, data,
-      permission.scope, scope, true);
+    const found = this._mayScope(box, data,
+      permission.scope, scope);
 
     if (typeof permission.name === 'undefined') {
       return found;
