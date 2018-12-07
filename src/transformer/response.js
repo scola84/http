@@ -2,51 +2,21 @@ import { Worker } from '@scola/worker';
 
 export default class ResponseTransformer extends Worker {
   act(response, data, callback) {
-    const box = this._resolve(response);
+    const responseData = data;
+    const [box, extraData] = this._resolveResponse(response);
 
     if (response.status >= 400) {
-      let error = null;
-
-      if (data && data.error) {
-        error = new Error(`${response.status} ${data.error.message}`);
-        error.field = data.error.field;
-        error.reason = data.error.reason;
-      } else {
-        error = new Error(String(response.status));
-        error.data = data;
-      }
-
-      box.error = true;
-      this.fail(box, error, callback);
-
+      this._resolveError(response, responseData, callback, box);
       return;
     }
 
-    const merged = this.merge(box, data, response);
-
-    if (typeof merged !== 'undefined') {
-      data = merged;
-    }
+    data = this.merge(box, extraData, responseData, response);
 
     this.pass(box, data, callback);
   }
 
-  decide(response, data) {
-    if (data === null) {
-      if (typeof response.getHeader('Content-Type') === 'undefined') {
-        return null;
-      }
-
-      if (response.getHeader('Content-Length') === 0) {
-        return null;
-      }
-    }
-
-    return true;
-  }
-
   err(response, error, callback) {
-    const box = this._resolve(response);
+    const [box] = this._resolveResponse(response);
 
     if (box.error === true) {
       return;
@@ -56,19 +26,33 @@ export default class ResponseTransformer extends Worker {
     this.fail(box, error, callback);
   }
 
-  _resolve(response) {
-    let box = response;
+  _resolveError(response, data, callback, box) {
+    const description = data &&
+      (data.error && data.error.message || data.message) ||
+      '';
 
-    if (box.request && box.request.box) {
-      box = box.request.box;
+    const message = `${response.status} ${description}`;
+    const error = new Error(message.trim());
 
-      if (typeof box.response !== 'undefined') {
-        throw new Error('Box has already been used');
-      }
+    box.error = true;
+    error.data = data;
 
-      box.response = response;
+    if (data && data.error) {
+      error.field = data.error.field;
+      error.reason = data.error.reason;
     }
 
-    return box;
+    this.fail(box, error, callback);
+  }
+
+  _resolveResponse(response) {
+    const extra = response.request.extra;
+
+    if (extra.callback) {
+      extra.callback();
+      extra.callback = null;
+    }
+
+    return [extra.box, extra.data];
   }
 }
