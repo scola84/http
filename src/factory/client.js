@@ -21,7 +21,7 @@ import TransferEncodingDecoder from '../decoder/transfer-encoding';
 import TransferEncodingEncoder from '../encoder/transfer-encoding';
 import UpgradeResponder from '../responder/upgrade';
 
-export default function createClient(logRequest = false, logResponse = false) {
+export default function createClient(options = {}) {
   const bodyParser = new BodyParser();
   const bodyWriter = new BodyWriter();
   const clientConnector = new ClientConnector();
@@ -71,11 +71,11 @@ export default function createClient(logRequest = false, logResponse = false) {
   clientConnector
     .bypass(responseTransformer);
 
-  if (logRequest === true) {
+  if ((options.log & 1) === 1) {
     bodyWriter.setLog('data');
   }
 
-  if (logResponse === true) {
+  if ((options.log & 2) === 2) {
     clientMediator.setLog('data');
   }
 
