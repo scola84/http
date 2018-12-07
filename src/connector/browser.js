@@ -15,10 +15,6 @@ export default class BrowserConnector extends Worker {
 
     const message = new Request(options);
 
-    if (message.box && message.box.response) {
-      delete message.box.response;
-    }
-
     if (typeof message.socket === 'undefined') {
       message.socket = this._createSocket(message);
     }

@@ -56,8 +56,7 @@ export default class Message {
 
   constructor(options = {}) {
     this.body = {};
-    this.box = options.box;
-    this.extra = options.extra;
+    this.extra = options.extra || {};
     this.headers = options.headers || {};
     this.parser = { begin: 0, end: 0 };
     this.protocol = { name: null, version: null };
