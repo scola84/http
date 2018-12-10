@@ -16,13 +16,11 @@ export default class ResponseTransformer extends Worker {
   }
 
   err(response, error, callback) {
-    const [box] = this._resolveResponse(response);
-
-    if (box.error === true) {
-      return;
-    }
+    const [box, extraData] = this._resolveResponse(response);
 
     box.error = true;
+    error.data = extraData;
+
     this.fail(box, error, callback);
   }
 
