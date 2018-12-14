@@ -10,9 +10,13 @@ export default class ResponseTransformer extends Worker {
       return;
     }
 
-    data = this.merge(box, extraData, responseData, response);
-
-    this.pass(box, data, callback);
+    try {
+      data = this.merge(box, extraData, responseData, response);
+      this.pass(box, data, callback);
+    } catch (error) {
+      error.data = extraData;
+      this.fail(box, error, callback);
+    }
   }
 
   err(response, error, callback) {
