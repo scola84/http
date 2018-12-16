@@ -16,10 +16,16 @@ export default class ClientConnector extends Worker {
 
     const request = new Request(options);
 
-    if (typeof request.socket === 'undefined') {
-      this._connect(request, data, callback);
-    } else {
+    if (typeof request.socket !== 'undefined') {
       this.pass(request, data, callback);
+      return;
+    }
+
+    try {
+      this._connect(request, data, callback);
+    } catch (error) {
+      error.data = data;
+      this.fail(request, error, callback);
     }
   }
 

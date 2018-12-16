@@ -69,6 +69,9 @@ export default function createClient(options = {}) {
     .connect(responseTransformer);
 
   clientConnector
+    .bypass(clientMediator);
+
+  clientMediator
     .bypass(responseTransformer);
 
   if ((options.log & 1) === 1) {

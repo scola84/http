@@ -2,21 +2,14 @@ import { Worker } from '@scola/worker';
 
 export default class ResponseTransformer extends Worker {
   act(response, data, callback) {
-    const responseData = data;
     const [box, extraData] = this._resolveResponse(response);
 
     if (response.status >= 400) {
-      this._resolveError(response, responseData, callback, box);
+      this._handleError(response, data, callback, box, extraData);
       return;
     }
 
-    try {
-      data = this.merge(box, extraData, responseData, response);
-      this.pass(box, data, callback);
-    } catch (error) {
-      error.data = extraData;
-      this.fail(box, error, callback);
-    }
+    this._handleSuccess(response, data, callback, box, extraData);
   }
 
   err(response, error, callback) {
@@ -28,7 +21,7 @@ export default class ResponseTransformer extends Worker {
     this.fail(box, error, callback);
   }
 
-  _resolveError(response, data, callback, box) {
+  _handleError(response, data, callback, box, extraData) {
     const description = data &&
       (data.error && data.error.message || data.message) ||
       '';
@@ -37,7 +30,9 @@ export default class ResponseTransformer extends Worker {
     const error = new Error(message.trim());
 
     box.error = true;
-    error.data = data;
+
+    error.data = extraData;
+    error.responseData = data;
 
     if (data && data.error) {
       error.field = data.error.field;
@@ -45,6 +40,17 @@ export default class ResponseTransformer extends Worker {
     }
 
     this.fail(box, error, callback);
+  }
+
+  _handleSuccess(response, data, callback, box, extraData) {
+    try {
+      data = this.merge(box, extraData, data, response);
+      this.pass(box, data, callback);
+    } catch (error) {
+      error.data = extraData;
+      error.responseData = data;
+      this.fail(box, error, callback);
+    }
   }
 
   _resolveResponse(response) {
