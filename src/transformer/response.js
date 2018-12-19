@@ -21,6 +21,14 @@ export default class ResponseTransformer extends Worker {
     this.fail(box, error, callback);
   }
 
+  merge(box, extraData, data, response) {
+    if (this._merge) {
+      return this._merge(box, extraData, data, response);
+    }
+
+    return data;
+  }
+
   _handleError(response, data, callback, box, extraData) {
     const description = data &&
       (data.error && data.error.message || data.message) ||
