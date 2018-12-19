@@ -93,6 +93,8 @@ import {
 
 import locale from './src/locale';
 
+import stub from './test/stub';
+
 export {
   PasswordChecker,
   RoleChecker,
@@ -188,4 +190,8 @@ export {
 
 export {
   locale
+};
+
+export {
+  stub
 };
