@@ -1,9 +1,10 @@
 import net from 'net';
 
-export default function stub({
-  port = 8888,
-  host = 'localhost'
-}) {
+export default function stub(options = {}) {
+  const {
+    port = 8888,
+      host = 'localhost'
+  } = options;
 
   const original = net.connect;
 
