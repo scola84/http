@@ -8,7 +8,7 @@ export default class BodyParser extends Worker {
     this.setMaxLength(options.maxLength);
   }
 
-  setMaxLength(maxLength = 1024 * 1024) {
+  setMaxLength(maxLength = -1) {
     this._maxLength = maxLength;
     return this;
   }
@@ -28,8 +28,10 @@ export default class BodyParser extends Worker {
       contentLength = 0;
     }
 
-    if (contentLength > this._maxLength) {
-      throw new Error('413 Content length exceeds maximum');
+    if (this._maxLength > -1) {
+      if (contentLength > this._maxLength) {
+        throw new Error('413 Content length exceeds maximum');
+      }
     }
 
     data = data.slice(message.parser.begin);
@@ -46,8 +48,10 @@ export default class BodyParser extends Worker {
       message.state.body = true;
     }
 
-    if (message.body.length > this._maxLength) {
-      throw new Error('413 Body length exceeds maximum');
+    if (this._maxLength > -1) {
+      if (message.body.length > this._maxLength) {
+        throw new Error('413 Body length exceeds maximum');
+      }
     }
 
     if (data.length === 0) {
