@@ -1,9 +1,20 @@
 import { Streamer } from '@scola/worker';
+import merge from 'lodash-es/merge';
 import Request from '../message/request';
 
+const woptions = {
+  id: null
+};
+
 export default class ServerConnector extends Streamer {
+  static setOptions(options) {
+    merge(woptions, options);
+  }
+
   act(socket) {
-    this.read({ socket });
+    this.read({
+      socket
+    });
   }
 
   data(box, data) {
@@ -19,6 +30,7 @@ export default class ServerConnector extends Streamer {
 
     if (create === true) {
       box.message = new Request({ socket: box.socket });
+      box.message.setHeader('X-Server-Id', woptions.id);
     }
 
     data = this._prepareParser(box.message, data);

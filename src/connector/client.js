@@ -6,6 +6,7 @@ import tls from 'tls';
 import Request from '../message/request';
 
 const woptions = {
+  agent: null,
   net,
   tls
 };
@@ -25,6 +26,7 @@ export default class ClientConnector extends Worker {
     });
 
     const request = new Request(options);
+    request.setHeader('User-Agent', woptions.agent);
 
     if (typeof request.socket !== 'undefined') {
       this.pass(request, data, callback);
