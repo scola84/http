@@ -4,7 +4,7 @@ import chai from 'chai';
 
 import ResponseTransformer from '../../../src/transformer/response';
 
-describe('ResponseTransformer', () => {
+describe('@scola/http/ResponseTransformer', () => {
   it('should merge with proper arguments', (done) => {
     const extraBox = { name: 'extrabox' };
     const extraData = { name: 'extradata' };
