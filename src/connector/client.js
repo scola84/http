@@ -19,6 +19,7 @@ export default class ClientConnector extends Worker {
   act(options, data, callback) {
     defaults(options, {
       method: 'GET',
+      timeout: 30000,
       url: {
         port: options.url.scheme === 'http' ? 80 : 443,
         scheme: 'https'
@@ -53,11 +54,20 @@ export default class ClientConnector extends Worker {
     const socket = library.connect(Object.assign({
       host: request.url.hostname,
       port: request.url.port,
-      servername: request.url.hostname
+      servername: request.url.hostname,
+      timeout: request.timeout
     }, request.options));
 
     socket.once('error', (error) => {
       this.fail(request.createResponse(), error, callback);
+      socket.removeAllListeners();
+    });
+
+    socket.once('timeout', () => {
+      const error = new Error('Connection timed out');
+      this.fail(request.createResponse(), error, callback);
+      socket.removeAllListeners();
+      socket.destroy();
     });
 
     socket.once(event, () => {

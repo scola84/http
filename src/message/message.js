@@ -62,6 +62,7 @@ export default class Message {
     this.protocol = { name: null, version: null };
     this.socket = options.socket;
     this.state = options.state || {};
+    this.timeout = options.timeout;
     this.timestamp = null;
     this.user = null;
   }
