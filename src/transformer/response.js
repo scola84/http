@@ -3,7 +3,9 @@ import { Worker } from '@scola/worker';
 export default class ResponseTransformer extends Worker {
   act(response, data, callback) {
     try {
-      if (response.status >= 400) {
+      if (response.request.error === true) {
+        return;
+      } else if (response.status >= 400) {
         this._throwError(response, data);
       } else {
         this._handleSuccess(response, data, callback);
@@ -32,9 +34,18 @@ export default class ResponseTransformer extends Worker {
       callback: extraCallback = () => {}
     } = response.request.extra;
 
+    response.request.error = true;
+
     error.data = extraData;
     error.responseData = data;
     error.responseString = String(data);
+
+    if (response.mustEnd()) {
+      if (response.socket) {
+        response.socket.removeAllListeners();
+        response.socket.destroy();
+      }
+    }
 
     extraCallback();
 
@@ -49,6 +60,13 @@ export default class ResponseTransformer extends Worker {
     } = response.request.extra;
 
     data = this.merge(box, extraData, data, response);
+
+    if (response.mustEnd()) {
+      if (response.socket) {
+        response.socket.removeAllListeners();
+        response.socket.destroy();
+      }
+    }
 
     extraCallback();
 
