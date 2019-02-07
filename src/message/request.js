@@ -122,6 +122,7 @@ export default class Request extends Message {
     this._url = null;
 
     this.method = options.method;
+    this.retry = options.retry;
     this.timestamp = Date.now();
     this.url = options.url;
   }
