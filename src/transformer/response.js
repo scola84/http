@@ -47,6 +47,8 @@ export default class ResponseTransformer extends Worker {
       callback: extraCallback = () => {}
     } = response.request.extra;
 
+    box.error = true;
+
     error.data = extraData;
     error.responseData = data;
     error.responseString = String(data);
