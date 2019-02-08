@@ -115,6 +115,7 @@ describe('@scola/http/ResponseTransformer', () => {
           chai.expect(box).to.equal(extraBox);
           chai.expect(error.data).to.equal(extraData);
           chai.expect(error.responseData).to.equal(testData);
+          chai.expect(error.responseString).to.equal('[object Object]');
           chai.expect(error.message).to.equal('400 Error message');
           chai.expect(error.field).to.equal('Error field');
           chai.expect(error.reason).to.equal('Error reason');
@@ -158,6 +159,7 @@ describe('@scola/http/ResponseTransformer', () => {
           chai.expect(box).to.equal(extraBox);
           chai.expect(error.data).to.equal(extraData);
           chai.expect(error.responseData).to.equal(testData);
+          chai.expect(error.responseString).to.equal('[object Object]');
           chai.expect(error.message).to.equal('Merge conflict');
           chai.expect(callback).to.equal(testCallback);
           chai.expect(extraCallback).to.have.been.called();
@@ -173,6 +175,50 @@ describe('@scola/http/ResponseTransformer', () => {
         throw new Error('Merge conflict');
       }
     });
+
+    transformer.connect(worker);
+    transformer.act(testResponse, testData, testCallback);
+  });
+
+  it('should fail when callback throws error', (done) => {
+    const extraBox = { name: 'extrabox' };
+    const extraData = { name: 'extradata' };
+    const extraCallback = chai.spy(() => {
+      throw new Error('Callback error');
+    });
+
+    const testData = { name: 'testdata' };
+    const testCallback = () => {};
+
+    const testResponse = new Response({
+      request: new Request({
+        extra: {
+          box: extraBox,
+          callback: extraCallback,
+          data: extraData
+        }
+      }),
+      status: 200
+    });
+
+    const worker = new Worker({
+      err(box, error, callback) {
+        try {
+          chai.expect(box).to.equal(extraBox);
+          chai.expect(error.data).to.equal(extraData);
+          chai.expect(error.responseData).to.equal(testData);
+          chai.expect(error.responseString).to.equal('[object Object]');
+          chai.expect(error.message).to.equal('Callback error');
+          chai.expect(callback).to.equal(testCallback);
+          chai.expect(extraCallback).to.have.been.called();
+          done();
+        } catch (catchError) {
+          done(catchError);
+        }
+      }
+    });
+
+    const transformer = new ResponseTransformer();
 
     transformer.connect(worker);
     transformer.act(testResponse, testData, testCallback);
@@ -203,7 +249,52 @@ describe('@scola/http/ResponseTransformer', () => {
           chai.expect(box).to.equal(extraBox);
           chai.expect(error.data).to.equal(extraData);
           chai.expect(error.responseData).to.equal(null);
+          chai.expect(error.responseString).to.equal('null');
           chai.expect(error.message).to.equal('Test message');
+          chai.expect(callback).to.equal(testCallback);
+          chai.expect(extraCallback).to.have.been.called();
+          done();
+        } catch (catchError) {
+          done(catchError);
+        }
+      }
+    });
+
+    const transformer = new ResponseTransformer();
+
+    transformer.connect(worker);
+    transformer.err(testResponse, testError, testCallback);
+  });
+
+  it('should fail when callback throws error in error flow', (done) => {
+    const extraBox = { name: 'extrabox' };
+    const extraData = { name: 'extradata' };
+    const extraCallback = chai.spy(() => {
+      throw new Error('Callback error');
+    });
+
+    const testError = new Error('Test message');
+    const testCallback = () => {};
+
+    const testResponse = new Response({
+      request: new Request({
+        extra: {
+          box: extraBox,
+          callback: extraCallback,
+          data: extraData
+        }
+      }),
+      status: 200
+    });
+
+    const worker = new Worker({
+      err(box, error, callback) {
+        try {
+          chai.expect(box).to.equal(extraBox);
+          chai.expect(error.data).to.equal(extraData);
+          chai.expect(error.responseData).to.equal(null);
+          chai.expect(error.responseString).to.equal('null');
+          chai.expect(error.message).to.equal('Callback error');
           chai.expect(callback).to.equal(testCallback);
           chai.expect(extraCallback).to.have.been.called();
           done();

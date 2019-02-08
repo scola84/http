@@ -47,12 +47,6 @@ export default class ResponseTransformer extends Worker {
       callback: extraCallback = () => {}
     } = response.request.extra;
 
-    box.error = true;
-
-    error.data = extraData;
-    error.responseData = data;
-    error.responseString = String(data);
-
     if (response.mustEnd()) {
       if (response.socket) {
         response.socket.removeAllListeners();
@@ -60,12 +54,15 @@ export default class ResponseTransformer extends Worker {
       }
     }
 
+    box.error = true;
+    error = this._setError(error, data, extraData);
+
     try {
       extraCallback();
       this.fail(box, error, callback);
     } catch (tryError) {
-      tryError.data = extraData;
-      this.fail(box, tryError, callback);
+      error = this._setError(tryError, data, extraData);
+      this.fail(box, error, callback);
     }
   }
 
@@ -76,8 +73,6 @@ export default class ResponseTransformer extends Worker {
       callback: extraCallback = () => {}
     } = response.request.extra;
 
-    data = this.merge(box, extraData, data, response);
-
     if (response.mustEnd()) {
       if (response.socket) {
         response.socket.removeAllListeners();
@@ -86,11 +81,26 @@ export default class ResponseTransformer extends Worker {
     }
 
     try {
+      data = this.merge(box, extraData, data, response);
+    } catch (tryError) {
+      this._handleError(response, data, callback, tryError);
+      return;
+    }
+
+    try {
       extraCallback();
       this.pass(box, data, callback);
     } catch (tryError) {
-      tryError.data = data;
-      this.fail(box, tryError, callback);
+      const error = this._setError(tryError, data, extraData);
+      this.fail(box, error, callback);
     }
+  }
+
+  _setError(error, data, extraData) {
+    error.data = extraData;
+    error.responseData = data;
+    error.responseString = String(data);
+
+    return error;
   }
 }
