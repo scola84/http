@@ -113,6 +113,7 @@ describe('@scola/http/ResponseTransformer', () => {
       err(box, error, callback) {
         try {
           chai.expect(box).to.equal(extraBox);
+          chai.expect(box.error).to.equal(true);
           chai.expect(error.data).to.equal(extraData);
           chai.expect(error.responseData).to.equal(testData);
           chai.expect(error.responseString).to.equal('[object Object]');
@@ -157,6 +158,7 @@ describe('@scola/http/ResponseTransformer', () => {
       err(box, error, callback) {
         try {
           chai.expect(box).to.equal(extraBox);
+          chai.expect(box.error).to.equal(true);
           chai.expect(error.data).to.equal(extraData);
           chai.expect(error.responseData).to.equal(testData);
           chai.expect(error.responseString).to.equal('[object Object]');
@@ -205,6 +207,7 @@ describe('@scola/http/ResponseTransformer', () => {
       err(box, error, callback) {
         try {
           chai.expect(box).to.equal(extraBox);
+          chai.expect(box.error).to.equal(true);
           chai.expect(error.data).to.equal(extraData);
           chai.expect(error.responseData).to.equal(testData);
           chai.expect(error.responseString).to.equal('[object Object]');
@@ -247,6 +250,7 @@ describe('@scola/http/ResponseTransformer', () => {
       err(box, error, callback) {
         try {
           chai.expect(box).to.equal(extraBox);
+          chai.expect(box.error).to.equal(true);
           chai.expect(error.data).to.equal(extraData);
           chai.expect(error.responseData).to.equal(null);
           chai.expect(error.responseString).to.equal('null');
@@ -291,6 +295,7 @@ describe('@scola/http/ResponseTransformer', () => {
       err(box, error, callback) {
         try {
           chai.expect(box).to.equal(extraBox);
+          chai.expect(box.error).to.equal(true);
           chai.expect(error.data).to.equal(extraData);
           chai.expect(error.responseData).to.equal(null);
           chai.expect(error.responseString).to.equal('null');

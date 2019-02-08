@@ -54,14 +54,13 @@ export default class ResponseTransformer extends Worker {
       }
     }
 
-    box.error = true;
-    error = this._setError(error, data, extraData);
+    error = this._setError(box, error, data, extraData);
 
     try {
       extraCallback();
       this.fail(box, error, callback);
     } catch (tryError) {
-      error = this._setError(tryError, data, extraData);
+      error = this._setError(box, tryError, data, extraData);
       this.fail(box, error, callback);
     }
   }
@@ -91,12 +90,14 @@ export default class ResponseTransformer extends Worker {
       extraCallback();
       this.pass(box, data, callback);
     } catch (tryError) {
-      const error = this._setError(tryError, data, extraData);
+      const error = this._setError(box, tryError, data, extraData);
       this.fail(box, error, callback);
     }
   }
 
-  _setError(error, data, extraData) {
+  _setError(box, error, data, extraData) {
+    box.error = true;
+
     error.data = extraData;
     error.responseData = data;
     error.responseString = String(data);
