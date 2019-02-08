@@ -36,14 +36,14 @@ export default class ClientConnector extends Worker {
     }
 
     try {
-      this._connect(request, data, callback);
+      this._connect(request, data, callback, options);
     } catch (error) {
       error.data = data;
       this.fail(request, error, callback);
     }
   }
 
-  _connect(request, data, callback) {
+  _connect(request, data, callback, options) {
     const library = request.url.scheme === 'http' ?
       woptions.net : woptions.tls;
 
@@ -65,7 +65,7 @@ export default class ClientConnector extends Worker {
 
     socket.once('timeout', () => {
       request.socket = socket;
-      this._timeout(request, data, callback);
+      this._timeout(request, data, callback, options);
     });
 
     socket.once(event, () => {
@@ -74,27 +74,27 @@ export default class ClientConnector extends Worker {
     });
   }
 
-  _retry(request, data, callback) {
-    request.retry -= 1;
-
+  _retry(request, data, callback, options) {
     if (request.socket) {
       request.socket.removeAllListeners();
       request.socket.destroy();
       delete request.socket;
     }
 
-    this._connect(request, data, callback);
+    if (request.retry === 0) {
+      const error = new Error('Connection timed out');
+      this.fail(request, error, callback);
+      return;
+    }
+
+    options.retry -= 1;
+    this.act(options, data, callback);
   }
 
-  _timeout(request, data, callback) {
-    if (request.retry > 0) {
-      try {
-        this._retry(request, data, callback);
-      } catch (error) {
-        this.fail(request, error, callback);
-      }
-    } else {
-      const error = new Error('Connection timed out');
+  _timeout(request, data, callback, options) {
+    try {
+      this._retry(request, data, callback, options);
+    } catch (error) {
       this.fail(request, error, callback);
     }
   }
