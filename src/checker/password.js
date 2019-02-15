@@ -6,7 +6,6 @@ export default class PasswordChecker extends Worker {
     const password = data.password;
     const hash = request.user.getDetail('password') || '';
 
-    data.password = null;
     request.user.unsetDetail('password');
 
     compare(password, hash, (error, result) => {
@@ -24,9 +23,8 @@ export default class PasswordChecker extends Worker {
     });
   }
 
-  decide(request, data) {
+  decide(request) {
     if (request.user === null) {
-      data.password = null;
       throw new Error('401 User not found');
     }
 
