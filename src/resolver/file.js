@@ -50,6 +50,10 @@ export default class FileResolver extends Streamer {
       response.setHeader('Content-Length', stats.size);
       response.setHeader('Content-Type', data.file.type);
 
+      if (data.file.path.slice(-3) === '.gz') {
+        response.setHeader('Content-Encoding', 'gzip');
+      }
+
       this.read(response, data);
     });
   }
