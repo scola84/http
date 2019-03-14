@@ -8,7 +8,7 @@
   "main": "./index.js",
   "jsnext:main": "./index.js",
   "dependencies": {
-    "@scola/worker": "^2.14.1",
+    "@scola/worker": "^2.14.3",
     "bcrypt": "^3.0.4",
     "buffer": "^5.2.1",
     "decode-uri-component": "^0.2.0",
