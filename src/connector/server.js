@@ -7,6 +7,10 @@ const woptions = {
 };
 
 export default class ServerConnector extends Streamer {
+  static getOptions() {
+    return woptions;
+  }
+
   static setOptions(options) {
     merge(woptions, options);
   }

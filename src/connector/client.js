@@ -12,6 +12,10 @@ const woptions = {
 };
 
 export default class ClientConnector extends Worker {
+  static getOptions() {
+    return woptions;
+  }
+
   static setOptions(options) {
     merge(woptions, options);
   }
