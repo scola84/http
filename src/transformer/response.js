@@ -100,7 +100,6 @@ export default class ResponseTransformer extends Worker {
 
     error.data = extraData;
     error.responseData = data;
-    error.responseString = String(data);
 
     return error;
   }
