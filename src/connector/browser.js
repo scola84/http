@@ -25,6 +25,9 @@ export default class BrowserConnector extends Worker {
   _createSocket(message) {
     const socket = new XMLHttpRequest();
 
+    socket.removeAllListeners = () => {};
+    socket.destroy = () => {};
+
     socket.open(message.method, message.formatUrl());
 
     return socket;
