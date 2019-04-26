@@ -8,12 +8,7 @@ export default class PathRouter extends Router {
 
   act(request, data, callback) {
     if (this._paths === null) {
-      this._paths = Object.keys(this._workers).map((name) => {
-        return {
-          name,
-          regexp: new RegExp(name)
-        };
-      });
+      this._paths = this._createPaths();
     }
 
     const url = request.parseUrl();
@@ -34,5 +29,14 @@ export default class PathRouter extends Router {
 
     this.fail(request.createResponse(),
       new Error(`404 Path not found (${url.path})`), callback);
+  }
+
+  _createPaths() {
+    return Object.keys(this._workers).map((name) => {
+      return {
+        name,
+        regexp: new RegExp(name)
+      };
+    });
   }
 }
