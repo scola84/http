@@ -1,27 +1,31 @@
-import BodyParser from '../parser/body';
-import BodyWriter from '../writer/body';
-import ClientConnector from '../connector/client';
-import ClientMediator from '../mediator/client';
-import ConnectionHeader from '../header/connection';
-import ContentEncodingDecoder from '../decoder/content-encoding';
-import ContentEncodingEncoder from '../encoder/content-encoding';
-import ContentLengthHeader from '../header/content-length';
-import ContentTypeDecoder from '../decoder/content-type';
-import ContentTypeEncoder from '../encoder/content-type';
-import ContinueResponder from '../responder/continue';
-import DateHeader from '../header/date';
-import HeaderFieldsParser from '../parser/header-fields';
-import HeaderFieldsWriter from '../writer/header-fields';
-import RequestLineWriter from '../writer/request-line';
-import ResponseLineParser from '../parser/response-line';
-import ResponseTransformer from '../transformer/response';
-import TrailerFieldsParser from '../parser/trailer-fields';
-import TrailerFieldsWriter from '../writer/trailer-fields';
-import TransferEncodingDecoder from '../decoder/transfer-encoding';
-import TransferEncodingEncoder from '../encoder/transfer-encoding';
-import UpgradeResponder from '../responder/upgrade';
+import {
+  BodyParser,
+  BodyWriter,
+  ClientConnector,
+  ClientMediator,
+  ConnectionHeader,
+  ContentEncodingDecoder,
+  ContentEncodingEncoder,
+  ContentLengthHeader,
+  ContentTypeDecoder,
+  ContentTypeEncoder,
+  ContinueResponder,
+  DateHeader,
+  HeaderFieldsParser,
+  HeaderFieldsWriter,
+  RequestLineWriter,
+  ResponseLineParser,
+  ResponseTransformer,
+  TrailerFieldsParser,
+  TrailerFieldsWriter,
+  TransferEncodingDecoder,
+  TransferEncodingEncoder,
+  UpgradeResponder
+} from '../worker';
 
-export default function createClient(options = {}) {
+export default function createClient({
+  log = 0
+}) {
   const bodyParser = new BodyParser();
   const bodyWriter = new BodyWriter();
   const clientConnector = new ClientConnector();
@@ -74,16 +78,16 @@ export default function createClient(options = {}) {
   clientMediator
     .bypass(responseTransformer);
 
-  if ((options.log & 1) === 1) {
+  if ((log & 1) === 1) {
     bodyWriter.setLog('data');
   }
 
-  if ((options.log & 2) === 2) {
+  if ((log & 2) === 2) {
     clientMediator.setLog('data');
   }
 
-  return [
-    clientConnector,
-    responseTransformer
-  ];
+  return {
+    connector: clientConnector,
+    transformer: responseTransformer
+  };
 }

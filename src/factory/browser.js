@@ -1,18 +1,20 @@
-import BodyParser from '../parser/body';
-import BrowserConnector from '../connector/browser';
-import BrowserMediator from '../mediator/browser';
-import ContentEncodingDecoder from '../decoder/content-encoding';
-import ContentEncodingEncoder from '../encoder/content-encoding';
-import ContentTypeDecoder from '../decoder/content-type';
-import ContentTypeEncoder from '../encoder/content-type';
-import HeaderFieldsParser from '../parser/header-fields';
-import ResponseLineParser from '../parser/response-line';
-import ResponseTransformer from '../transformer/response';
-import TrailerFieldsParser from '../parser/trailer-fields';
-import TransferEncodingDecoder from '../decoder/transfer-encoding';
-import TransferEncodingEncoder from '../encoder/transfer-encoding';
+import {
+  BodyParser,
+  BrowserConnector,
+  BrowserMediator,
+  ContentEncodingDecoder,
+  ContentEncodingEncoder,
+  ContentTypeDecoder,
+  ContentTypeEncoder,
+  HeaderFieldsParser,
+  ResponseLineParser,
+  ResponseTransformer,
+  TrailerFieldsParser,
+  TransferEncodingDecoder,
+  TransferEncodingEncoder
+} from '../worker';
 
-export default function createBrowser(...codec) {
+export default function createBrowser(codec) {
   const bodyParser = new BodyParser();
   const browserConnector = new BrowserConnector();
   const browserMediator = new BrowserMediator();
@@ -27,30 +29,23 @@ export default function createBrowser(...codec) {
   const transferEncodingDecoder = new TransferEncodingDecoder();
   const transferEncodingEncoder = new TransferEncodingEncoder();
 
-  const decoders = [
-    'application/json',
-    'application/msgpack'
-  ];
+  const decoders = ['json', 'msgpack'];
+  const encoders = ['formdata', 'json', 'msgpack', 'urlencoded'];
 
-  const encoders = [
-    'multipart/form-data',
-    'application/json',
-    'application/msgpack',
-    'application/x-www-form-urlencoded'
-  ];
+  for (let i = 0; i < decoders.length; i += 1) {
+    const name = decoders[i];
 
-  for (let i = 0; i < codec.length; i += 1) {
-    if (decoders.indexOf(codec[i].type) > -1) {
-      contentTypeDecoder
-        .setStrict(false)
-        .manage(codec[i].type, new codec[i].Decoder());
-    }
+    contentTypeDecoder
+      .setStrict(false)
+      .manage(codec[name].type, new codec[name].Decoder());
+  }
 
-    if (encoders.indexOf(codec[i].type) > -1) {
-      contentTypeEncoder
-        .setStrict(false)
-        .manage(codec[i].type, new codec[i].Encoder());
-    }
+  for (let i = 0; i < encoders.length; i += 1) {
+    const name = encoders[i];
+
+    contentTypeEncoder
+      .setStrict(false)
+      .manage(codec[name].type, new codec[name].Encoder());
   }
 
   browserConnector
@@ -67,8 +62,14 @@ export default function createBrowser(...codec) {
     .connect(contentTypeDecoder)
     .connect(responseTransformer);
 
-  return [
-    browserConnector,
-    responseTransformer
-  ];
+  browserConnector
+    .bypass(browserMediator);
+
+  browserMediator
+    .bypass(responseTransformer);
+
+  return {
+    connector: browserConnector,
+    transformer: responseTransformer
+  };
 }
