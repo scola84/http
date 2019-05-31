@@ -16,12 +16,10 @@ export default [{
   output: [{
     file: 'dist/http.cjs.js',
     format: 'cjs',
-    indent: false
   }, {
     extend: true,
     file: 'dist/http.umd.js',
     format: 'umd',
-    indent: false,
     name: 'scola'
   }],
   plugins: [
