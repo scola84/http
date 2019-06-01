@@ -1,7 +1,7 @@
 {
   "name": "@scola/http",
   "version": "6.0.0",
-  "description": "HTTP Server and Client",
+  "description": "Request and serve documents over HTTP",
   "repository": "github:scola84/http",
   "author": "M.C. van den Boogaart <scola@kvdb.name>",
   "license": "MIT",
@@ -12,9 +12,11 @@
     "rollup-plugin-buble": "^0.19.6",
     "rollup-plugin-commonjs": "^10.0.0",
     "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-resolve": "^5.0.0"
   },
   "dependencies": {
+    "@scola/codec": "^2.5.3",
     "@scola/worker": "^2.15.0",
     "bcrypt": "^3.0.6",
     "buffer": "^5.2.1",

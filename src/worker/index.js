@@ -3,7 +3,6 @@ export * from './connector';
 export * from './decoder';
 export * from './encoder';
 export * from './header';
-export * from './interceptor';
 export * from './mediator';
 export * from './message';
 export * from './parser';

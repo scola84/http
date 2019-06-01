@@ -1,3 +1,5 @@
+import { setupBrowser } from '@scola/codec';
+
 import {
   BodyParser,
   BrowserConnector,
@@ -14,7 +16,11 @@ import {
   TransferEncodingEncoder
 } from '../worker';
 
-export default function createBrowser(codec) {
+export default function createBrowser(options = {}) {
+  const {
+    setup = setupBrowser
+  } = options;
+
   const bodyParser = new BodyParser();
   const browserConnector = new BrowserConnector();
   const browserMediator = new BrowserMediator();
@@ -28,25 +34,6 @@ export default function createBrowser(codec) {
   const trailerFieldsParser = new TrailerFieldsParser();
   const transferEncodingDecoder = new TransferEncodingDecoder();
   const transferEncodingEncoder = new TransferEncodingEncoder();
-
-  const decoders = ['json', 'msgpack'];
-  const encoders = ['formdata', 'json', 'msgpack', 'urlencoded'];
-
-  for (let i = 0; i < decoders.length; i += 1) {
-    const name = decoders[i];
-
-    contentTypeDecoder
-      .setStrict(false)
-      .manage(codec[name].type, new codec[name].Decoder());
-  }
-
-  for (let i = 0; i < encoders.length; i += 1) {
-    const name = encoders[i];
-
-    contentTypeEncoder
-      .setStrict(false)
-      .manage(codec[name].type, new codec[name].Encoder());
-  }
 
   browserConnector
     .connect(contentTypeEncoder)
@@ -68,8 +55,8 @@ export default function createBrowser(codec) {
   browserMediator
     .bypass(responseTransformer);
 
-  return {
+  return setup({
     connector: browserConnector,
     transformer: responseTransformer
-  };
+  });
 }

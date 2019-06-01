@@ -1,3 +1,5 @@
+import { setupClient } from '@scola/codec';
+
 import {
   BodyParser,
   BodyWriter,
@@ -23,9 +25,12 @@ import {
   UpgradeResponder
 } from '../worker';
 
-export default function createClient({
-  log = 0
-}) {
+export default function createClient(options = {}) {
+  const {
+    log = 0,
+      setup = setupClient
+  } = options;
+
   const bodyParser = new BodyParser();
   const bodyWriter = new BodyWriter();
   const clientConnector = new ClientConnector();
@@ -86,8 +91,8 @@ export default function createClient({
     clientMediator.setLog('data');
   }
 
-  return {
+  return setup({
     connector: clientConnector,
     transformer: responseTransformer
-  };
+  });
 }

@@ -1,5 +1,3 @@
-/*eslint no-useless-escape: 0 */
-
 import { Worker } from '@scola/worker';
 import { STATUS_CODES } from 'http';
 const filter = [401, 403, 500];
@@ -7,7 +5,7 @@ const filter = [401, 403, 500];
 export default class ErrorResponder extends Worker {
   err(message, error, callback) {
     const response = message.createResponse();
-    const match = error.message.match(/(\d{3})?([^\(]*)/);
+    const match = error.message.match(/(\d{3})?([^(]*)/);
 
     response.error = error;
     response.status = match === null ? 500 : Number(match[1] || 500);
@@ -21,18 +19,13 @@ export default class ErrorResponder extends Worker {
 
     let data = {
       error: {
+        code: response.status,
         message: match[2].trim()
       }
     };
 
     if (response.status < 500) {
-      if (error.field) {
-        data.error.field = error.field;
-      }
-
-      if (error.reason) {
-        data.error.reason = error.reason;
-      }
+      data.error.details = error.details;
     }
 
     data = JSON.stringify(data);

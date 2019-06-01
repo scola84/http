@@ -1,3 +1,4 @@
+import { setupServer } from '@scola/codec';
 import net from 'net';
 
 import {
@@ -13,7 +14,6 @@ import {
   ContentTypeHeader,
   ContinueResponder,
   DateHeader,
-  ErrorInterceptor,
   ErrorResponder,
   HeaderFieldsParser,
   HeaderFieldsWriter,
@@ -30,11 +30,14 @@ import {
   UpgradeResponder
 } from '../worker';
 
-export default function createServer({
-  listen = 3000,
-  log = 0,
-  router = 'resource'
-}) {
+export default function createServer(options = {}) {
+  const {
+    listen = 3000,
+      log = 0,
+      router = 'resource',
+      setup = setupServer
+  } = options;
+
   const bodyParser = new BodyParser();
   const bodyWriter = new BodyWriter();
   const connectionHeader = new ConnectionHeader();
@@ -47,7 +50,6 @@ export default function createServer({
   const contentTypeHeader = new ContentTypeHeader();
   const continueResponder = new ContinueResponder();
   const dateHeader = new DateHeader();
-  const errorInterceptor = new ErrorInterceptor();
   const errorResponder = new ErrorResponder();
   const headerFieldsParser = new HeaderFieldsParser();
   const headerFieldsWriter = new HeaderFieldsWriter();
@@ -88,7 +90,6 @@ export default function createServer({
     .connect(contentLengthHeader)
     .connect(connectionHeader)
     .connect(dateHeader)
-    .connect(errorInterceptor)
     .connect(headerFieldsWriter)
     .connect(responseLineWriter)
     .connect(trailerFieldsWriter)
@@ -108,10 +109,10 @@ export default function createServer({
     }).listen(listen);
   }
 
-  return {
+  return setup({
     connector: serverConnector,
     responder: errorResponder,
     router: routers[router],
     writer: bodyWriter
-  };
+  });
 }
