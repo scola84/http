@@ -128,11 +128,13 @@ export default class Request extends Message {
   }
 
   createResponse(options = {}) {
-    options.request = this;
-    options.socket = this.socket;
-    options.status = 200;
+    const {
+      request = this,
+        socket = this.socket,
+        status = 200
+    } = options;
 
-    return new Response(options);
+    return new Response({ request, socket, status });
   }
 
   formatAuth() {

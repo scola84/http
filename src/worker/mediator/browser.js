@@ -65,7 +65,7 @@ export default class BrowserMediator extends Worker {
       request.socket.responseText;
 
     this.pass(
-      request.createResponse(),
+      request.createResponse({ status: null }),
       Buffer.from(responseData),
       callback
     );
