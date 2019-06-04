@@ -17,18 +17,11 @@ export default class ErrorResponder extends Worker {
       match[2] = STATUS_CODES[response.status];
     }
 
-    let data = {
-      error: {
-        code: response.status,
-        message: match[2].trim()
-      }
-    };
-
-    if (response.status < 500) {
-      data.error.details = error.details;
-    }
-
-    data = JSON.stringify(data);
+    const data = JSON.stringify({
+      status: response.status,
+      message: match[2].trim(),
+      details: response.status < 500 ? error.details : null
+    });
 
     this.fail(response, data, callback);
   }

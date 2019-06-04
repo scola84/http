@@ -23,19 +23,13 @@ export default class ResponseTransformer extends Worker {
   }
 
   _createError(response, data) {
-    let description = '';
+    const error = new Error(
+      `${response.status} ${data.message || ''}`.trim()
+    );
 
-    if (data && data.error && data.error.message) {
-      description = data.error.message;
-    }
-
-    const message = `${response.status} ${description}`;
-    const error = new Error(message.trim());
-
-    if (data && data.error) {
-      error.field = data.error.field;
-      error.reason = data.error.reason;
-    }
+    error.status = data.status;
+    error.message = data.message;
+    error.details = data.details;
 
     return error;
   }
