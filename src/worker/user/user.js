@@ -137,7 +137,7 @@ export default class User {
 
   may(permission, box, data) {
     if (typeof permission === 'string' || Array.isArray(permission)) {
-      return this._mayRole(permission);
+      return this.mayRole(permission);
     }
 
     if (typeof permission === 'function') {
@@ -145,23 +145,23 @@ export default class User {
     }
 
     if (typeof permission.scope === 'undefined') {
-      return this._mayRole(permission.name);
+      return this.mayRole(permission.name);
     }
 
     const scope = data && data.meta && data.meta.scope ||
       data && data.data && data.data.scope;
 
-    const found = this._mayScope(box, data,
+    const found = this.mayScope(box, data,
       permission.scope, scope);
 
     if (typeof permission.name === 'undefined') {
       return found;
     }
 
-    return this._mayRole(permission.name) && found;
+    return this.mayRole(permission.name) && found;
   }
 
-  _mayRole(names) {
+  mayRole(names) {
     names = Array.isArray(names) ? names : [names];
     let name = null;
 
@@ -179,7 +179,7 @@ export default class User {
     return false;
   }
 
-  _mayScope(box, data, desired, actual) {
+  mayScope(box, data, desired, actual) {
     if (typeof desired === 'function') {
       return desired(box, data, actual);
     }

@@ -30,12 +30,12 @@ export default class FileResolver extends Streamer {
     response.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
 
     if (data === null) {
-      this._resolveEmpty(response, data, callback);
+      this.resolveEmpty(response, data, callback);
       return;
     }
 
     if (data.file.name !== decodeUriComponent(response.request.params[4])) {
-      this._resolveError(response, new Error('Invalid file name'), callback);
+      this.resolveError(response, new Error('Invalid file name'), callback);
       return;
     }
 
@@ -43,7 +43,7 @@ export default class FileResolver extends Streamer {
 
     stat(file, (error, stats) => {
       if (error) {
-        this._resolveError(response, error, callback);
+        this.resolveError(response, error, callback);
         return;
       }
 
@@ -68,12 +68,12 @@ export default class FileResolver extends Streamer {
       response.request.params[3]);
   }
 
-  _resolveEmpty(response, data, callback) {
+  resolveEmpty(response, data, callback) {
     response.setHeader('Content-Type', 'application/octet-stream');
     this.pass(response, '', callback);
   }
 
-  _resolveError(response, error, callback) {
+  resolveError(response, error, callback) {
     this.fail(response,
       new Error(`404 File not found (${error.message})`), callback);
   }

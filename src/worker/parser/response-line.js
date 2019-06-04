@@ -26,7 +26,7 @@ export default class ResponseLineParser extends Worker {
         break;
       }
 
-      this._processCode(message, data);
+      this.processCode(message, data);
     }
 
     if (message.state.line === true) {
@@ -40,7 +40,7 @@ export default class ResponseLineParser extends Worker {
     return message.state.line !== true;
   }
 
-  _processCode(message, data) {
+  processCode(message, data) {
     message.parser.length = (message.parser.length || 0) + 1;
 
     if (message.parser.length > this._maxLength) {
@@ -50,20 +50,20 @@ export default class ResponseLineParser extends Worker {
     const code = data[message.parser.end];
 
     if (code === 32) {
-      this._processSpace(message, data);
+      this.processSpace(message, data);
     } else if (code === 47) {
-      this._processSlash(message, data);
+      this.processSlash(message, data);
     } else if (code === 10) {
-      this._processLineFeed(message, data);
+      this.processLineFeed(message, data);
     }
   }
 
-  _processLineFeed(message) {
+  processLineFeed(message) {
     message.parser.begin = message.parser.end + 1;
     message.state.line = true;
   }
 
-  _processProtocolName(message, data) {
+  processProtocolName(message, data) {
     message.protocol.name = data.toString(
       'utf-8',
       message.parser.begin,
@@ -73,7 +73,7 @@ export default class ResponseLineParser extends Worker {
     message.parser.begin = message.parser.end + 1;
   }
 
-  _processProtocolVersion(message, data) {
+  processProtocolVersion(message, data) {
     message.protocol.version = data.toString(
       'utf-8',
       message.parser.begin,
@@ -83,21 +83,21 @@ export default class ResponseLineParser extends Worker {
     message.parser.begin = message.parser.end + 1;
   }
 
-  _processSlash(message, data) {
+  processSlash(message, data) {
     if (typeof message.protocol.name !== 'string') {
-      this._processProtocolName(message, data);
+      this.processProtocolName(message, data);
     }
   }
 
-  _processSpace(message, data) {
+  processSpace(message, data) {
     if (typeof message.protocol.version !== 'string') {
-      this._processProtocolVersion(message, data);
+      this.processProtocolVersion(message, data);
     } else if (typeof message.status !== 'number') {
-      this._processStatus(message, data);
+      this.processStatus(message, data);
     }
   }
 
-  _processStatus(message, data) {
+  processStatus(message, data) {
     message.status = Number(data.toString(
       'utf-8',
       message.parser.begin,

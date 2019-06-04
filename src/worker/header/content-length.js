@@ -3,7 +3,7 @@ import { Buffer } from 'buffer/';
 
 export default class ContentLengthHeader extends Worker {
   act(message, data, callback) {
-    this._setHeader(message, data);
+    this.setHeader(message, data);
     this.pass(message, data, callback);
   }
 
@@ -18,11 +18,11 @@ export default class ContentLengthHeader extends Worker {
   }
 
   err(message, data, callback) {
-    this._setHeader(message, data);
+    this.setHeader(message, data);
     this.fail(message, data, callback);
   }
 
-  _setHeader(message, data) {
+  setHeader(message, data) {
     message.headers['Content-Length'] =
       message.body.length ||
       (data && Buffer.byteLength(data)) ||

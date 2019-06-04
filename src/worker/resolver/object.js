@@ -27,14 +27,14 @@ export default class ObjectResolver extends Worker {
     response.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
 
     if (data === null) {
-      this._resolveEmpty(response, data, callback);
+      this.resolveEmpty(response, data, callback);
       return;
     }
 
     this.pass(response, data, callback);
   }
 
-  _resolveEmpty(response, data, callback) {
+  resolveEmpty(response, data, callback) {
     response.setHeader('Content-Type', 'application/octet-stream');
     this.pass(response, '', callback);
   }

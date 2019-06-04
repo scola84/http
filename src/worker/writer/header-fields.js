@@ -2,12 +2,12 @@ import { Worker } from '@scola/worker';
 
 export default class HeaderFieldsWriter extends Worker {
   act(message, data, callback) {
-    data = this._write(message, data);
+    data = this.writeData(message, data);
     this.pass(message, data, callback);
   }
 
   err(message, data, callback) {
-    data = this._write(message, data);
+    data = this.writeData(message, data);
     this.fail(message, data, callback);
   }
 
@@ -15,11 +15,11 @@ export default class HeaderFieldsWriter extends Worker {
     return message.state.headers !== true;
   }
 
-  _isEmpty(data) {
+  isEmpty(data) {
     return typeof data === 'undefined' || data === null;
   }
 
-  _write(message, data) {
+  writeData(message, data) {
     const headers = message.formatHeaders();
 
     if (data instanceof Buffer) {
@@ -28,7 +28,7 @@ export default class HeaderFieldsWriter extends Worker {
         Buffer.from(data)
       ]);
     } else {
-      data = headers + '\r\n' + (this._isEmpty(data) ? '' : data);
+      data = headers + '\r\n' + (this.isEmpty(data) ? '' : data);
     }
 
     message.state.headers = true;

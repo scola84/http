@@ -32,14 +32,14 @@ export default class BrowserConnector extends Worker {
     }
 
     try {
-      this._connect(request, data, callback);
+      this.open(request, data, callback);
     } catch (error) {
       error.data = data;
       this.fail(request, error, callback);
     }
   }
 
-  _connect(request, data, callback) {
+  open(request, data, callback) {
     request.socket = new XMLHttpRequest();
     request.socket.removeAllListeners = () => {};
     request.socket.destroy = () => {};

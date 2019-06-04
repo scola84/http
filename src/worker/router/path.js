@@ -8,7 +8,7 @@ export default class PathRouter extends Router {
 
   act(request, data, callback) {
     if (this._paths === null) {
-      this._paths = this._createPaths();
+      this._paths = this.createPaths();
     }
 
     const url = request.parseUrl();
@@ -34,7 +34,7 @@ export default class PathRouter extends Router {
     );
   }
 
-  _createPaths() {
+  createPaths() {
     const paths = [];
     const names = Object.keys(this._workers);
 

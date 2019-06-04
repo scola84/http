@@ -8,7 +8,7 @@ export default class ResourceRouter extends Router {
 
   act(request, data, callback) {
     if (this._resources === null) {
-      this._resources = this._createResources();
+      this._resources = this.createResources();
     }
 
     const url = request.parseUrl();
@@ -35,7 +35,7 @@ export default class ResourceRouter extends Router {
     );
   }
 
-  _createResources() {
+  createResources() {
     const resources = [];
     const names = Object.keys(this._workers);
 

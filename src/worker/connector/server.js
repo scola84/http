@@ -37,7 +37,7 @@ export default class ServerConnector extends Streamer {
       box.message.setHeader('X-Server-Id', woptions.id);
     }
 
-    data = this._prepareParser(box.message, data);
+    data = this.prepareParser(box.message, data);
 
     this.pass(box.message, data, (bx, resume) => {
       this.throttle(box, resume);
@@ -52,7 +52,7 @@ export default class ServerConnector extends Streamer {
     return box.socket;
   }
 
-  _prepareParser(message, data) {
+  prepareParser(message, data) {
     if (message.parser.data) {
       data = Buffer.concat([message.parser.data, data]);
       message.parser.data = null;

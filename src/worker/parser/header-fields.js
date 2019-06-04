@@ -19,7 +19,7 @@ export default class HeaderFieldsParser extends Worker {
         break;
       }
 
-      this._processCode(message, data);
+      this.processCode(message, data);
     }
 
     if (message.state.headers === true) {
@@ -33,7 +33,7 @@ export default class HeaderFieldsParser extends Worker {
     return message.state.headers !== true;
   }
 
-  _processCode(message, data) {
+  processCode(message, data) {
     message.parser.length = (message.parser.length || 0) + 1;
 
     if (message.parser.length > this._maxLength) {
@@ -43,17 +43,17 @@ export default class HeaderFieldsParser extends Worker {
     const code = data[message.parser.end];
 
     if (code === 32) {
-      this._processSpace(message, data);
+      this.processSpace(message, data);
     } else if (code === 58) {
-      this._processColon(message, data);
+      this.processColon(message, data);
     } else if (code === 10) {
-      this._processLineFeed(message, data);
+      this.processLineFeed(message, data);
     } else if (code !== 13) {
       message.parser.spaces = 0;
     }
   }
 
-  _processColon(message, data) {
+  processColon(message, data) {
     if (message.parser.key) {
       return;
     }
@@ -67,7 +67,7 @@ export default class HeaderFieldsParser extends Worker {
     message.parser.begin = message.parser.end + 1;
   }
 
-  _processLineFeed(message, data) {
+  processLineFeed(message, data) {
     const next = data[message.parser.end + 1];
 
     if (next === 9 || next === 32) {
@@ -101,7 +101,7 @@ export default class HeaderFieldsParser extends Worker {
     message.parser.begin = message.parser.end + 1;
   }
 
-  _processSpace(message) {
+  processSpace(message) {
     if (message.parser.begin === message.parser.end) {
       message.parser.begin = message.parser.end + 1;
     } else {

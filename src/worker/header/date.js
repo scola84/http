@@ -6,12 +6,12 @@ export default class DateHeader extends Worker {
 
     this._date = null;
 
-    this._setDate();
-    this._setInterval();
+    this.setDate();
+    this.setInterval();
   }
 
   act(message, data, callback) {
-    this._setHeader(message);
+    this.setHeader(message);
     this.pass(message, data, callback);
   }
 
@@ -20,19 +20,19 @@ export default class DateHeader extends Worker {
   }
 
   err(message, data, callback) {
-    this._setHeader(message);
+    this.setHeader(message);
     this.fail(message, data, callback);
   }
 
-  _setHeader(message) {
+  setHeader(message) {
     message.headers.Date = this._date;
   }
 
-  _setDate() {
+  setDate() {
     this._date = new Date().toUTCString();
   }
 
-  _setInterval() {
-    setInterval(() => this._setDate(), 1000);
+  setInterval() {
+    setInterval(() => this.setDate(), 1000);
   }
 }

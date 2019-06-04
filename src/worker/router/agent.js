@@ -8,7 +8,7 @@ export default class AgentRouter extends Router {
 
   act(request, data, callback) {
     if (this._agents === null) {
-      this._agents = this._createAgents();
+      this._agents = this.createAgents();
     }
 
     const userAgent = request.getHeader('User-Agent');
@@ -29,7 +29,7 @@ export default class AgentRouter extends Router {
     this.pass('default', request, data, callback);
   }
 
-  _createAgents() {
+  createAgents() {
     const agents = [];
     const names = Object.keys(this._workers);
 

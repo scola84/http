@@ -40,14 +40,14 @@ export default class ClientConnector extends Worker {
     }
 
     try {
-      this._connect(request, data, callback, options);
+      this.open(request, data, callback, options);
     } catch (error) {
       error.data = data;
       this.fail(request, error, callback);
     }
   }
 
-  _connect(request, data, callback, options) {
+  open(request, data, callback, options) {
     const library = request.url.scheme === 'http' ?
       woptions.net : woptions.tls;
 
@@ -69,7 +69,7 @@ export default class ClientConnector extends Worker {
 
     socket.once('timeout', () => {
       request.socket = socket;
-      this._timeout(request, data, callback, options);
+      this.timeout(request, data, callback, options);
     });
 
     socket.once(event, () => {
@@ -78,7 +78,7 @@ export default class ClientConnector extends Worker {
     });
   }
 
-  _retry(request, data, callback, options) {
+  retry(request, data, callback, options) {
     if (request.socket) {
       request.socket.removeAllListeners();
       request.socket.destroy();
@@ -95,9 +95,9 @@ export default class ClientConnector extends Worker {
     this.act(options, data, callback);
   }
 
-  _timeout(request, data, callback, options) {
+  timeout(request, data, callback, options) {
     try {
-      this._retry(request, data, callback, options);
+      this.retry(request, data, callback, options);
     } catch (error) {
       this.fail(request, error, callback);
     }

@@ -3,12 +3,12 @@ import { STATUS_CODES } from 'http';
 
 export default class ResponseLineWriter extends Worker {
   act(message, data, callback) {
-    data = this._write(message, data);
+    data = this.writeData(message, data);
     this.pass(message, data, callback);
   }
 
   err(message, data, callback) {
-    data = this._write(message, data);
+    data = this.writeData(message, data);
     this.fail(message, data, callback);
   }
 
@@ -16,7 +16,7 @@ export default class ResponseLineWriter extends Worker {
     return message.state.line !== true;
   }
 
-  _write(message, data) {
+  writeData(message, data) {
     const line = 'HTTP/1.1 ' +
       (message.status || 200) + ' ' +
       STATUS_CODES[message.status || 200] +

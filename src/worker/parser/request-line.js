@@ -19,7 +19,7 @@ export default class RequestLineParser extends Worker {
         break;
       }
 
-      this._processCode(message, data);
+      this.processCode(message, data);
     }
 
     if (message.state.line === true) {
@@ -33,7 +33,7 @@ export default class RequestLineParser extends Worker {
     return message.state.line !== true;
   }
 
-  _processCode(message, data) {
+  processCode(message, data) {
     message.parser.length = (message.parser.length || 0) + 1;
 
     if (message.parser.length > this._maxLength) {
@@ -43,20 +43,20 @@ export default class RequestLineParser extends Worker {
     const code = data[message.parser.end];
 
     if (code === 32) {
-      this._processSpace(message, data);
+      this.processSpace(message, data);
     } else if (code === 47) {
-      this._processSlash(message, data);
+      this.processSlash(message, data);
     } else if (code === 10) {
-      this._processLineFeed(message, data);
+      this.processLineFeed(message, data);
     }
   }
 
-  _processLineFeed(message, data) {
-    this._processProtocolVersion(message, data);
+  processLineFeed(message, data) {
+    this.processProtocolVersion(message, data);
     message.state.line = true;
   }
 
-  _processMethod(message, data) {
+  processMethod(message, data) {
     message.method = data.toString(
       'utf-8',
       message.parser.begin,
@@ -66,7 +66,7 @@ export default class RequestLineParser extends Worker {
     message.parser.begin = message.parser.end + 1;
   }
 
-  _processProtocolName(message, data) {
+  processProtocolName(message, data) {
     message.protocol.name = data.toString(
       'utf-8',
       message.parser.begin,
@@ -76,7 +76,7 @@ export default class RequestLineParser extends Worker {
     message.parser.begin = message.parser.end + 1;
   }
 
-  _processProtocolVersion(message, data) {
+  processProtocolVersion(message, data) {
     message.protocol.version = data.toString(
       'utf-8',
       message.parser.begin,
@@ -86,21 +86,21 @@ export default class RequestLineParser extends Worker {
     message.parser.begin = message.parser.end + 1;
   }
 
-  _processSlash(message, data) {
+  processSlash(message, data) {
     if (typeof message.url === 'string') {
-      this._processProtocolName(message, data);
+      this.processProtocolName(message, data);
     }
   }
 
-  _processSpace(message, data) {
+  processSpace(message, data) {
     if (typeof message.method !== 'string') {
-      this._processMethod(message, data);
+      this.processMethod(message, data);
     } else if (typeof message.url !== 'string') {
-      this._processUrl(message, data);
+      this.processUrl(message, data);
     }
   }
 
-  _processUrl(message, data) {
+  processUrl(message, data) {
     message.url = data.toString(
       'utf-8',
       message.parser.begin,

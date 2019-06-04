@@ -6,7 +6,7 @@ export default class TrailerFieldsWriter extends Worker {
       message.body.te.indexOf('trailers') !== -1);
 
     if (writeTrailers === true) {
-      data = this._writeTrailers(message, data);
+      data = this.writeTrailers(message, data);
     }
 
     data += '\r\n';
@@ -25,7 +25,7 @@ export default class TrailerFieldsWriter extends Worker {
     return false;
   }
 
-  _writeTrailers(message, data) {
+  writeTrailers(message, data) {
     const keys = Object.keys(message.trailers);
     let key = '';
 

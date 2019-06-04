@@ -4,9 +4,9 @@ import defaults from 'lodash-es/defaultsDeep';
 
 export default class BrowserMediator extends Worker {
   act(request, data, callback = () => {}) {
-    this._handleProgress(request, data, callback);
-    this._setHeaders(request);
-    this._bind(request, data, callback);
+    this.handleProgress(request, data, callback);
+    this.setHeaders(request);
+    this.bind(request, data, callback);
 
     request.socket.send(data);
   }
@@ -15,32 +15,32 @@ export default class BrowserMediator extends Worker {
     this.fail(request.createResponse(), error, callback);
   }
 
-  _bind(request, data, callback) {
+  bind(request, data, callback) {
     request.socket.onerror = () => {
-      this._handleError(request, data, callback);
+      this.handleError(request, data, callback);
     };
 
     request.socket.onload = () => {
-      this._handleLoad(request, data, callback);
+      this.handleLoad(request, data, callback);
     };
 
     request.socket.onprogress = (event) => {
-      this._handleProgress(request, data, callback, event);
+      this.handleProgress(request, data, callback, event);
     };
 
     request.socket.upload.onprogress = request.socket.onprogress;
   }
 
-  _unbind(request) {
+  unbind(request) {
     request.socket.onerror = null;
     request.socket.onload = null;
     request.socket.onprogress = null;
     request.socket.upload.onprogress = null;
   }
 
-  _handleError(request, data, callback) {
-    this._handleProgress(request, data, callback, { total: 1 });
-    this._unbind(request);
+  handleError(request, data, callback) {
+    this.handleProgress(request, data, callback, { total: 1 });
+    this.unbind(request);
 
     const errorText = (request.socket.status ?
         request.socket.status + ' ' : '') +
@@ -52,9 +52,9 @@ export default class BrowserMediator extends Worker {
     );
   }
 
-  _handleLoad(request, data, callback) {
-    this._handleProgress(request, data, callback, { total: 1 });
-    this._unbind(request);
+  handleLoad(request, data, callback) {
+    this.handleProgress(request, data, callback, { total: 1 });
+    this.unbind(request);
 
     const responseHeaders = request.socket.getAllResponseHeaders();
 
@@ -71,7 +71,7 @@ export default class BrowserMediator extends Worker {
     );
   }
 
-  _handleProgress(request, data, callback, event = {}) {
+  handleProgress(request, data, callback, event = {}) {
     callback(defaults(event, {
       lengthComputable: true,
       loaded: 1,
@@ -79,7 +79,7 @@ export default class BrowserMediator extends Worker {
     }));
   }
 
-  _setHeaders(request) {
+  setHeaders(request) {
     const names = Object.keys(request.headers || {});
     let name = null;
 

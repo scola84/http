@@ -2,7 +2,7 @@ import { Worker } from '@scola/worker';
 
 export default class ConnectionHeader extends Worker {
   act(message, data, callback) {
-    this._setHeader(message);
+    this.setHeader(message);
     this.pass(message, data, callback);
   }
 
@@ -11,23 +11,23 @@ export default class ConnectionHeader extends Worker {
   }
 
   err(message, data, callback) {
-    this._setHeader(message);
+    this.setHeader(message);
     this.fail(message, data, callback);
   }
 
-  _setHeader(message) {
+  setHeader(message) {
     if (message.status) {
-      this._setResponseHeader(message);
+      this.setResponseHeader(message);
     } else {
-      this._setRequestHeader(message);
+      this.setRequestHeader(message);
     }
   }
 
-  _setRequestHeader(message) {
+  setRequestHeader(message) {
     message.headers.Connection = 'keep-alive';
   }
 
-  _setResponseHeader(message) {
+  setResponseHeader(message) {
     message.headers.Connection = 'close';
 
     if (
