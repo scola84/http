@@ -56,13 +56,20 @@ export default class BrowserMediator extends Worker {
     this.handleProgress(request, data, callback, { total: 1 });
     this.unbind(request);
 
-    const responseHeaders = request.socket.getAllResponseHeaders();
+    const responseText = request.socket.responseText;
+    let responseHeaders = request.socket.getAllResponseHeaders();
+
+    if (responseHeaders.match('content-length') === null) {
+      responseHeaders = 'content-length: ' +
+        Buffer.byteLength(responseText) + '\r\n' +
+        responseHeaders;
+    }
 
     const responseData = 'HTTP/1.1 ' +
       request.socket.status + ' ' + request.socket.statusText + '\r\n' +
       responseHeaders +
       (responseHeaders.slice(-4) === '\r\n\r\n' ? '' : '\r\n') +
-      request.socket.responseText;
+      responseText;
 
     this.pass(
       request.createResponse({ status: null }),
