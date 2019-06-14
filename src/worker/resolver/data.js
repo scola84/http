@@ -1,12 +1,7 @@
 import { Worker } from '@scola/worker';
 
-export default class ResultResolver extends Worker {
+export default class DataResolver extends Worker {
   act(request, data, callback) {
-    if (typeof data.data === 'undefined') {
-      throw new Error('404 Object not found' +
-        ` (${request.method} ${request.url.path})`);
-    }
-
     const response = request.createResponse();
 
     if (typeof data.status === 'undefined') {
@@ -18,5 +13,9 @@ export default class ResultResolver extends Worker {
     }
 
     this.pass(response, data, callback);
+  }
+
+  decide(request, data) {
+    return typeof data.data !== 'undefined';
   }
 }

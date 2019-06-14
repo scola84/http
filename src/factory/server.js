@@ -13,9 +13,10 @@ import {
   ContentTypeEncoder,
   ContentTypeHeader,
   ContinueResponder,
+  DataResolver,
   DateHeader,
   ErrorResolver,
-  ResultResolver,
+  FileResolver,
   HeaderFieldsParser,
   HeaderFieldsWriter,
   PathRouter,
@@ -50,13 +51,14 @@ export default function createServer(options = {}) {
   const contentTypeEncoder = new ContentTypeEncoder();
   const contentTypeHeader = new ContentTypeHeader();
   const continueResponder = new ContinueResponder();
+  const dataResolver = new DataResolver();
   const dateHeader = new DateHeader();
+  const fileResolver = new FileResolver();
   const errorResolver = new ErrorResolver();
   const headerFieldsParser = new HeaderFieldsParser();
   const headerFieldsWriter = new HeaderFieldsWriter();
   const requestLineParser = new RequestLineParser();
   const responseLineWriter = new ResponseLineWriter();
-  const resultResolver = new ResultResolver();
   const serverConnector = new ServerConnector();
   const trailerFieldsParser = new TrailerFieldsParser();
   const trailerFieldsWriter = new TrailerFieldsWriter();
@@ -82,7 +84,8 @@ export default function createServer(options = {}) {
     .connect(contentTypeDecoder)
     .connect(routers[router]);
 
-  resultResolver
+  dataResolver
+    .connect(fileResolver)
     .connect(errorResolver)
     .connect(contentTypeHeader)
     .connect(contentEncodingHeader)
@@ -114,7 +117,7 @@ export default function createServer(options = {}) {
 
   return setup({
     connector: serverConnector,
-    resolver: resultResolver,
+    resolver: dataResolver,
     router: routers[router],
     writer: bodyWriter
   });

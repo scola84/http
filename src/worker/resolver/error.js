@@ -3,6 +3,16 @@ import { STATUS_CODES } from 'http';
 const filter = [401, 403, 500];
 
 export default class ErrorResolver extends Worker {
+  act(request, data, callback) {
+    const error = new Error('404 Object not found' +
+      ` (${request.method} ${request.url.path})`);
+    return this.err(request, error, callback);
+  }
+
+  decide(response) {
+    return typeof response.status === 'undefined';
+  }
+
   err(request, error, callback) {
     const response = request.createResponse();
     const match = error.message.match(/(\d{3})?([^(]*)/);

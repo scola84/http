@@ -1,7 +1,9 @@
+import DataResolver from './data';
+import FileResolver from './file';
 import ErrorResolver from './error';
-import ResultResolver from './result';
 
 export {
-  ErrorResolver,
-  ResultResolver
+  DataResolver,
+  FileResolver,
+  ErrorResolver
 };
