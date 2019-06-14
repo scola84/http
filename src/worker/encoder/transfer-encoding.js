@@ -10,11 +10,11 @@ export default class TransferEncodingEncoder extends Manager {
       return false;
     }
 
-    if (typeof message.headers['Transfer-Encoding'] === 'undefined') {
+    const transfer = message.headers['transfer-encoding'];
+
+    if (typeof transfer === 'undefined') {
       return false;
     }
-
-    const transfer = message.headers['Transfer-Encoding'];
 
     for (let i = 0; i < transfer.length; i += 1) {
       if (typeof this._pool[transfer[i]] === 'undefined') {

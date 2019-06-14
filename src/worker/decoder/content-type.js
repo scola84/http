@@ -18,21 +18,22 @@ export default class ContentTypeDecoder extends Manager {
       return true;
     }
 
-    const type = message.parseHeader('Content-Type', true);
+    const type = message.parseHeader('content-type');
 
-    if (typeof type === 'undefined') {
+    if (typeof type.value === 'undefined') {
       return false;
     }
 
-    if (typeof this._pool[type[0]] === 'undefined') {
+    if (typeof this._pool[type.value[0]] === 'undefined') {
       if (this._strict === true) {
-        throw new Error(`415 Decoder not implemented (${type[0]})`);
+        throw new Error('415 Decoder not implemented ' +
+          ` (${type[0]})`);
       }
 
       return false;
     }
 
-    message.body.type = type[0];
+    message.body.type = type.value[0];
     return true;
   }
 

@@ -10,11 +10,11 @@ export default class ContentEncodingEncoder extends Manager {
       return false;
     }
 
-    if (typeof message.headers['Content-Encoding'] === 'undefined') {
+    const content = message.headers['content-encoding'];
+
+    if (typeof content === 'undefined') {
       return false;
     }
-
-    const content = message.headers['Content-Encoding'];
 
     for (let i = 0; i < content.length; i += 1) {
       if (typeof this._pool[content[i]] === 'undefined') {

@@ -6,19 +6,20 @@ export default class TransferEncodingDecoder extends Manager {
       return true;
     }
 
-    const transfer = message.parseHeader('Transfer-Encoding');
+    const transfer = message.parseHeader('transfer-encoding');
 
-    if (typeof transfer === 'undefined') {
+    if (typeof transfer.values === 'undefined') {
       return false;
     }
 
-    for (let i = 0; i < transfer.length; i += 1) {
-      if (typeof this._pool[transfer[i][0]] === 'undefined') {
-        throw new Error(`501 Decoder not implemented (${transfer[i][0]})`);
+    for (let i = 0; i < transfer.values.length; i += 1) {
+      if (typeof this._pool[transfer.values[i][0]] === 'undefined') {
+        throw new Error('501 Decoder not implemented' +
+          ` (${transfer[i][0]})`);
       }
     }
 
-    message.body.transfer = transfer
+    message.body.transfer = transfer.values
       .reverse()
       .map((encoding) => encoding[0]);
 

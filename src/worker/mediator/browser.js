@@ -5,8 +5,8 @@ import defaults from 'lodash-es/defaultsDeep';
 export default class BrowserMediator extends Worker {
   act(request, data, callback = () => {}) {
     this.handleProgress(request, data, callback);
+    this.bindSocket(request, data, callback);
     this.setHeaders(request);
-    this.bind(request, data, callback);
 
     request.socket.send(data);
   }
@@ -15,7 +15,7 @@ export default class BrowserMediator extends Worker {
     this.fail(request.createResponse(), error, callback);
   }
 
-  bind(request, data, callback) {
+  bindSocket(request, data, callback) {
     request.socket.onerror = () => {
       this.handleError(request, data, callback);
     };
@@ -31,7 +31,7 @@ export default class BrowserMediator extends Worker {
     request.socket.upload.onprogress = request.socket.onprogress;
   }
 
-  unbind(request) {
+  unbindSocket(request) {
     request.socket.onerror = null;
     request.socket.onload = null;
     request.socket.onprogress = null;
@@ -40,21 +40,22 @@ export default class BrowserMediator extends Worker {
 
   handleError(request, data, callback) {
     this.handleProgress(request, data, callback, { total: 1 });
-    this.unbind(request);
+    this.unbindSocket(request);
 
-    const errorText = (request.socket.status ?
-        request.socket.status + ' ' : '') +
-      'Could not complete request';
+    const response = request.createResponse();
+    response.status = request.socket.status;
 
-    this.fail(
-      request.createResponse(),
-      new Error(errorText)
+    const error = new Error(
+      (request.socket.status ? request.socket.status + ' ' : '') +
+      'Could not complete request'
     );
+
+    this.fail(response, error);
   }
 
   handleLoad(request, data, callback) {
     this.handleProgress(request, data, callback, { total: 1 });
-    this.unbind(request);
+    this.unbindSocket(request);
 
     const responseText = request.socket.responseText;
     let responseHeaders = request.socket.getAllResponseHeaders();
@@ -72,7 +73,7 @@ export default class BrowserMediator extends Worker {
       responseText;
 
     this.pass(
-      request.createResponse({ status: null }),
+      request.createResponse(),
       Buffer.from(responseData),
       callback
     );

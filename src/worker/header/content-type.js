@@ -12,7 +12,9 @@ export default class ContentTypeHeader extends Worker {
   }
 
   act(message, data, callback) {
-    const acceptable = message.parseAcceptable('Accept', '*/*');
+    const acceptable = message
+      .parseHeader('Accept')
+      .parseAcceptable('*/*');
 
     let asub = null;
     let atype = null;
@@ -36,7 +38,7 @@ export default class ContentTypeHeader extends Worker {
         msub = asub === '*' || asub === isub;
 
         if (mtype === true && msub === true) {
-          message.headers['Content-Type'] = this._types[j];
+          message.headers['content-type'] = this._types[j];
           break;
         }
       }
@@ -48,7 +50,7 @@ export default class ContentTypeHeader extends Worker {
   decide(message, data) {
     if (
       typeof data !== 'undefined' &&
-      typeof message.headers['Content-Type'] === 'undefined'
+      typeof message.headers['content-type'] === 'undefined'
     ) {
       return true;
     }

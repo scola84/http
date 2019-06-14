@@ -11,7 +11,7 @@ export default class AgentRouter extends Router {
       this._agents = this.createAgents();
     }
 
-    const userAgent = request.getHeader('User-Agent');
+    const userAgent = request.headers['user-agent'];
 
     let agent = null;
     let params = null;

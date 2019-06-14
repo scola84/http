@@ -2,7 +2,7 @@ import { Worker } from '@scola/worker';
 
 export default class UpgradeResponder extends Worker {
   decide(message) {
-    return message.getHeader('Upgrade') === 'websocket';
+    return message.headers.upgrade === 'websocket';
   }
 
   act(message, data) {

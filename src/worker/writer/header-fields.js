@@ -20,7 +20,20 @@ export default class HeaderFieldsWriter extends Worker {
   }
 
   writeData(message, data) {
-    const headers = message.formatHeaders();
+    const keys = Object.keys(message.headers);
+
+    let headers = '';
+    let key = null;
+    let value = null;
+
+    for (let i = 0; i < keys.length; i += 1) {
+      key = keys[i];
+      value = message.headers[key];
+
+      if (value) {
+        headers += key + ': ' + value + '\r\n';
+      }
+    }
 
     if (data instanceof Buffer) {
       data = Buffer.concat([

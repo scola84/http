@@ -16,9 +16,7 @@ export default class ServerConnector extends Streamer {
   }
 
   act(socket) {
-    this.read({
-      socket
-    });
+    this.read({ socket });
   }
 
   data(box, data) {
@@ -34,7 +32,7 @@ export default class ServerConnector extends Streamer {
 
     if (create === true) {
       box.message = new Request({ socket: box.socket });
-      box.message.setHeader('X-Server-Id', woptions.id);
+      box.message['x-server-id'] = woptions.id;
     }
 
     data = this.prepareParser(box.message, data);

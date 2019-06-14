@@ -1,22 +1,12 @@
-import { Router } from '@scola/worker';
+import RequestRouter from './request';
 
-export default class MethodRouter extends Router {
+export default class MethodRouter extends RequestRouter {
   act(request, data, callback) {
     if (this._workers[request.method]) {
-      this.pass(request.method, request, data, callback);
-      return;
+      return this.pass(request.method, request, data, callback);
     }
 
-    const response = request.createResponse({
-      headers: {
-        Allow: Object.keys(this._workers)
-      }
-    });
-
-    this.fail(
-      response,
-      new Error('405 Method not allowed'),
-      callback
-    );
+    return this.handleMethodError(request, data, callback,
+      Object.keys(this._workers));
   }
 }

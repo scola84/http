@@ -1,6 +1,6 @@
-import { Router } from '@scola/worker';
+import RequestRouter from './request';
 
-export default class PathRouter extends Router {
+export default class PathRouter extends RequestRouter {
   constructor(options) {
     super(options);
     this._paths = null;
@@ -11,27 +11,20 @@ export default class PathRouter extends Router {
       this._paths = this.createPaths();
     }
 
-    const url = request.parseUrl();
-
     let path = null;
     let params = null;
 
     for (let i = 0; i < this._paths.length; i += 1) {
       path = this._paths[i];
-      params = path.regexp.exec(url.path);
+      params = path.regexp.exec(request.url.path);
 
       if (params !== null) {
         request.params = params;
-        this.pass(path.name, request, data, callback);
-        return;
+        return this.pass(path.name, request, data, callback);
       }
     }
 
-    this.fail(
-      request.createResponse(),
-      new Error(`404 Path not found (${url.path})`),
-      callback
-    );
+    return this.handlePathError(request, data, callback);
   }
 
   createPaths() {

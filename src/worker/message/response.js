@@ -1,33 +1,22 @@
 import Message from './message';
-let defaultHeaders = null;
 
 export default class Response extends Message {
-  static setHeaders(value) {
-    defaultHeaders = Object.assign(defaultHeaders || {}, value);
-  }
-
   constructor(options = {}) {
-    if (defaultHeaders !== null) {
-      options.headers = Object.assign({},
-        defaultHeaders, options.headers);
-    }
-
     super(options);
 
-    this.error = null;
     this.request = options.request;
     this.status = options.status;
 
-    const connection = this.request.getHeader('Connection');
+    const connection = this.request.headers.connection;
 
     if (typeof connection !== 'undefined') {
-      this.headers.Connection = connection;
+      this.headers.connection = connection;
     }
 
-    const setCookie = this.request.getHeader('Set-Cookie');
+    const setCookie = this.request.headers['set-cookie'];
 
     if (typeof setCookie !== 'undefined') {
-      this.headers['Set-Cookie'] = setCookie;
+      this.headers['set-cookie'] = setCookie;
     }
   }
 
@@ -35,33 +24,7 @@ export default class Response extends Message {
     return this;
   }
 
-  getDuration() {
-    return this.getTimestamp() - this.request.getTimestamp();
-  }
-
   mustEnd() {
-    return this.getHeader('Connection') === 'close';
-  }
-
-  parseAcceptable(header, base = '') {
-    const acceptable = this.request.parseHeader(header) || [{ 0: base }];
-    let entry = null;
-
-    for (let i = 0; i < acceptable.length; i += 1) {
-      entry = acceptable[i];
-
-      entry.hq = typeof entry.q === 'undefined' ? 0 : 1;
-      entry.q = entry.hq === 1 ? Number(entry.q) : 1;
-
-      entry.s = 0;
-      entry.s += (entry[0].match(/\*/g) || '').length;
-      entry.s += Object.keys(entry).length - 4;
-    }
-
-    acceptable.sort((a, b) => {
-      return b.q - a.q || b.hq - a.hq || b.s - a.s || 0;
-    });
-
-    return acceptable;
+    return this.headers.connection === 'close';
   }
 }

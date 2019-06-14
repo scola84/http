@@ -21,18 +21,7 @@ export default class ClientConnector extends Worker {
   }
 
   act(options, data, callback) {
-    defaults(options, {
-      method: 'GET',
-      retry: 0,
-      timeout: 60000,
-      url: {
-        port: options.url.scheme === 'http' ? 80 : 443,
-        scheme: 'https'
-      }
-    });
-
     const request = new Request(options);
-    request.setHeader('User-Agent', woptions.agent);
 
     if (typeof request.socket !== 'undefined') {
       this.pass(request, data, callback);
@@ -54,7 +43,10 @@ export default class ClientConnector extends Worker {
     const event = library === woptions.net ?
       'connect' : 'secureConnect';
 
-    request.headers.Host = request.formatHost();
+    defaults(request.headers, {
+      agent: woptions.agent,
+      host: request.url.formatHost()
+    });
 
     const socket = library.connect(Object.assign({
       host: request.url.hostname,

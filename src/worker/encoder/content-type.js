@@ -22,21 +22,22 @@ export default class ContentTypeEncoder extends Manager {
       return false;
     }
 
-    if (typeof message.headers['Content-Type'] === 'undefined') {
+    const type = message.parseHeader('content-type');
+
+    if (typeof type.value === 'undefined') {
       return false;
     }
 
-    const type = message.parseHeader('Content-Type', true);
-
-    if (typeof this._pool[type[0]] === 'undefined') {
+    if (typeof this._pool[type.value[0]] === 'undefined') {
       if (this._strict === true) {
-        throw new Error(`406 Encoder not implemented (${type[0]})`);
+        throw new Error('406 Encoder not implemented' +
+          ` (${type.value[0]})`);
       }
 
       return false;
     }
 
-    message.body.type = type[0];
+    message.body.type = type.value[0];
     return true;
   }
 

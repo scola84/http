@@ -8,13 +8,12 @@ export default class ContentLengthHeader extends Worker {
   }
 
   decide(message) {
-    if (typeof message.headers['Content-Length'] !== 'undefined') {
+    if (typeof message.headers['content-length'] !== 'undefined') {
       return false;
     }
 
-    return message
-      .getHeader('Transfer-Encoding', '')
-      .indexOf('chunked') === -1;
+    const encoding = message.headers['transfer-encoding'] || '';
+    return encoding.indexOf('chunked') === -1;
   }
 
   err(message, data, callback) {
@@ -23,9 +22,16 @@ export default class ContentLengthHeader extends Worker {
   }
 
   setHeader(message, data) {
-    message.headers['Content-Length'] =
-      message.body.length ||
-      (data && Buffer.byteLength(data)) ||
-      0;
+    let length = 0;
+
+    if (typeof message.body.length !== 'undefined') {
+      length = message.body.length;
+    }
+
+    if (typeof data !== 'undefined' && data !== null) {
+      length = Buffer.byteLength(data);
+    }
+
+    message.headers['content-length'] = length;
   }
 }

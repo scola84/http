@@ -84,15 +84,15 @@ export default class ResponseLineParser extends Worker {
   }
 
   processSlash(message, data) {
-    if (typeof message.protocol.name !== 'string') {
+    if (typeof message.protocol.name === 'undefined') {
       this.processProtocolName(message, data);
     }
   }
 
   processSpace(message, data) {
-    if (typeof message.protocol.version !== 'string') {
+    if (typeof message.protocol.version === 'undefined') {
       this.processProtocolVersion(message, data);
-    } else if (typeof message.status !== 'number') {
+    } else if (typeof message.status === 'undefined') {
       this.processStatus(message, data);
     }
   }

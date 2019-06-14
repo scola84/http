@@ -1,11 +1,11 @@
 import AgentRouter from './agent';
 import MethodRouter from './method';
 import PathRouter from './path';
-import ResourceRouter from './resource';
+import RequestRouter from './request';
 
 export {
   AgentRouter,
   MethodRouter,
   PathRouter,
-  ResourceRouter
+  RequestRouter
 };

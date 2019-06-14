@@ -7,7 +7,7 @@ export default class ConnectionHeader extends Worker {
   }
 
   decide(message) {
-    return typeof message.headers.Connection === 'undefined';
+    return typeof message.headers.connection === 'undefined';
   }
 
   err(message, data, callback) {
@@ -24,17 +24,17 @@ export default class ConnectionHeader extends Worker {
   }
 
   setRequestHeader(message) {
-    message.headers.Connection = 'keep-alive';
+    message.headers.connection = 'keep-alive';
   }
 
   setResponseHeader(message) {
-    message.headers.Connection = 'close';
+    message.headers.connection = 'close';
 
     if (
       message.protocol.version === '1.1' &&
       message.status === 200
     ) {
-      message.headers.Connection = 'keep-alive';
+      message.headers.connection = 'keep-alive';
     }
   }
 }

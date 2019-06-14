@@ -16,7 +16,7 @@ export default class DateHeader extends Worker {
   }
 
   decide(message) {
-    return typeof message.headers.Date === 'undefined';
+    return typeof message.headers.date === 'undefined';
   }
 
   err(message, data, callback) {
@@ -25,7 +25,7 @@ export default class DateHeader extends Worker {
   }
 
   setHeader(message) {
-    message.headers.Date = this._date;
+    message.headers.date = this._date;
   }
 
   setDate() {

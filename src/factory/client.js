@@ -11,7 +11,6 @@ import {
   ContentLengthHeader,
   ContentTypeDecoder,
   ContentTypeEncoder,
-  ContinueResponder,
   DateHeader,
   HeaderFieldsParser,
   HeaderFieldsWriter,
@@ -21,8 +20,7 @@ import {
   TrailerFieldsParser,
   TrailerFieldsWriter,
   TransferEncodingDecoder,
-  TransferEncodingEncoder,
-  UpgradeResponder
+  TransferEncodingEncoder
 } from '../worker';
 
 export default function createClient(options = {}) {
@@ -41,7 +39,6 @@ export default function createClient(options = {}) {
   const contentLengthHeader = new ContentLengthHeader();
   const contentTypeDecoder = new ContentTypeDecoder();
   const contentTypeEncoder = new ContentTypeEncoder();
-  const continueResponder = new ContinueResponder();
   const dateHeader = new DateHeader();
   const headerFieldsParser = new HeaderFieldsParser();
   const headerFieldsWriter = new HeaderFieldsWriter();
@@ -52,7 +49,6 @@ export default function createClient(options = {}) {
   const trailerFieldsWriter = new TrailerFieldsWriter();
   const transferEncodingDecoder = new TransferEncodingDecoder();
   const transferEncodingEncoder = new TransferEncodingEncoder();
-  const upgradeResponder = new UpgradeResponder();
 
   clientConnector
     .connect(contentTypeEncoder)
@@ -68,8 +64,6 @@ export default function createClient(options = {}) {
     .connect(clientMediator)
     .connect(responseLineParser)
     .connect(headerFieldsParser)
-    .connect(continueResponder)
-    .connect(upgradeResponder)
     .connect(bodyParser)
     .connect(transferEncodingDecoder)
     .connect(trailerFieldsParser)

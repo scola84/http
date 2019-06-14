@@ -12,8 +12,11 @@ export default class TransferEncodingHeader extends Worker {
   }
 
   act(message, data, callback) {
-    const acceptable = message.parseAcceptable('TE', '*');
-    const preferred = message.headers['Transfer-Encoding'];
+    const acceptable = message
+      .parseHeader('TE')
+      .parseAcceptable('*');
+
+    const preferred = message.headers['transfer-encoding'];
     const actual = [];
 
     let accept = null;
@@ -44,9 +47,9 @@ export default class TransferEncodingHeader extends Worker {
     message.body.transfer = actual;
 
     if (actual.length > 0) {
-      message.headers['Transfer-Encoding'] = actual;
+      message.headers['transfer-encoding'] = actual;
     } else {
-      delete message.headers['Transfer-Encoding'];
+      delete message.headers['transfer-encoding'];
     }
 
     this.pass(message, data, callback);
@@ -55,7 +58,7 @@ export default class TransferEncodingHeader extends Worker {
   decide(message, data) {
     if (
       typeof data !== 'undefined' &&
-      typeof message.headers['Transfer-Encoding'] !== 'undefined' &&
+      typeof message.headers['transfer-encoding'] !== 'undefined' &&
       typeof message.body.transfer === 'undefined'
     ) {
       return true;

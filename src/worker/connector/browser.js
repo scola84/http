@@ -1,29 +1,8 @@
 import { Worker } from '@scola/worker';
-import defaults from 'lodash-es/defaultsDeep';
-import merge from 'lodash-es/merge';
 import Request from '../message/request';
 
-const woptions = {};
-
 export default class BrowserConnector extends Worker {
-  static getOptions() {
-    return woptions;
-  }
-
-  static setOptions(options) {
-    merge(woptions, options);
-  }
-
   act(options, data, callback) {
-    defaults(options, woptions, {
-      method: 'GET',
-      url: {
-        hostname: window.location.hostname,
-        port: options.url.scheme === 'http' ? 80 : 443,
-        scheme: 'https'
-      }
-    });
-
     const request = new Request(options);
 
     if (typeof request.socket !== 'undefined') {
@@ -34,7 +13,10 @@ export default class BrowserConnector extends Worker {
     try {
       this.open(request, data, callback);
     } catch (error) {
-      error.data = data;
+      if (typeof error.data === 'undefined') {
+        error.data = data;
+      }
+
       this.fail(request, error, callback);
     }
   }
@@ -46,7 +28,7 @@ export default class BrowserConnector extends Worker {
 
     request.socket.open(
       request.method,
-      request.formatUrl()
+      request.url.format()
     );
 
     this.pass(request, data, callback);

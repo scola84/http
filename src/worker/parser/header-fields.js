@@ -82,7 +82,7 @@ export default class HeaderFieldsParser extends Worker {
       return;
     }
 
-    const key = message.parser.key;
+    const key = message.parser.key.toLowerCase();
 
     let value = data.toString(
       'utf-8',

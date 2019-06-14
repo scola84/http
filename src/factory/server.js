@@ -14,12 +14,13 @@ import {
   ContentTypeHeader,
   ContinueResponder,
   DateHeader,
-  ErrorResponder,
+  ErrorResolver,
+  ResultResolver,
   HeaderFieldsParser,
   HeaderFieldsWriter,
   PathRouter,
   RequestLineParser,
-  ResourceRouter,
+  RequestRouter,
   ResponseLineWriter,
   ServerConnector,
   TrailerFieldsParser,
@@ -34,7 +35,7 @@ export default function createServer(options = {}) {
   const {
     listen = 3000,
       log = 0,
-      router = 'resource',
+      router = 'request',
       setup = setupServer
   } = options;
 
@@ -50,11 +51,12 @@ export default function createServer(options = {}) {
   const contentTypeHeader = new ContentTypeHeader();
   const continueResponder = new ContinueResponder();
   const dateHeader = new DateHeader();
-  const errorResponder = new ErrorResponder();
+  const errorResolver = new ErrorResolver();
   const headerFieldsParser = new HeaderFieldsParser();
   const headerFieldsWriter = new HeaderFieldsWriter();
   const requestLineParser = new RequestLineParser();
   const responseLineWriter = new ResponseLineWriter();
+  const resultResolver = new ResultResolver();
   const serverConnector = new ServerConnector();
   const trailerFieldsParser = new TrailerFieldsParser();
   const trailerFieldsWriter = new TrailerFieldsWriter();
@@ -65,7 +67,7 @@ export default function createServer(options = {}) {
 
   const routers = {
     path: new PathRouter(),
-    resource: new ResourceRouter()
+    request: new RequestRouter()
   };
 
   serverConnector
@@ -80,7 +82,8 @@ export default function createServer(options = {}) {
     .connect(contentTypeDecoder)
     .connect(routers[router]);
 
-  errorResponder
+  resultResolver
+    .connect(errorResolver)
     .connect(contentTypeHeader)
     .connect(contentEncodingHeader)
     .connect(transferEncodingHeader)
@@ -111,7 +114,7 @@ export default function createServer(options = {}) {
 
   return setup({
     connector: serverConnector,
-    responder: errorResponder,
+    resolver: resultResolver,
     router: routers[router],
     writer: bodyWriter
   });

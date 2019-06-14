@@ -14,7 +14,7 @@ export default class BodyParser extends Worker {
   }
 
   act(message, data, callback) {
-    let contentLength = message.getHeader('Content-Length');
+    let contentLength = message.headers['content-length'];
 
     if (typeof contentLength !== 'undefined') {
       contentLength = Number(contentLength);
@@ -23,7 +23,7 @@ export default class BodyParser extends Worker {
         throw new Error('411 Invalid Content-Length header');
       }
 
-      message.setHeader('Content-Length', contentLength);
+      message.headers['content-length'] = contentLength;
     } else {
       contentLength = 0;
     }
@@ -62,10 +62,12 @@ export default class BodyParser extends Worker {
   }
 
   decide(message, data) {
+    const encoding = message.headers['transfer-encoding'] || '';
+
     if (
       data !== null &&
       message.state.body !== true &&
-      message.getHeader('Transfer-Encoding', '').indexOf('chunked') === -1
+      encoding.indexOf('chunked') === -1
     ) {
       return true;
     }

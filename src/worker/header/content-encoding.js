@@ -12,8 +12,11 @@ export default class ContentEncodingHeader extends Worker {
   }
 
   act(message, data, callback) {
-    const acceptable = message.parseAcceptable('Accept-Encoding', '*');
-    const preferred = message.headers['Content-Encoding'];
+    const acceptable = message
+      .parseHeader('accept-encoding')
+      .parseAcceptable('*');
+
+    const preferred = message.headers['content-encoding'];
     const actual = [];
 
     let accept = null;
@@ -39,9 +42,9 @@ export default class ContentEncodingHeader extends Worker {
     message.body.content = actual;
 
     if (actual.length > 0) {
-      message.headers['Content-Encoding'] = actual;
+      message.headers['content-encoding'] = actual;
     } else {
-      delete message.headers['Content-Encoding'];
+      delete message.headers['content-encoding'];
     }
 
     this.pass(message, data, callback);
@@ -50,7 +53,7 @@ export default class ContentEncodingHeader extends Worker {
   decide(message, data) {
     if (
       typeof data !== 'undefined' &&
-      typeof message.headers['Content-Encoding'] !== 'undefined' &&
+      typeof message.headers['content-encoding'] !== 'undefined' &&
       typeof message.body.content === 'undefined'
     ) {
       return true;

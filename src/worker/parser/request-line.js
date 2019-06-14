@@ -1,4 +1,5 @@
 import { Worker } from '@scola/worker';
+import Url from '../message/url';
 
 export default class RequestLineParser extends Worker {
   constructor(options = {}) {
@@ -87,25 +88,25 @@ export default class RequestLineParser extends Worker {
   }
 
   processSlash(message, data) {
-    if (typeof message.url === 'string') {
+    if (typeof message.url !== 'undefined') {
       this.processProtocolName(message, data);
     }
   }
 
   processSpace(message, data) {
-    if (typeof message.method !== 'string') {
+    if (typeof message.method === 'undefined') {
       this.processMethod(message, data);
-    } else if (typeof message.url !== 'string') {
+    } else if (typeof message.url === 'undefined') {
       this.processUrl(message, data);
     }
   }
 
   processUrl(message, data) {
-    message.url = data.toString(
+    message.url = Url.parse(data.toString(
       'utf-8',
       message.parser.begin,
       message.parser.end
-    );
+    ));
 
     message.parser.begin = message.parser.end + 1;
   }

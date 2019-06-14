@@ -8,17 +8,18 @@ export default class ContentEncodingDecoder extends Manager {
 
     const content = message.parseHeader('Content-Encoding');
 
-    if (typeof content === 'undefined') {
+    if (typeof content.values === 'undefined') {
       return false;
     }
 
-    for (let i = 0; i < content.length; i += 1) {
-      if (typeof this._pool[content[i][0]] === 'undefined') {
-        throw new Error(`501 Decoder not implemented (${content[i][0]})`);
+    for (let i = 0; i < content.values.length; i += 1) {
+      if (typeof this._pool[content.values[i][0]] === 'undefined') {
+        throw new Error('501 Decoder not implemented' +
+          ` (${content[i][0]})`);
       }
     }
 
-    message.body.content = content
+    message.body.content = content.values
       .reverse()
       .map((encoding) => encoding[0]);
 
