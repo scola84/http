@@ -1,20 +1,7 @@
 import { Streamer } from '@scola/worker';
-import merge from 'lodash-es/merge';
-import Request from '../message/request';
-
-const woptions = {
-  id: null
-};
+import { Request } from '../message';
 
 export default class ServerConnector extends Streamer {
-  static getOptions() {
-    return woptions;
-  }
-
-  static setOptions(options) {
-    merge(woptions, options);
-  }
-
   act(socket) {
     this.read({ socket });
   }
@@ -25,19 +12,20 @@ export default class ServerConnector extends Streamer {
       console.log();
     }
 
-    const create = typeof box.message === 'undefined' ||
-      box.message.state.body === true &&
-      box.message.state.headers === true &&
-      box.message.state.line === true;
+    const create = typeof box.request === 'undefined' ||
+      box.request.state.body === true &&
+      box.request.state.headers === true &&
+      box.request.state.line === true;
 
     if (create === true) {
-      box.message = new Request({ socket: box.socket });
-      box.message['x-server-id'] = woptions.id;
+      box.request = new Request({
+        socket: box.socket
+      });
     }
 
-    data = this.prepareParser(box.message, data);
+    data = this.prepareParser(box.request, data);
 
-    this.pass(box.message, data, (bx, resume) => {
+    this.pass(box.request, data, (bx, resume) => {
       this.throttle(box, resume);
     });
   }
@@ -46,22 +34,22 @@ export default class ServerConnector extends Streamer {
 
   fail() {}
 
-  stream(box) {
-    return box.socket;
+  stream(request) {
+    return request.socket;
   }
 
-  prepareParser(message, data) {
-    if (message.parser.data) {
-      data = Buffer.concat([message.parser.data, data]);
-      message.parser.data = null;
+  prepareParser(request, data) {
+    if (request.parser.data) {
+      data = Buffer.concat([request.parser.data, data]);
+      request.parser.data = null;
     }
 
-    if (typeof message.parser.length === 'undefined') {
-      message.parser.length = null;
+    if (typeof request.parser.length === 'undefined') {
+      request.parser.length = null;
     }
 
-    message.parser.begin = 0;
-    message.parser.end = 0;
+    request.parser.begin = 0;
+    request.parser.end = 0;
 
     return data;
   }

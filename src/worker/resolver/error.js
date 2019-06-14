@@ -14,6 +14,8 @@ export default class ErrorResolver extends Worker {
   }
 
   err(request, error, callback) {
+    this.log('fail', request, error, callback);
+
     const response = request.createResponse();
     const match = error.message.match(/(\d{3})?([^(]*)/);
 

@@ -1,25 +1,9 @@
 import { Worker } from '@scola/worker';
-import defaults from 'lodash-es/defaultsDeep';
-import merge from 'lodash-es/merge';
 import net from 'net';
 import tls from 'tls';
 import Request from '../message/request';
 
-const woptions = {
-  agent: null,
-  net,
-  tls
-};
-
 export default class ClientConnector extends Worker {
-  static getOptions() {
-    return woptions;
-  }
-
-  static setOptions(options) {
-    merge(woptions, options);
-  }
-
   act(options, data, callback) {
     const request = new Request(options);
 
@@ -38,15 +22,12 @@ export default class ClientConnector extends Worker {
 
   open(request, data, callback, options) {
     const library = request.url.scheme === 'http' ?
-      woptions.net : woptions.tls;
+      net : tls;
 
-    const event = library === woptions.net ?
+    const event = library === net ?
       'connect' : 'secureConnect';
 
-    defaults(request.headers, {
-      agent: woptions.agent,
-      host: request.url.formatHost()
-    });
+    request.headers.host = request.url.formatHost();
 
     const socket = library.connect(Object.assign({
       host: request.url.hostname,
