@@ -61,6 +61,9 @@ export default class BrowserMediator extends Worker {
     let responseHeaders = request.socket.getAllResponseHeaders();
 
     if (responseHeaders.match('content-length') === null) {
+      responseHeaders = responseHeaders
+        .replace(/(content|transfer)-encoding.+\r\n/g, '');
+
       responseHeaders = 'content-length: ' +
         Buffer.byteLength(responseText) + '\r\n' +
         responseHeaders;
