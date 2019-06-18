@@ -1,6 +1,6 @@
 import { Router } from '@scola/worker';
 
-export default class AgentRouter extends Router {
+export class AgentRouter extends Router {
   constructor(options) {
     super(options);
     this._agents = null;

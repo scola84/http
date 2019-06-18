@@ -1,6 +1,6 @@
 import { Worker } from '@scola/worker';
 
-export default class TrailerFieldsWriter extends Worker {
+export class TrailerFieldsWriter extends Worker {
   act(message, data, callback) {
     const writeTrailers = (typeof message.body.te !== 'undefined' &&
       message.body.te.indexOf('trailers') !== -1);

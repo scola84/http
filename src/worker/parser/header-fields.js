@@ -1,6 +1,6 @@
 import { Worker } from '@scola/worker';
 
-export default class HeaderFieldsParser extends Worker {
+export class HeaderFieldsParser extends Worker {
   constructor(options = {}) {
     super(options);
 

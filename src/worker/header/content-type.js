@@ -1,6 +1,6 @@
 import { Worker } from '@scola/worker';
 
-export default class ContentTypeHeader extends Worker {
+export class ContentTypeHeader extends Worker {
   constructor(methods) {
     super(methods);
     this._types = [];

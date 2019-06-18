@@ -1,6 +1,6 @@
-import Header from './header';
+import { Header } from './header';
 
-export default class Message {
+export class Message {
   constructor(options = {}) {
     this.body = {};
     this.extra = options.extra || {};

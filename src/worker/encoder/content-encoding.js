@@ -1,6 +1,6 @@
 import { Manager } from '@scola/worker';
 
-export default class ContentEncodingEncoder extends Manager {
+export class ContentEncodingEncoder extends Manager {
   decide(message, data) {
     if (typeof message.body.content !== 'undefined') {
       return true;

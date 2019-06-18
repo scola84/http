@@ -1,4 +1,4 @@
-export default class Header {
+export class Header {
   static parse(name, header) {
     if (typeof header === 'undefined') {
       return new Header({ name });

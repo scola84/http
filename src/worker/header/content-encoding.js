@@ -1,6 +1,6 @@
 import { Worker } from '@scola/worker';
 
-export default class ContentEncodingHeader extends Worker {
+export class ContentEncodingHeader extends Worker {
   constructor(methods) {
     super(methods);
     this._encodings = [];

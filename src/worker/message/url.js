@@ -1,7 +1,7 @@
 import defaults from 'lodash-es/defaultsDeep';
 import qs from 'qs';
 
-export default class Url {
+export class Url {
   static parse(url) {
     if (url instanceof Url) {
       return url;
@@ -87,7 +87,7 @@ export default class Url {
   }
 
   constructor(options) {
-    defaults(options, {
+    options = defaults({}, options, {
       hostname: typeof window === 'undefined' ?
         null : window.location.hostname,
       port: options.scheme === 'http' ? 80 : 443,

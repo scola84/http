@@ -23,7 +23,7 @@ import {
   TransferEncodingEncoder
 } from '../worker';
 
-export default function createClient(options = {}) {
+export function createClient(options = {}) {
   const {
     log = 0,
       setup = setupClient

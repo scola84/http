@@ -1,6 +1,6 @@
-import RequestRouter from './request';
+import { RequestRouter } from './request';
 
-export default class PathRouter extends RequestRouter {
+export class PathRouter extends RequestRouter {
   constructor(options) {
     super(options);
     this._paths = null;

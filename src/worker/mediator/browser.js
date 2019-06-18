@@ -2,7 +2,7 @@ import { Worker } from '@scola/worker';
 import { Buffer } from 'buffer/';
 import defaults from 'lodash-es/defaultsDeep';
 
-export default class BrowserMediator extends Worker {
+export class BrowserMediator extends Worker {
   act(request, data, callback = () => {}) {
     this.handleProgress(request, data, callback);
     this.bindSocket(request, data, callback);

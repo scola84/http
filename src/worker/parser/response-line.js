@@ -1,6 +1,6 @@
 import { Worker } from '@scola/worker';
 
-export default class ResponseLineParser extends Worker {
+export class ResponseLineParser extends Worker {
   constructor(options = {}) {
     super(options);
 

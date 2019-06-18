@@ -1,7 +1,7 @@
 import { Worker } from '@scola/worker';
 import { STATUS_CODES } from 'http';
 
-export default class ResponseLineWriter extends Worker {
+export class ResponseLineWriter extends Worker {
   act(message, data, callback) {
     data = this.writeData(message, data);
     this.pass(message, data, callback);

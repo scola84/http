@@ -1,6 +1,6 @@
 import { Worker } from '@scola/worker';
 
-export default class DateHeader extends Worker {
+export class DateHeader extends Worker {
   constructor(methods) {
     super(methods);
 

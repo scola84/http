@@ -1,13 +1,5 @@
-import BodyParser from './body';
-import HeaderFieldsParser from './header-fields';
-import RequestLineParser from './request-line';
-import ResponseLineParser from './response-line';
-import TrailerFieldsParser from './trailer-fields';
-
-export {
-  BodyParser,
-  HeaderFieldsParser,
-  RequestLineParser,
-  ResponseLineParser,
-  TrailerFieldsParser
-};
+export * from './body';
+export * from './header-fields';
+export * from './request-line';
+export * from './response-line';
+export * from './trailer-fields';

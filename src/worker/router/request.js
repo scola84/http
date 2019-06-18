@@ -1,6 +1,6 @@
 import { Router } from '@scola/worker';
 
-export default class RequestRouter extends Router {
+export class RequestRouter extends Router {
   constructor(options) {
     super(options);
     this._resources = null;

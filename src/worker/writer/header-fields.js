@@ -1,6 +1,6 @@
 import { Worker } from '@scola/worker';
 
-export default class HeaderFieldsWriter extends Worker {
+export class HeaderFieldsWriter extends Worker {
   act(message, data, callback) {
     data = this.writeData(message, data);
     this.pass(message, data, callback);

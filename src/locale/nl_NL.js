@@ -1,4 +1,4 @@
-export default {
+export const nl_NL = {
   status: {
     400: 'De gegevens zijn niet juist.',
     404: 'Het pad is niet gevonden.',

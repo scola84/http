@@ -1,6 +1,6 @@
 import { Worker } from '@scola/worker';
 
-export default class DataResolver extends Worker {
+export class DataResolver extends Worker {
   act(request, data, callback) {
     const response = request.createResponse();
 

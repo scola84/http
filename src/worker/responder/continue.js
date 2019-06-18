@@ -1,6 +1,6 @@
 import { Worker } from '@scola/worker';
 
-export default class ContinueResponder extends Worker {
+export class ContinueResponder extends Worker {
   decide(message) {
     return message.headers.expect === '100-continue';
   }

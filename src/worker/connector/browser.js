@@ -1,7 +1,7 @@
 import { Worker } from '@scola/worker';
-import Request from '../message/request';
+import { Request } from '../message';
 
-export default class BrowserConnector extends Worker {
+export class BrowserConnector extends Worker {
   act(options, data, callback) {
     const request = new Request(options);
 

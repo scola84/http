@@ -1,6 +1,6 @@
-import HeaderFieldsParser from '../parser/header-fields';
+import { HeaderFieldsParser } from '../parser/header-fields';
 
-export default class TrailerFieldsParser extends HeaderFieldsParser {
+export class TrailerFieldsParser extends HeaderFieldsParser {
   act(message, data, callback) {
     message.parser.begin = 0;
     message.parser.end = 0;

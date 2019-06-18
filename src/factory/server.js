@@ -32,7 +32,7 @@ import {
   UpgradeResponder
 } from '../worker';
 
-export default function createServer(options = {}) {
+export function createServer(options = {}) {
   const {
     listen = 3000,
       log = 0,

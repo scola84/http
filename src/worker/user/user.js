@@ -5,7 +5,7 @@ import Long from 'long';
 const scopes = { read: 0, write: 1 };
 let masks = {};
 
-export default class User {
+export class User {
   static getMasks() {
     return masks;
   }

@@ -1,7 +1,7 @@
 import { Worker } from '@scola/worker';
-import Url from '../message/url';
+import { Url } from '../message';
 
-export default class RequestLineParser extends Worker {
+export class RequestLineParser extends Worker {
   constructor(options = {}) {
     super(options);
 

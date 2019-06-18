@@ -1,6 +1,6 @@
 import { Worker } from '@scola/worker';
 
-export default class TransferEncodingHeader extends Worker {
+export class TransferEncodingHeader extends Worker {
   constructor(methods) {
     super(methods);
     this._encodings = [];

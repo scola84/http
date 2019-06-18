@@ -1,6 +1,6 @@
 import { Worker } from '@scola/worker';
 
-export default class ConnectionHeader extends Worker {
+export class ConnectionHeader extends Worker {
   act(message, data, callback) {
     this.setHeader(message);
     this.pass(message, data, callback);

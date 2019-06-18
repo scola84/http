@@ -1,6 +1,6 @@
 import { Worker } from '@scola/worker';
 
-export default class BodyParser extends Worker {
+export class BodyParser extends Worker {
   constructor(options = {}) {
     super(options);
 

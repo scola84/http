@@ -1,6 +1,6 @@
 import { Worker } from '@scola/worker';
 
-export default class RequestLineWriter extends Worker {
+export class RequestLineWriter extends Worker {
   act(message, data, callback) {
     data = message.method + ' ' +
       message.formatRelativeUrl() + ' HTTP/1.1' +

@@ -1,6 +1,6 @@
 import { Streamer } from '@scola/worker';
 
-export default class BodyWriter extends Streamer {
+export class BodyWriter extends Streamer {
   act(message, data, callback) {
     this.writeData(message, data, callback);
     this.pass(message, data, callback);

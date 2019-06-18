@@ -1,7 +1,7 @@
 import { Streamer } from '@scola/worker';
 import { createReadStream, stat } from 'fs';
 
-export default class FileResolver extends Streamer {
+export class FileResolver extends Streamer {
   act(request, data, callback) {
     const response = request.createResponse();
 

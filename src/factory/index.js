@@ -1,9 +1,3 @@
-import createBrowser from './browser';
-import createClient from './client';
-import createServer from './server';
-
-export {
-  createBrowser,
-  createClient,
-  createServer
-};
+export * from './browser';
+export * from './client';
+export * from './server';

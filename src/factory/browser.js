@@ -16,7 +16,7 @@ import {
   TransferEncodingEncoder
 } from '../worker';
 
-export default function createBrowser(options = {}) {
+export function createBrowser(options = {}) {
   const {
     setup = setupBrowser
   } = options;

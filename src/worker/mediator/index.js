@@ -1,7 +1,2 @@
-import BrowserMediator from './browser';
-import ClientMediator from './client';
-
-export {
-  BrowserMediator,
-  ClientMediator
-};
+export * from './browser';
+export * from './client';

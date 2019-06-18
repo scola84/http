@@ -1,16 +1,16 @@
 import defaults from 'lodash-es/defaultsDeep';
-import Message from './message';
-import Response from './response';
-import Url from './url';
+import { Message } from './message';
+import { Response } from './response';
+import { Url } from './url';
 
-export default class Request extends Message {
+export class Request extends Message {
   constructor(options = {}) {
-    super(options);
-
-    defaults(options, {
+    options = defaults({}, options, {
       retry: 0,
       timeout: 60000
     });
+
+    super(options);
 
     this.method = options.method;
     this.retry = options.retry;

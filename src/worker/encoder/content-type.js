@@ -1,6 +1,6 @@
 import { Manager } from '@scola/worker';
 
-export default class ContentTypeEncoder extends Manager {
+export class ContentTypeEncoder extends Manager {
   constructor(options = {}) {
     super(options);
 

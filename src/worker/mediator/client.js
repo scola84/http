@@ -1,6 +1,6 @@
 import { Streamer } from '@scola/worker';
 
-export default class ClientMediator extends Streamer {
+export class ClientMediator extends Streamer {
   act(request) {
     this.read(request.createResponse());
   }

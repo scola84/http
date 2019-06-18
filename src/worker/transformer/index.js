@@ -1,5 +1,1 @@
-import ResponseTransformer from './response';
-
-export {
-  ResponseTransformer
-};
+export * from './response';

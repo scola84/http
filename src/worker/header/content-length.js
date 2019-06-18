@@ -1,7 +1,7 @@
 import { Worker } from '@scola/worker';
 import { Buffer } from 'buffer/';
 
-export default class ContentLengthHeader extends Worker {
+export class ContentLengthHeader extends Worker {
   act(message, data, callback) {
     this.setHeader(message, data);
     this.pass(message, data, callback);

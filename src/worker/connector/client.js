@@ -1,9 +1,9 @@
 import { Worker } from '@scola/worker';
 import net from 'net';
 import tls from 'tls';
-import Request from '../message/request';
+import { Request } from '../message';
 
-export default class ClientConnector extends Worker {
+export class ClientConnector extends Worker {
   act(options, data, callback) {
     const request = new Request(options);
 

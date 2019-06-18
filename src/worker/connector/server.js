@@ -1,7 +1,7 @@
 import { Streamer } from '@scola/worker';
 import { Request } from '../message';
 
-export default class ServerConnector extends Streamer {
+export class ServerConnector extends Streamer {
   act(socket) {
     this.read({ socket });
   }

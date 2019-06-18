@@ -1,6 +1,6 @@
-import Message from './message';
+import { Message } from './message';
 
-export default class Response extends Message {
+export class Response extends Message {
   constructor(options = {}) {
     super(options);
 

@@ -1,6 +1,6 @@
 import { Worker } from '@scola/worker';
 
-export default class ResponseTransformer extends Worker {
+export class ResponseTransformer extends Worker {
   act(response, data, callback) {
     if (response.mustEnd()) {
       if (response.socket) {

@@ -1,9 +1,3 @@
-import ContentEncodingEncoder from './content-encoding';
-import ContentTypeEncoder from './content-type';
-import TransferEncodingEncoder from './transfer-encoding';
-
-export {
-  ContentEncodingEncoder,
-  ContentTypeEncoder,
-  TransferEncodingEncoder
-};
+export * from './content-encoding';
+export * from './content-type';
+export * from './transfer-encoding';

@@ -2,7 +2,7 @@ import { Worker } from '@scola/worker';
 import { STATUS_CODES } from 'http';
 const filter = [401, 403, 500];
 
-export default class ErrorResolver extends Worker {
+export class ErrorResolver extends Worker {
   act(request, data, callback) {
     const error = new Error('404 Object not found' +
       ` (${request.method} ${request.url.path})`);
