@@ -7,11 +7,15 @@ import resolve from 'rollup-plugin-node-resolve';
 export default [{
   input: './index.js',
   external: [
-    '@scola/codec',
     'bcrypt',
+    'busboy',
     'fs',
+    'fs-extra',
     'http',
+    'msgpack-lite',
     'net',
+    'parse5',
+    'shortid',
     'tls'
   ],
   output: [{
@@ -21,10 +25,7 @@ export default [{
     extend: true,
     file: 'dist/http.umd.js',
     format: 'umd',
-    name: 'scola.http',
-    globals: {
-      '@scola/codec': 'scola.codec'
-    }
+    name: 'scola.http'
   }],
   plugins: [
     resolve(),

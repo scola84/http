@@ -1,5 +1,5 @@
 import { Worker } from '@scola/worker';
-import { Url } from '../message';
+import { Url } from '../../object';
 
 export class RequestLineParser extends Worker {
   constructor(options = {}) {
@@ -7,6 +7,10 @@ export class RequestLineParser extends Worker {
 
     this._maxLength = null;
     this.setMaxLength(options.maxLength);
+  }
+
+  getMaxLength() {
+    return this._maxLength;
   }
 
   setMaxLength(maxLength = 8 * 1024) {

@@ -16,7 +16,6 @@
     "rollup-plugin-node-resolve": "^5.0.0"
   },
   "dependencies": {
-    "@scola/codec": "^2.5.3",
     "@scola/worker": "^2.15.0",
     "bcrypt": "^3.0.6",
     "buffer": "^5.2.1",

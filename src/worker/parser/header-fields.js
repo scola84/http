@@ -8,6 +8,10 @@ export class HeaderFieldsParser extends Worker {
     this.setMaxLength(options.maxLength);
   }
 
+  getMaxLength() {
+    return this._maxLength;
+  }
+
   setMaxLength(maxLength = 8 * 1024) {
     this._maxLength = maxLength;
     return this;

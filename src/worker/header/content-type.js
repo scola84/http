@@ -1,17 +1,71 @@
 import { Worker } from '@scola/worker';
+const methods = ['POST', 'PUT'];
 
 export class ContentTypeHeader extends Worker {
-  constructor(methods) {
-    super(methods);
-    this._types = [];
+  constructor(options = {}) {
+    super(options);
+
+    this._types = null;
+    this.setTypes(options.types);
   }
 
-  addType(type) {
-    this._types.push(type);
+  getTypes() {
+    return this._types;
+  }
+
+  setTypes(value = []) {
+    this._types = value;
+    return this;
+  }
+
+  addType(value) {
+    this._types.push(value);
     return this;
   }
 
   act(message, data, callback) {
+    this.setHeader(message, data);
+    this.pass(message, data, callback);
+  }
+
+  setHeader(message, data) {
+    if (message.status) {
+      this.setResponseHeader(message);
+    } else {
+      this.setRequestHeader(message, data);
+    }
+  }
+
+  setRequestHeader(message, data) {
+    if (methods.indexOf(message.method) === -1) {
+      return;
+    }
+
+    const keys = Object.keys(data);
+
+    let key = null;
+    let type = this._types[0];
+    let values = null;
+
+    for (let i = 0; i < keys.length; i += 1) {
+      key = keys[i];
+
+      values = data[key];
+      values = Array.isArray(values) ? values : [values];
+
+      for (let j = 0; j < values.length; j += 1) {
+        if (values[j] instanceof File) {
+          type = 'multipart/form-data';
+        }
+      }
+    }
+
+    if (this._types.indexOf(type) > -1) {
+      message.headers['content-type'] = type;
+    }
+  }
+
+  setResponseHeader(message) {
     const acceptable = message
       .parseHeader('Accept')
       .parseAcceptable('*/*');
@@ -43,8 +97,6 @@ export class ContentTypeHeader extends Worker {
         }
       }
     }
-
-    this.pass(message, data, callback);
   }
 
   decide(message, data) {

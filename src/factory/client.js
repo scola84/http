@@ -1,8 +1,8 @@
-import { setupClient } from '@scola/codec';
-
 import {
   BodyParser,
   BodyWriter,
+  ChunkedDecoder,
+  ChunkedEncoder,
   ClientConnector,
   ClientMediator,
   ConnectionHeader,
@@ -11,37 +11,56 @@ import {
   ContentLengthHeader,
   ContentTypeDecoder,
   ContentTypeEncoder,
+  ContentTypeHeader,
   DateHeader,
+  FormdataEncoder,
   HeaderFieldsParser,
   HeaderFieldsWriter,
+  HtmlDecoder,
+  HtmlEncoder,
+  JsonDecoder,
+  JsonEncoder,
+  MsgpackDecoder,
+  MsgpackEncoder,
+  PlainDecoder,
+  PlainEncoder,
   RequestLineWriter,
   ResponseLineParser,
   ResponseTransformer,
   TrailerFieldsParser,
   TrailerFieldsWriter,
   TransferEncodingDecoder,
-  TransferEncodingEncoder
+  TransferEncodingEncoder,
+  UrlencodedDecoder,
+  UrlencodedEncoder
 } from '../worker';
 
-export function createClient(options = {}) {
-  const {
-    log = 0,
-      setup = setupClient
-  } = options;
-
+export function createClient() {
   const bodyParser = new BodyParser();
   const bodyWriter = new BodyWriter();
   const clientConnector = new ClientConnector();
   const clientMediator = new ClientMediator();
+  const chunkedDecoder = new ChunkedDecoder();
+  const chunkedEncoder = new ChunkedEncoder();
   const connectionHeader = new ConnectionHeader();
   const contentEncodingDecoder = new ContentEncodingDecoder();
   const contentEncodingEncoder = new ContentEncodingEncoder();
   const contentLengthHeader = new ContentLengthHeader();
   const contentTypeDecoder = new ContentTypeDecoder();
   const contentTypeEncoder = new ContentTypeEncoder();
+  const contentTypeHeader = new ContentTypeHeader();
   const dateHeader = new DateHeader();
+  const formdataEncoder = new FormdataEncoder();
   const headerFieldsParser = new HeaderFieldsParser();
   const headerFieldsWriter = new HeaderFieldsWriter();
+  const htmlDecoder = new HtmlDecoder();
+  const htmlEncoder = new HtmlEncoder();
+  const jsonDecoder = new JsonDecoder();
+  const jsonEncoder = new JsonEncoder();
+  const msgpackDecoder = new MsgpackDecoder();
+  const msgpackEncoder = new MsgpackEncoder();
+  const plainDecoder = new PlainDecoder();
+  const plainEncoder = new PlainEncoder();
   const requestLineWriter = new RequestLineWriter();
   const responseLineParser = new ResponseLineParser();
   const responseTransformer = new ResponseTransformer();
@@ -49,8 +68,11 @@ export function createClient(options = {}) {
   const trailerFieldsWriter = new TrailerFieldsWriter();
   const transferEncodingDecoder = new TransferEncodingDecoder();
   const transferEncodingEncoder = new TransferEncodingEncoder();
+  const urlencodedDecoder = new UrlencodedDecoder();
+  const urlencodedEncoder = new UrlencodedEncoder();
 
   clientConnector
+    .connect(contentTypeHeader)
     .connect(contentTypeEncoder)
     .connect(contentEncodingEncoder)
     .connect(transferEncodingEncoder)
@@ -77,16 +99,35 @@ export function createClient(options = {}) {
   clientMediator
     .bypass(responseTransformer);
 
-  if ((log & 1) === 1) {
-    bodyWriter.setLog('data');
-  }
+  contentTypeDecoder
+    .setStrict(false)
+    .manage(htmlDecoder.getType(), htmlDecoder)
+    .manage(jsonDecoder.getType(), jsonDecoder)
+    .manage(msgpackDecoder.getType(), msgpackDecoder)
+    .manage(urlencodedDecoder.getType(), urlencodedDecoder)
+    .manage(plainDecoder.getType(), plainDecoder);
 
-  if ((log & 2) === 2) {
-    clientMediator.setLog('data');
-  }
+  contentTypeEncoder
+    .setStrict(false)
+    .manage(htmlEncoder.getType(), htmlEncoder)
+    .manage(jsonEncoder.getType(), jsonEncoder)
+    .manage(msgpackEncoder.getType(), msgpackEncoder)
+    .manage(formdataEncoder.getType(), formdataEncoder)
+    .manage(plainEncoder.getType(), plainEncoder)
+    .manage(urlencodedEncoder.getType(), urlencodedEncoder);
 
-  return setup({
+  contentTypeHeader
+    .addType(jsonEncoder.getType())
+    .addType(formdataEncoder.getType());
+
+  transferEncodingDecoder
+    .manage(chunkedDecoder.getEncoding(), chunkedDecoder);
+
+  transferEncodingEncoder
+    .manage(chunkedEncoder.getEncoding(), chunkedEncoder);
+
+  return {
     connector: clientConnector,
     transformer: responseTransformer
-  });
+  };
 }

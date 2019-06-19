@@ -1,9 +1,10 @@
-import { setupServer } from '@scola/codec';
 import net from 'net';
 
 import {
   BodyParser,
   BodyWriter,
+  ChunkedDecoder,
+  ChunkedEncoder,
   ConnectionHeader,
   ContentEncodingDecoder,
   ContentEncodingEncoder,
@@ -17,9 +18,18 @@ import {
   DateHeader,
   ErrorResolver,
   FileResolver,
+  FormdataDecoder,
+  FormdataEncoder,
   HeaderFieldsParser,
   HeaderFieldsWriter,
-  PathRouter,
+  HtmlDecoder,
+  HtmlEncoder,
+  JsonDecoder,
+  JsonEncoder,
+  MsgpackDecoder,
+  MsgpackEncoder,
+  PlainDecoder,
+  PlainEncoder,
   RequestLineParser,
   RequestRouter,
   ResponseLineWriter,
@@ -29,19 +39,20 @@ import {
   TransferEncodingDecoder,
   TransferEncodingEncoder,
   TransferEncodingHeader,
-  UpgradeResponder
+  UpgradeResponder,
+  UrlencodedDecoder,
+  UrlencodedEncoder
 } from '../worker';
 
 export function createServer(options = {}) {
   const {
-    listen = 3000,
-      log = 0,
-      router = 'request',
-      setup = setupServer
+    listen = 3000
   } = options;
 
   const bodyParser = new BodyParser();
   const bodyWriter = new BodyWriter();
+  const chunkedDecoder = new ChunkedDecoder();
+  const chunkedEncoder = new ChunkedEncoder();
   const connectionHeader = new ConnectionHeader();
   const contentEncodingDecoder = new ContentEncodingDecoder();
   const contentEncodingEncoder = new ContentEncodingEncoder();
@@ -55,9 +66,20 @@ export function createServer(options = {}) {
   const dateHeader = new DateHeader();
   const fileResolver = new FileResolver();
   const errorResolver = new ErrorResolver();
+  const formdataEncoder = new FormdataEncoder();
+  const formdataDecoder = new FormdataDecoder();
   const headerFieldsParser = new HeaderFieldsParser();
   const headerFieldsWriter = new HeaderFieldsWriter();
+  const htmlDecoder = new HtmlDecoder();
+  const htmlEncoder = new HtmlEncoder();
+  const jsonDecoder = new JsonDecoder();
+  const jsonEncoder = new JsonEncoder();
+  const msgpackDecoder = new MsgpackDecoder();
+  const msgpackEncoder = new MsgpackEncoder();
+  const plainDecoder = new PlainDecoder();
+  const plainEncoder = new PlainEncoder();
   const requestLineParser = new RequestLineParser();
+  const requestRouter = new RequestRouter();
   const responseLineWriter = new ResponseLineWriter();
   const serverConnector = new ServerConnector();
   const trailerFieldsParser = new TrailerFieldsParser();
@@ -66,11 +88,8 @@ export function createServer(options = {}) {
   const transferEncodingEncoder = new TransferEncodingEncoder();
   const transferEncodingHeader = new TransferEncodingHeader();
   const upgradeResponder = new UpgradeResponder();
-
-  const routers = {
-    path: new PathRouter(),
-    request: new RequestRouter()
-  };
+  const urlencodedDecoder = new UrlencodedDecoder();
+  const urlencodedEncoder = new UrlencodedEncoder();
 
   serverConnector
     .connect(requestLineParser)
@@ -82,7 +101,7 @@ export function createServer(options = {}) {
     .connect(trailerFieldsParser)
     .connect(contentEncodingDecoder)
     .connect(contentTypeDecoder)
-    .connect(routers[router]);
+    .connect(requestRouter);
 
   dataResolver
     .connect(fileResolver)
@@ -101,13 +120,36 @@ export function createServer(options = {}) {
     .connect(trailerFieldsWriter)
     .connect(bodyWriter);
 
-  if ((log & 1) === 1) {
-    serverConnector.setLog('data');
-  }
+  contentTypeDecoder
+    .setStrict(false)
+    .manage(htmlDecoder.getType(), htmlDecoder)
+    .manage(jsonDecoder.getType(), jsonDecoder)
+    .manage(msgpackDecoder.getType(), msgpackDecoder)
+    .manage(formdataDecoder.getType(), formdataDecoder)
+    .manage(urlencodedDecoder.getType(), urlencodedDecoder)
+    .manage(plainDecoder.getType(), plainDecoder);
 
-  if ((log & 2) === 2) {
-    bodyWriter.setLog('data');
-  }
+  contentTypeEncoder
+    .setStrict(false)
+    .manage(htmlEncoder.getType(), htmlEncoder)
+    .manage(jsonEncoder.getType(), jsonEncoder)
+    .manage(msgpackEncoder.getType(), msgpackEncoder)
+    .manage(formdataEncoder.getType(), formdataEncoder)
+    .manage(plainEncoder.getType(), plainEncoder)
+    .manage(urlencodedEncoder.getType(), urlencodedEncoder);
+
+  transferEncodingDecoder
+    .manage(chunkedDecoder.getEncoding(), chunkedDecoder);
+
+  transferEncodingEncoder
+    .manage(chunkedEncoder.getEncoding(), chunkedEncoder);
+
+  contentTypeHeader
+    .addType(jsonEncoder.getType())
+    .addType(msgpackEncoder.getType())
+    .addType(formdataEncoder.getType())
+    .addType(urlencodedEncoder.getType())
+    .addType(plainEncoder.getType());
 
   if (listen) {
     net.createServer((socket) => {
@@ -115,10 +157,10 @@ export function createServer(options = {}) {
     }).listen(listen);
   }
 
-  return setup({
+  return {
     connector: serverConnector,
     resolver: dataResolver,
-    router: routers[router],
+    router: requestRouter,
     writer: bodyWriter
-  });
+  };
 }

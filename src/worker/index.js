@@ -4,7 +4,6 @@ export * from './decoder';
 export * from './encoder';
 export * from './header';
 export * from './mediator';
-export * from './message';
 export * from './parser';
 export * from './resolver';
 export * from './responder';

@@ -1,8 +1,8 @@
 import { Worker } from '@scola/worker';
 
 export class DateHeader extends Worker {
-  constructor(methods) {
-    super(methods);
+  constructor(options) {
+    super(options);
 
     this._date = null;
 

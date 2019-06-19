@@ -8,6 +8,10 @@ export class ContentTypeEncoder extends Manager {
     this.setStrict(options.strict);
   }
 
+  getStrict() {
+    return this._strict;
+  }
+
   setStrict(value = true) {
     this._strict = value;
     return this;

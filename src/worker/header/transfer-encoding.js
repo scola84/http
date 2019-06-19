@@ -1,13 +1,24 @@
 import { Worker } from '@scola/worker';
 
 export class TransferEncodingHeader extends Worker {
-  constructor(methods) {
-    super(methods);
-    this._encodings = [];
+  constructor(options = {}) {
+    super(options);
+
+    this._encodings = null;
+    this.setEncodings(options.encodings);
   }
 
-  addEncoding(encoding) {
-    this._encodings.push(encoding);
+  getEncodings() {
+    return this._encodings;
+  }
+
+  setEncodings(value = []) {
+    this._encodings = value;
+    return this;
+  }
+
+  addEncoding(value) {
+    this._encondings.push(value);
     return this;
   }
 
