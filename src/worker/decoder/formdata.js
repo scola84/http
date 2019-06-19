@@ -40,7 +40,7 @@ export class FormdataDecoder extends Worker {
 
   decode(message, data, callback) {
     if (typeof message.parser.formdata === 'undefined') {
-      this.setup(message, data, callback);
+      this.setupParser(message, data, callback);
     }
 
     if (message.state.body === true) {
@@ -66,7 +66,7 @@ export class FormdataDecoder extends Worker {
     this.pass(message, data, callback);
   }
 
-  set(data, name, value) {
+  setValue(data, name, value) {
     if (typeof data[name] !== 'undefined') {
       if (Array.isArray(data[name]) === true) {
         value = data[name].concat(value);
@@ -78,7 +78,7 @@ export class FormdataDecoder extends Worker {
     data[name] = value;
   }
 
-  setup(message, data, callback) {
+  setupParser(message, data, callback) {
     const options = Object.assign({}, this._config, {
       headers: (message._original || message).headers
     });
@@ -87,7 +87,7 @@ export class FormdataDecoder extends Worker {
     const parsed = {};
 
     formdata.on('field', (name, value) => {
-      this.set(parsed, name, value);
+      this.setValue(parsed, name, value);
     });
 
     formdata.on('file', (fieldName, stream, name, encoding, type) => {
@@ -112,11 +112,11 @@ export class FormdataDecoder extends Worker {
       });
 
       stream.once('end', () => {
-        this.set(parsed, fieldName, file);
+        this.setValue(parsed, fieldName, file);
       });
 
       stream.once('error', (error) => {
-        this.set(parsed, fieldName, error);
+        this.setValue(parsed, fieldName, error);
       });
 
       target.on('drain', () => {
