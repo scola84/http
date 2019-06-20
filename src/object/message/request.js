@@ -5,16 +5,15 @@ import { Url } from './url';
 
 export class Request extends Message {
   constructor(options = {}) {
-    options = defaults({}, options, {
-      retry: 0,
-      timeout: 60000
-    });
-
     super(options);
 
-    this.method = options.method;
-    this.retry = options.retry;
-    this.timeout = options.timeout;
+    defaults(this, options, {
+      method: 'GET',
+      retry: 0,
+      timeout: 60000,
+      url: null
+    });
+
     this.url = Url.parse(options.url);
   }
 

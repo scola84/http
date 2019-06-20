@@ -1,7 +1,7 @@
 import { Worker } from '@scola/worker';
 import Busboy from 'busboy';
 import fs from 'fs-extra';
-import defaults from 'lodash-es/defaults';
+import defaults from 'lodash-es/defaultsDeep';
 import shortid from 'shortid';
 
 export class FormdataDecoder extends Worker {

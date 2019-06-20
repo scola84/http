@@ -87,38 +87,41 @@ export class Url {
   }
 
   constructor(options) {
-    options = defaults({}, options, {
-      hostname: typeof window === 'undefined' ?
-        null : window.location.hostname,
+    defaults(this, options, {
+      auth: null,
+      hostname: window ? window.location.hostname : null,
+      path: null,
       port: options.scheme === 'http' ? 80 : 443,
+      query: null,
       scheme: 'https'
     });
-
-    this.auth = options.auth;
-    this.hostname = options.hostname;
-    this.path = options.path;
-    this.port = options.port;
-    this.query = options.query;
-    this.scheme = options.scheme;
   }
 
   format() {
     let string = '';
 
-    string += this.scheme + '://';
-    string += this.auth ? this.auth + '@' : '';
+    string += this.formatScheme();
+    string += this.formatAuth();
     string += this.formatHost();
-    string += this.formatRelative();
+    string += this.formatPath();
 
     return string;
+  }
+
+  formatAuth() {
+    return this.auth ? this.auth + '@' : '';
   }
 
   formatHost() {
     return this.hostname + (this.port ? ':' + this.port : '');
   }
 
-  formatRelative() {
+  formatPath() {
     const query = qs.stringify(this.query);
     return this.path + (query ? '?' + query : '');
+  }
+
+  formatScheme() {
+    return this.scheme + '://';
   }
 }
