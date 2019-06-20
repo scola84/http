@@ -98,9 +98,9 @@ export class RequestLineParser extends Worker {
   }
 
   processSpace(message, data) {
-    if (typeof message.method === 'undefined') {
+    if (message.parser.begin === 0) {
       this.processMethod(message, data);
-    } else if (typeof message.url === 'undefined') {
+    } else {
       this.processUrl(message, data);
     }
   }

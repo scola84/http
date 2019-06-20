@@ -89,7 +89,7 @@ export class Url {
   constructor(options) {
     defaults(this, options, {
       auth: null,
-      hostname: window ? window.location.hostname : null,
+      hostname: null,
       path: null,
       port: options.scheme === 'http' ? 80 : 443,
       query: null,
