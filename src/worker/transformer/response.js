@@ -23,4 +23,13 @@ export class ResponseTransformer extends Worker {
 
     this.fail(response, error, callback);
   }
+
+  err(request, error, callback) {
+    const response = request.createResponse();
+
+    error = new Error(`500 ${error.message}`);
+    error.status = 500;
+
+    this.fail(response, error, callback);
+  }
 }
