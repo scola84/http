@@ -31,7 +31,6 @@ import {
   PlainDecoder,
   PlainEncoder,
   RequestLineParser,
-  RequestRouter,
   ResponseLineWriter,
   ServerConnector,
   TrailerFieldsParser,
@@ -79,7 +78,6 @@ export function createServer(options = {}) {
   const plainDecoder = new PlainDecoder();
   const plainEncoder = new PlainEncoder();
   const requestLineParser = new RequestLineParser();
-  const requestRouter = new RequestRouter();
   const responseLineWriter = new ResponseLineWriter();
   const serverConnector = new ServerConnector();
   const trailerFieldsParser = new TrailerFieldsParser();
@@ -100,8 +98,7 @@ export function createServer(options = {}) {
     .connect(transferEncodingDecoder)
     .connect(trailerFieldsParser)
     .connect(contentEncodingDecoder)
-    .connect(contentTypeDecoder)
-    .connect(requestRouter);
+    .connect(contentTypeDecoder);
 
   dataResolver
     .connect(fileResolver)
@@ -159,8 +156,8 @@ export function createServer(options = {}) {
 
   return {
     connector: serverConnector,
+    decoder: contentTypeDecoder,
     resolver: dataResolver,
-    router: requestRouter,
     writer: bodyWriter
   };
 }
