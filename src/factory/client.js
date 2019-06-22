@@ -35,7 +35,7 @@ import {
   UrlencodedEncoder
 } from '../worker';
 
-export function createClient() {
+export function createClient(type = 'create') {
   const bodyParser = new BodyParser();
   const bodyWriter = new BodyWriter();
   const clientConnector = new ClientConnector();
@@ -126,8 +126,8 @@ export function createClient() {
   transferEncodingEncoder
     .manage(chunkedEncoder.getEncoding(), chunkedEncoder);
 
-  return {
+  return Object[type]({
     connector: clientConnector,
     transformer: responseTransformer
-  };
+  });
 }

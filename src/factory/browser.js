@@ -28,7 +28,7 @@ import {
   UrlencodedEncoder
 } from '../worker';
 
-export function createBrowser() {
+export function createBrowser(type = 'create') {
   const bodyParser = new BodyParser();
   const browserConnector = new BrowserConnector();
   const browserMediator = new BrowserMediator();
@@ -105,8 +105,8 @@ export function createBrowser() {
   transferEncodingEncoder
     .manage(chunkedEncoder.getEncoding(), chunkedEncoder);
 
-  return {
+  return Object[type]({
     connector: browserConnector,
     transformer: responseTransformer
-  };
+  });
 }
