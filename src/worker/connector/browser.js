@@ -13,10 +13,7 @@ export class BrowserConnector extends Worker {
     try {
       this.open(request, data, callback);
     } catch (error) {
-      if (typeof error.data === 'undefined') {
-        error.data = data;
-      }
-
+      error.data = data;
       this.fail(request, error, callback);
     }
   }

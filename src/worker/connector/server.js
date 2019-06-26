@@ -3,14 +3,13 @@ import { Request } from '../../object';
 
 export class ServerConnector extends Streamer {
   act(socket) {
-    this.read({ socket });
+    this.read({
+      socket
+    });
   }
 
   data(box, data) {
-    if (this._log === 'data') {
-      console.log(String(data));
-      console.log();
-    }
+    this.log('info', box, data);
 
     const create = typeof box.request === 'undefined' ||
       box.request.state.body === true &&
