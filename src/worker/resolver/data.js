@@ -16,6 +16,13 @@ export class DataResolver extends Worker {
   }
 
   decide(request, data) {
-    return typeof data.data !== 'undefined';
+    if (
+      request.method !== 'GET' ||
+      typeof data.data !== 'undefined'
+    ) {
+      return true;
+    }
+
+    return false;
   }
 }
