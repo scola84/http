@@ -3,10 +3,7 @@ import { Worker } from '@scola/worker';
 export class ResponseTransformer extends Worker {
   act(response, data, callback) {
     if (response.mustEnd()) {
-      if (response.socket) {
-        response.socket.removeAllListeners();
-        response.socket.destroy();
-      }
+      response.end();
     }
 
     if (response.status < 400) {

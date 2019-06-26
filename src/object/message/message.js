@@ -14,6 +14,11 @@ export class Message {
     this.user = null;
   }
 
+  end() {
+    this.socket.removeAllListeners();
+    this.socket.destroy();
+  }
+
   parseHeader(name) {
     return Header.parse(name, this.headers[name]);
   }

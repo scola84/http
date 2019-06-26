@@ -22,8 +22,7 @@ export class BodyWriter extends Streamer {
 
     if (message.state.body === true) {
       if (message.mustEnd()) {
-        message.socket.removeAllListeners();
-        message.socket.destroy();
+        message.end();
       }
     }
   }
