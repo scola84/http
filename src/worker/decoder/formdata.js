@@ -18,11 +18,11 @@ export class FormdataDecoder extends Worker {
 
   setConfig(value = {}) {
     this._config = defaults({}, value, {
-      base: '/tmp/',
-      path: ''
+      base: '/tmp',
+      path: '/'
     });
 
-    fs.ensureDirSync(this._config.base + '/' + this._config.path);
+    fs.ensureDirSync(this._config.base + this._config.path);
     return this;
   }
 
@@ -97,7 +97,9 @@ export class FormdataDecoder extends Worker {
       file.type = type;
       file.size = 0;
 
-      file.tmppath = this._config.base + '/' + this._config.path +
+      file.tmppath =
+        this._config.base +
+        this._config.path +
         shortid.generate();
 
       const target = fs.createWriteStream(file.tmppath);
