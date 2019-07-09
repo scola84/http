@@ -35,7 +35,7 @@ import {
   UrlencodedEncoder
 } from '../worker';
 
-export function createClient(type = 'create') {
+export function createClient(type = 'values') {
   const bodyParser = new BodyParser();
   const bodyWriter = new BodyWriter();
   const clientConnector = new ClientConnector();
