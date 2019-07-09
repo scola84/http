@@ -1,4 +1,5 @@
 import { Streamer } from '@scola/worker';
+import { Buffer } from 'buffer/';
 
 export class BodyWriter extends Streamer {
   act(message, data, callback) {
@@ -16,7 +17,10 @@ export class BodyWriter extends Streamer {
   }
 
   writeData(message, data, callback) {
-    if (data !== null) {
+    if (
+      Buffer.isBuffer(data) ||
+      typeof data === 'string'
+    ) {
       this.write(message, data, callback);
     }
 

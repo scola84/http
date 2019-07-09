@@ -1,4 +1,5 @@
 import { Worker } from '@scola/worker';
+import { Buffer } from 'buffer/';
 
 export class HeaderFieldsWriter extends Worker {
   act(message, data, callback) {
@@ -35,7 +36,7 @@ export class HeaderFieldsWriter extends Worker {
       }
     }
 
-    if (data instanceof Buffer) {
+    if (Buffer.isBuffer(data)) {
       data = Buffer.concat([
         Buffer.from(headers + '\r\n'),
         Buffer.from(data)

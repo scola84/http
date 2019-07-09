@@ -1,4 +1,5 @@
 import { Streamer } from '@scola/worker';
+import { Buffer } from 'buffer/';
 import { Request } from '../../object';
 
 export class ServerConnector extends Streamer {

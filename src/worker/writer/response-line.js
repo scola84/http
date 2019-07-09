@@ -1,4 +1,5 @@
 import { Worker } from '@scola/worker';
+import { Buffer } from 'buffer/';
 import { STATUS_CODES } from 'http';
 
 export class ResponseLineWriter extends Worker {
@@ -22,7 +23,7 @@ export class ResponseLineWriter extends Worker {
       STATUS_CODES[message.status || 200] +
       '\r\n';
 
-    if (data instanceof Buffer) {
+    if (Buffer.isBuffer(data)) {
       data = Buffer.concat([Buffer.from(line), data]);
     } else {
       data = line + data;
