@@ -20,6 +20,10 @@ export class ClientConnector extends Worker {
     }
   }
 
+  err(box, error, callback) {
+    this.fail(new Request(), error, callback);
+  }
+
   open(request, data, callback, options) {
     const library = request.url.scheme === 'http' ?
       net : tls;

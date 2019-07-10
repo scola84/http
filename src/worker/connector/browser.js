@@ -17,6 +17,10 @@ export class BrowserConnector extends Worker {
     }
   }
 
+  err(box, error, callback) {
+    this.fail(new Request(), error, callback);
+  }
+
   open(request, data, callback) {
     request.socket = new XMLHttpRequest();
     request.socket.removeAllListeners = () => {};
