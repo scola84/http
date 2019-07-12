@@ -1,6 +1,6 @@
 import { Router } from '@scola/worker';
 
-export class RequestRouter extends Router {
+export class ResourceRouter extends Router {
   constructor(options) {
     super(options);
     this._resources = null;
@@ -11,7 +11,6 @@ export class RequestRouter extends Router {
       this._resources = this.createResources();
     }
 
-    let name = null;
     let params = null;
     let resource = null;
 
@@ -26,9 +25,7 @@ export class RequestRouter extends Router {
         }
 
         request.params = params;
-        name = `${request.method} ${request.url.path}`;
-
-        return this.pass(name, request, data, callback);
+        return this.pass(resource.name, request, data, callback);
       }
     }
 
@@ -40,14 +37,17 @@ export class RequestRouter extends Router {
     const names = Object.keys(this._workers);
 
     let method = null;
+    let name = null;
     let path = null;
 
     for (let i = 0; i < names.length; i += 1) {
-      [method, path] = names[i].split(' ');
+      name = names[i];
+      [method, path] = name.split(' ');
 
       resources[path] = resources[path] || {
-        regexp: new RegExp(path),
-        methods: []
+        methods: [],
+        name,
+        regexp: new RegExp(path)
       };
 
       resources[path].methods.push(method);

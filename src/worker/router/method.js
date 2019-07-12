@@ -1,6 +1,6 @@
-import { RequestRouter } from './request';
+import { ResourceRouter } from './resource';
 
-export class MethodRouter extends RequestRouter {
+export class MethodRouter extends ResourceRouter {
   act(request, data, callback) {
     if (this._workers[request.method]) {
       return this.pass(request.method, request, data, callback);
