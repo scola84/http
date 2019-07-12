@@ -1,5 +1,4 @@
 import { Worker } from '@scola/worker';
-import { STATUS_CODES } from 'http';
 
 export class ResponseTransformer extends Worker {
   act(response, data, callback) {
@@ -15,7 +14,7 @@ export class ResponseTransformer extends Worker {
     const error = new Error(
       response.status +
       ' ' +
-      (data.message || STATUS_CODES[response.status])
+      (data.message || 'Error')
     );
 
     error.data = data.data || data;
