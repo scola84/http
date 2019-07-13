@@ -117,8 +117,12 @@ export class Url {
   }
 
   formatPath() {
-    const query = qs.stringify(this.query);
-    return this.path + (query ? '?' + query : '');
+    return this.path + qs.stringify(this.query, {
+      addQueryPrefix: true,
+      filter: (name, value) => {
+        return value === '' ? void 0 : value;
+      }
+    });
   }
 
   formatScheme() {
