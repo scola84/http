@@ -11,6 +11,7 @@ export class ResourceRouter extends Router {
       this._resources = this.createResources();
     }
 
+    let name = null;
     let params = null;
     let resource = null;
 
@@ -24,8 +25,10 @@ export class ResourceRouter extends Router {
             resource.methods);
         }
 
+        name = `${request.method} ${resource.path}`;
         request.params = params;
-        return this.pass(resource.name, request, data, callback);
+
+        return this.pass(name, request, data, callback);
       }
     }
 
@@ -46,7 +49,7 @@ export class ResourceRouter extends Router {
 
       resources[path] = resources[path] || {
         methods: [],
-        name,
+        path,
         regexp: new RegExp(path)
       };
 
