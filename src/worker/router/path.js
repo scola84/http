@@ -19,7 +19,7 @@ export class PathRouter extends ResourceRouter {
       params = path.regexp.exec(request.url.path);
 
       if (params !== null) {
-        request.params = params;
+        request.params = params.groups || params;
         return this.pass(path.name, request, data, callback);
       }
     }

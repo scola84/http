@@ -26,7 +26,7 @@ export class ResourceRouter extends Router {
         }
 
         name = `${request.method} ${resource.path}`;
-        request.params = params;
+        request.params = params.groups || params;
 
         return this.pass(name, request, data, callback);
       }
