@@ -29,7 +29,7 @@ export class PathRouter extends ResourceRouter {
 
   createPaths() {
     const paths = [];
-    const names = Object.keys(this._workers);
+    const names = Object.keys(this._downstreams);
 
     let name = null;
 

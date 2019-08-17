@@ -31,7 +31,7 @@ export class AgentRouter extends Router {
 
   createAgents() {
     const agents = [];
-    const names = Object.keys(this._workers);
+    const names = Object.keys(this._downstreams);
 
     let name = null;
 

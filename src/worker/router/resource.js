@@ -37,7 +37,7 @@ export class ResourceRouter extends Router {
 
   createResources() {
     const resources = {};
-    const names = Object.keys(this._workers);
+    const names = Object.keys(this._downstreams);
 
     let method = null;
     let name = null;
