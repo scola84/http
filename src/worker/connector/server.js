@@ -34,10 +34,6 @@ export class ServerConnector extends Streamer {
 
   fail() {}
 
-  stream(request) {
-    return request.socket;
-  }
-
   prepareParser(request, data) {
     if (request.parser.data) {
       data = Buffer.concat([request.parser.data, data]);
@@ -52,5 +48,9 @@ export class ServerConnector extends Streamer {
     request.parser.end = 0;
 
     return data;
+  }
+
+  stream(request) {
+    return request.socket;
   }
 }

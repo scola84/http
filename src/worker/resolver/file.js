@@ -29,11 +29,6 @@ export class FileResolver extends Streamer {
     });
   }
 
-  handleError(request, error, callback) {
-    const newError = new Error(`404 File not found (${error.message})`);
-    this.fail(request, newError, callback);
-  }
-
   decide(request, data) {
     if (
       request.method === 'GET' &&
@@ -48,6 +43,12 @@ export class FileResolver extends Streamer {
   end(response) {
     response.state.body = true;
     this.pass(response, null);
+  }
+
+  handleError(request, error, callback) {
+    const newError = new Error('404 File not found' +
+      ` (${error.message})`);
+    this.fail(request, newError, callback);
   }
 
   stream(response, data) {

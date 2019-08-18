@@ -59,20 +59,20 @@ export class ResourceRouter extends Router {
     return Object.values(resources);
   }
 
-  handlePathError(request, data, callback) {
-    const response = request.createResponse();
-
-    const error = new Error('404 Resource not found' +
-      ` (${request.method} ${request.url.path})`);
-
-    this.fail(response, error, callback);
-  }
-
   handleMethodError(request, data, callback, methods) {
     const response = request.createResponse();
     response.headers.allow = methods;
 
     const error = new Error('405 Method not allowed' +
+      ` (${request.method} ${request.url.path})`);
+
+    this.fail(response, error, callback);
+  }
+
+  handlePathError(request, data, callback) {
+    const response = request.createResponse();
+
+    const error = new Error('404 Resource not found' +
       ` (${request.method} ${request.url.path})`);
 
     this.fail(response, error, callback);

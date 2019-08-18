@@ -8,13 +8,13 @@ export class ResponseLineWriter extends Worker {
     this.pass(message, data, callback);
   }
 
+  decide(message) {
+    return message.state.line !== true;
+  }
+
   err(message, data, callback) {
     data = this.writeData(message, data);
     this.fail(message, data, callback);
-  }
-
-  decide(message) {
-    return message.state.line !== true;
   }
 
   writeData(message, data) {

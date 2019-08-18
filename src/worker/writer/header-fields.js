@@ -7,13 +7,13 @@ export class HeaderFieldsWriter extends Worker {
     this.pass(message, data, callback);
   }
 
+  decide(message) {
+    return message.state.headers !== true;
+  }
+
   err(message, data, callback) {
     data = this.writeData(message, data);
     this.fail(message, data, callback);
-  }
-
-  decide(message) {
-    return message.state.headers !== true;
   }
 
   isEmpty(data) {

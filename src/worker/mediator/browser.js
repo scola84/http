@@ -11,10 +11,6 @@ export class BrowserMediator extends Worker {
     request.socket.send(data);
   }
 
-  err(request, error, callback) {
-    this.fail(request.createResponse(), error, callback);
-  }
-
   bindSocket(request, data, callback) {
     request.socket.onerror = () => {
       this.handleError(request, data, callback);
@@ -31,11 +27,8 @@ export class BrowserMediator extends Worker {
     request.socket.upload.onprogress = request.socket.onprogress;
   }
 
-  unbindSocket(request) {
-    request.socket.onerror = null;
-    request.socket.onload = null;
-    request.socket.onprogress = null;
-    request.socket.upload.onprogress = null;
+  err(request, error, callback) {
+    this.fail(request.createResponse(), error, callback);
   }
 
   handleError(request, data, callback) {
@@ -103,5 +96,12 @@ export class BrowserMediator extends Worker {
 
       request.socket.setRequestHeader(name, request.headers[name]);
     }
+  }
+
+  unbindSocket(request) {
+    request.socket.onerror = null;
+    request.socket.onload = null;
+    request.socket.onprogress = null;
+    request.socket.upload.onprogress = null;
   }
 }
