@@ -4,9 +4,7 @@ import { Request } from '../../object';
 
 export class ServerConnector extends Streamer {
   act(socket) {
-    this.read({
-      socket
-    });
+    this.read({ socket });
   }
 
   data(box, data) {
@@ -50,7 +48,7 @@ export class ServerConnector extends Streamer {
     return data;
   }
 
-  stream(request) {
-    return request.socket;
+  createReadStream(request, data, callback) {
+    callback(null, request.socket);
   }
 }

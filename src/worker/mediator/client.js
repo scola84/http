@@ -9,7 +9,7 @@ export class ClientMediator extends Streamer {
     this.fail(request.createResponse(), error, callback);
   }
 
-  stream(response) {
-    return response.socket;
+  createReadStream(response, data, callback) {
+    callback(null, response.socket);
   }
 }

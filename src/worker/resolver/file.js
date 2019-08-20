@@ -1,5 +1,5 @@
 import { Streamer } from '@scola/worker';
-import { createReadStream, stat } from 'fs';
+import fs from 'fs-extra';
 
 export class FileResolver extends Streamer {
   act(request, data, callback) {
@@ -13,7 +13,7 @@ export class FileResolver extends Streamer {
       response.status = data.status;
     }
 
-    stat(data.file.path, (error, stats) => {
+    fs.stat(data.file.path, (error, stats) => {
       if (error) {
         return this.handleError(request, error, callback);
       }
@@ -51,7 +51,7 @@ export class FileResolver extends Streamer {
     this.fail(request, newError, callback);
   }
 
-  stream(response, data) {
-    return createReadStream(data.file.path);
+  createReadStream(response, data, callback) {
+    callback(null, data.file.path);
   }
 }

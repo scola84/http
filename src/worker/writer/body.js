@@ -12,8 +12,8 @@ export class BodyWriter extends Streamer {
     this.fail(message, data, callback);
   }
 
-  stream(message) {
-    return message.socket;
+  createWriteStream(message, data, callback) {
+    callback(null, message.socket);
   }
 
   writeData(message, data, callback) {
