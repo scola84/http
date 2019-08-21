@@ -1,6 +1,6 @@
 import { Worker } from '@scola/worker';
 import { Buffer } from 'buffer/';
-import { CsvStruct } from '../../object';
+import { CsvStruct } from '../../helper';
 
 export class CsvEncoder extends Worker {
   constructor(options = {}) {

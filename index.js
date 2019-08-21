@@ -1,3 +1,3 @@
 export * from './src/factory';
-export * from './src/object';
+export * from './src/helper';
 export * from './src/worker';

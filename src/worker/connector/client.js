@@ -1,7 +1,7 @@
 import { Worker } from '@scola/worker';
 import net from 'net';
 import tls from 'tls';
-import { Request } from '../../object';
+import { Request } from '../../helper';
 
 export class ClientConnector extends Worker {
   act(options, data, callback) {

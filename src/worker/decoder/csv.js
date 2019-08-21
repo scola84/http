@@ -1,5 +1,5 @@
 import { Worker } from '@scola/worker';
-import { CsvStruct } from '../../object';
+import { CsvStruct } from '../../helper';
 
 export class CsvDecoder extends Worker {
   constructor(options = {}) {

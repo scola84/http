@@ -1,5 +1,5 @@
 import { Worker } from '@scola/worker';
-import { HtmlStruct } from '../../object';
+import { HtmlStruct } from '../../helper';
 
 export class HtmlDecoder extends Worker {
   getType() {

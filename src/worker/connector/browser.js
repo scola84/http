@@ -1,5 +1,5 @@
 import { Worker } from '@scola/worker';
-import { Request } from '../../object';
+import { Request } from '../../helper';
 
 export class BrowserConnector extends Worker {
   act(options, data, callback) {
