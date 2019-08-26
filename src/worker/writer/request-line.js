@@ -1,18 +1,18 @@
-import { Worker } from '@scola/worker';
+import { Worker } from '@scola/worker'
 
 export class RequestLineWriter extends Worker {
-  act(message, data, callback) {
+  act (message, data, callback) {
     data = message.method + ' ' +
       message.url.formatPath() + ' HTTP/1.1' +
       '\r\n' +
-      data;
+      data
 
-    message.state.line = true;
+    message.state.line = true
 
-    this.pass(message, data, callback);
+    this.pass(message, data, callback)
   }
 
-  decide(message) {
-    return message.state.line !== true;
+  decide (message) {
+    return message.state.line !== true
   }
 }

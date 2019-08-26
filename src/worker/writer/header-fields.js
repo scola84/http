@@ -1,38 +1,38 @@
-import { Worker } from '@scola/worker';
-import { Buffer } from 'buffer/';
+import { Worker } from '@scola/worker'
+import { Buffer } from 'buffer/'
 
 export class HeaderFieldsWriter extends Worker {
-  act(message, data, callback) {
-    data = this.writeData(message, data);
-    this.pass(message, data, callback);
+  act (message, data, callback) {
+    data = this.writeData(message, data)
+    this.pass(message, data, callback)
   }
 
-  decide(message) {
-    return message.state.headers !== true;
+  decide (message) {
+    return message.state.headers !== true
   }
 
-  err(message, data, callback) {
-    data = this.writeData(message, data);
-    this.fail(message, data, callback);
+  err (message, data, callback) {
+    data = this.writeData(message, data)
+    this.fail(message, data, callback)
   }
 
-  isEmpty(data) {
-    return typeof data === 'undefined' || data === null;
+  isEmpty (data) {
+    return typeof data === 'undefined' || data === null
   }
 
-  writeData(message, data) {
-    const keys = Object.keys(message.headers);
+  writeData (message, data) {
+    const keys = Object.keys(message.headers)
 
-    let headers = '';
-    let key = null;
-    let value = null;
+    let headers = ''
+    let key = null
+    let value = null
 
     for (let i = 0; i < keys.length; i += 1) {
-      key = keys[i];
-      value = message.headers[key];
+      key = keys[i]
+      value = message.headers[key]
 
       if (value) {
-        headers += key + ': ' + value + '\r\n';
+        headers += key + ': ' + value + '\r\n'
       }
     }
 
@@ -40,13 +40,13 @@ export class HeaderFieldsWriter extends Worker {
       data = Buffer.concat([
         Buffer.from(headers + '\r\n'),
         Buffer.from(data)
-      ]);
+      ])
     } else {
-      data = headers + '\r\n' + (this.isEmpty(data) ? '' : data);
+      data = headers + '\r\n' + (this.isEmpty(data) ? '' : data)
     }
 
-    message.state.headers = true;
+    message.state.headers = true
 
-    return data;
+    return data
   }
 }

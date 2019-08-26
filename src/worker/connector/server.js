@@ -1,54 +1,54 @@
-import { Streamer } from '@scola/worker';
-import { Buffer } from 'buffer/';
-import { Request } from '../../helper';
+import { Streamer } from '@scola/worker'
+import { Buffer } from 'buffer/'
+import { Request } from '../../helper'
 
 export class ServerConnector extends Streamer {
-  act(socket) {
-    this.read({ socket });
+  act (socket) {
+    this.read({ socket })
   }
 
-  data(box, data) {
-    this.log('info', box, data);
+  data (box, data) {
+    this.log('info', box, data)
 
     const create = typeof box.request === 'undefined' ||
-      box.request.state.body === true &&
-      box.request.state.headers === true &&
-      box.request.state.line === true;
+      (box.request.state.body === true &&
+        box.request.state.headers === true &&
+        box.request.state.line === true)
 
     if (create === true) {
       box.request = new Request({
         socket: box.socket
-      });
+      })
     }
 
-    data = this.prepareParser(box.request, data);
+    data = this.prepareParser(box.request, data)
 
     this.pass(box.request, data, (bx, resume) => {
-      this.throttle(box, resume);
-    });
+      this.throttle(box, resume)
+    })
   }
 
-  end() {}
+  end () {}
 
-  fail() {}
+  fail () {}
 
-  prepareParser(request, data) {
+  prepareParser (request, data) {
     if (request.parser.data) {
-      data = Buffer.concat([request.parser.data, data]);
-      request.parser.data = null;
+      data = Buffer.concat([request.parser.data, data])
+      request.parser.data = null
     }
 
     if (typeof request.parser.length === 'undefined') {
-      request.parser.length = null;
+      request.parser.length = null
     }
 
-    request.parser.begin = 0;
-    request.parser.end = 0;
+    request.parser.begin = 0
+    request.parser.end = 0
 
-    return data;
+    return data
   }
 
-  createReadStream(request, data, callback) {
-    callback(null, request.socket);
+  createReadStream (request, data, callback) {
+    callback(null, request.socket)
   }
 }

@@ -1,17 +1,17 @@
-import { Worker } from '@scola/worker';
-import { compare } from 'bcrypt';
+import { Worker } from '@scola/worker'
+import { compare } from 'bcrypt'
 
 export class PasswordChecker extends Worker {
-  act(request, data, callback) {
-    const password = data.password;
-    const hash = request.user.getDetail('password') || '';
+  act (request, data, callback) {
+    const password = data.password
+    const hash = request.user.getDetail('password') || ''
 
-    request.user.unsetDetail('password');
+    request.user.unsetDetail('password')
 
     compare(password, hash, (error, result) => {
       if (error) {
-        this.fail(request, error, callback);
-        return;
+        this.fail(request, error, callback)
+        return
       }
 
       if (result === false) {
@@ -19,20 +19,20 @@ export class PasswordChecker extends Worker {
           request,
           new Error('401 Password is invalid'),
           callback
-        );
+        )
 
-        return;
+        return
       }
 
-      this.pass(request, data, callback);
-    });
+      this.pass(request, data, callback)
+    })
   }
 
-  decide(request) {
+  decide (request) {
     if (request.user === null) {
-      throw new Error('401 User not found');
+      throw new Error('401 User not found')
     }
 
-    return true;
+    return true
   }
 }

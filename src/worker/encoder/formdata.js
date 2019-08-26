@@ -1,42 +1,42 @@
-import { Worker } from '@scola/worker';
+import { Worker } from '@scola/worker'
 
 export class FormdataEncoder extends Worker {
-  getType() {
-    return 'multipart/form-data';
+  getType () {
+    return 'multipart/form-data'
   }
 
-  act(message, data, callback) {
+  act (message, data, callback) {
     try {
-      this.encode(message, data, callback);
+      this.encode(message, data, callback)
     } catch (error) {
-      throw new Error('500 ' + error.message);
+      throw new Error('500 ' + error.message)
     }
   }
 
-  decide(message) {
+  decide (message) {
     return message.state.body !== true &&
-      message.body.dataType !== this.getType();
+      message.body.dataType !== this.getType()
   }
 
-  encode(message, data, callback) {
-    const keys = Object.keys(data);
-    const form = new FormData();
+  encode (message, data, callback) {
+    const keys = Object.keys(data)
+    const form = new window.FormData()
 
-    let name = null;
-    let value = null;
+    let name = null
+    let value = null
 
     for (let i = 0; i < keys.length; i += 1) {
-      name = keys[i];
-      value = data[name];
-      value = Array.isArray(value) ? value : [value];
+      name = keys[i]
+      value = data[name]
+      value = Array.isArray(value) ? value : [value]
 
       for (let j = 0; j < value.length; j += 1) {
-        form.append(name, value[j]);
+        form.append(name, value[j])
       }
     }
 
-    message.state.body = true;
+    message.state.body = true
 
-    this.pass(message, form, callback);
+    this.pass(message, form, callback)
   }
 }

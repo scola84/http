@@ -1,32 +1,32 @@
-import { Manager } from '@scola/worker';
+import { Manager } from '@scola/worker'
 
 export class ContentEncodingDecoder extends Manager {
-  decide(message) {
+  decide (message) {
     if (typeof message.body.content !== 'undefined') {
-      return true;
+      return true
     }
 
-    const content = message.parseHeader('Content-Encoding');
+    const content = message.parseHeader('Content-Encoding')
 
     if (typeof content.values === 'undefined') {
-      return false;
+      return false
     }
 
     for (let i = 0; i < content.values.length; i += 1) {
       if (typeof this._pool[content.values[i][0]] === 'undefined') {
         throw new Error('501 Decoder not implemented' +
-          ` (${content[i][0]})`);
+          ` (${content[i][0]})`)
       }
     }
 
     message.body.content = content.values
       .reverse()
-      .map((encoding) => encoding[0]);
+      .map((encoding) => encoding[0])
 
-    return true;
+    return true
   }
 
-  names(message) {
-    return message.body.content.slice(0);
+  names (message) {
+    return message.body.content.slice(0)
   }
 }

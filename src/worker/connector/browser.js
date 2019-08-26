@@ -1,36 +1,36 @@
-import { Worker } from '@scola/worker';
-import { Request } from '../../helper';
+import { Worker } from '@scola/worker'
+import { Request } from '../../helper'
 
 export class BrowserConnector extends Worker {
-  act(options, data, callback) {
-    const request = new Request(options);
+  act (options, data, callback) {
+    const request = new Request(options)
 
     if (typeof request.socket !== 'undefined') {
-      this.pass(request, data, callback);
-      return;
+      this.pass(request, data, callback)
+      return
     }
 
     try {
-      this.open(request, data, callback);
+      this.open(request, data, callback)
     } catch (error) {
-      this.fail(request, error, callback);
+      this.fail(request, error, callback)
     }
   }
 
-  err(box, error, callback) {
-    this.fail(new Request(), error, callback);
+  err (box, error, callback) {
+    this.fail(new Request(), error, callback)
   }
 
-  open(request, data, callback) {
-    request.socket = new XMLHttpRequest();
-    request.socket.removeAllListeners = () => {};
-    request.socket.destroy = () => {};
+  open (request, data, callback) {
+    request.socket = new window.XMLHttpRequest()
+    request.socket.removeAllListeners = () => {}
+    request.socket.destroy = () => {}
 
     request.socket.open(
       request.method,
       request.url.format()
-    );
+    )
 
-    this.pass(request, data, callback);
+    this.pass(request, data, callback)
   }
 }

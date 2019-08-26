@@ -1,38 +1,38 @@
-import { Worker } from '@scola/worker';
+import { Worker } from '@scola/worker'
 
 export class DateHeader extends Worker {
-  constructor(options) {
-    super(options);
+  constructor (options) {
+    super(options)
 
-    this._date = null;
+    this._date = null
 
-    this.setDate();
-    this.setInterval();
+    this.setDate()
+    this.setInterval()
   }
 
-  act(message, data, callback) {
-    this.setHeader(message);
-    this.pass(message, data, callback);
+  act (message, data, callback) {
+    this.setHeader(message)
+    this.pass(message, data, callback)
   }
 
-  decide(message) {
-    return typeof message.headers.date === 'undefined';
+  decide (message) {
+    return typeof message.headers.date === 'undefined'
   }
 
-  err(message, data, callback) {
-    this.setHeader(message);
-    this.fail(message, data, callback);
+  err (message, data, callback) {
+    this.setHeader(message)
+    this.fail(message, data, callback)
   }
 
-  setHeader(message) {
-    message.headers.date = this._date;
+  setHeader (message) {
+    message.headers.date = this._date
   }
 
-  setDate() {
-    this._date = new Date().toUTCString();
+  setDate () {
+    this._date = new Date().toUTCString()
   }
 
-  setInterval() {
-    setInterval(() => this.setDate(), 1000);
+  setInterval () {
+    setInterval(() => this.setDate(), 1000)
   }
 }

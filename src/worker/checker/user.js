@@ -1,11 +1,11 @@
-import { Worker } from '@scola/worker';
+import { Worker } from '@scola/worker'
 
 export class UserChecker extends Worker {
-  act(request, data, callback) {
+  act (request, data, callback) {
     if (request.user === null) {
-      throw new Error('401 User not found');
+      throw new Error('401 User not found')
     }
 
-    this.pass(request, data, callback);
+    this.pass(request, data, callback)
   }
 }

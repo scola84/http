@@ -1,57 +1,57 @@
-import { Streamer } from '@scola/worker';
-import fs from 'fs-extra';
+import { Streamer } from '@scola/worker'
+import fs from 'fs-extra'
 
 export class FileResolver extends Streamer {
-  act(request, data, callback) {
-    const response = request.createResponse();
+  act (request, data, callback) {
+    const response = request.createResponse()
 
     if (typeof data.status === 'undefined') {
-      data.status = 200;
+      data.status = 200
     }
 
     if (typeof response.status === 'undefined') {
-      response.status = data.status;
+      response.status = data.status
     }
 
     fs.stat(data.file.path, (error, stats) => {
       if (error) {
-        return this.handleError(request, error, callback);
+        return this.handleError(request, error, callback)
       }
 
-      response.headers['content-length'] = stats.size;
-      response.headers['content-type'] = data.file.type;
+      response.headers['content-length'] = stats.size
+      response.headers['content-type'] = data.file.type
 
       if (data.file.path.slice(-3) === '.gz') {
-        response.headers['content-encoding'] = ['gzip'];
+        response.headers['content-encoding'] = ['gzip']
       }
 
-      return this.read(response, data);
-    });
+      return this.read(response, data)
+    })
   }
 
-  decide(request, data) {
+  decide (request, data) {
     if (
       request.method === 'GET' &&
       typeof data.file !== 'undefined'
     ) {
-      return true;
+      return true
     }
 
-    return false;
+    return false
   }
 
-  end(response) {
-    response.state.body = true;
-    this.pass(response, null);
+  end (response) {
+    response.state.body = true
+    this.pass(response, null)
   }
 
-  handleError(request, error, callback) {
+  handleError (request, error, callback) {
     const newError = new Error('404 File not found' +
-      ` (${error.message})`);
-    this.fail(request, newError, callback);
+      ` (${error.message})`)
+    this.fail(request, newError, callback)
   }
 
-  createReadStream(response, data, callback) {
-    callback(null, data.file.path);
+  createReadStream (response, data, callback) {
+    callback(null, data.file.path)
   }
 }

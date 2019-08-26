@@ -1,80 +1,80 @@
-import { Worker } from '@scola/worker';
+import { Worker } from '@scola/worker'
 
 export class TransferEncodingHeader extends Worker {
-  constructor(options = {}) {
-    super(options);
+  constructor (options = {}) {
+    super(options)
 
-    this._encodings = null;
-    this.setEncodings(options.encodings);
+    this._encodings = null
+    this.setEncodings(options.encodings)
   }
 
-  getEncodings() {
-    return this._encodings;
+  getEncodings () {
+    return this._encodings
   }
 
-  setEncodings(value = []) {
-    this._encodings = value;
-    return this;
+  setEncodings (value = []) {
+    this._encodings = value
+    return this
   }
 
-  addEncoding(value) {
-    this._encondings.push(value);
-    return this;
+  addEncoding (value) {
+    this._encondings.push(value)
+    return this
   }
 
-  act(message, data, callback) {
+  act (message, data, callback) {
     const acceptable = message
       .parseHeader('TE')
-      .parseAcceptable('*');
+      .parseAcceptable('*')
 
-    const preferred = message.headers['transfer-encoding'];
-    const actual = [];
+    const preferred = message.headers['transfer-encoding']
+    const actual = []
 
-    let accept = null;
-    let prefer = null;
+    let accept = null
+    let prefer = null
 
     for (let i = 0; i < preferred.length; i += 1) {
-      prefer = preferred[i];
+      prefer = preferred[i]
 
       if (prefer === 'chunked') {
-        actual.push(prefer);
-        continue;
+        actual.push(prefer)
+        continue
       }
 
       for (let j = 0; j < acceptable.length; j += 1) {
         if (acceptable[j].q === 0) {
-          continue;
+          continue
         }
 
-        accept = acceptable[j][0];
+        accept = acceptable[j][0]
 
         if (accept === '*' || prefer === accept) {
-          actual.push(prefer);
-          break;
+          actual.push(prefer)
+          break
         }
       }
     }
 
-    message.body.transfer = actual;
+    message.body.transfer = actual
 
     if (actual.length > 0) {
-      message.headers['transfer-encoding'] = actual;
+      message.headers['transfer-encoding'] = actual
     } else {
-      delete message.headers['transfer-encoding'];
+      delete message.headers['transfer-encoding']
     }
 
-    this.pass(message, data, callback);
+    this.pass(message, data, callback)
   }
 
-  decide(message, data) {
+  decide (message, data) {
     if (
       typeof data !== 'undefined' &&
       typeof message.headers['transfer-encoding'] !== 'undefined' &&
       typeof message.body.transfer === 'undefined'
     ) {
-      return true;
+      return true
     }
 
-    return false;
+    return false
   }
 }

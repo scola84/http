@@ -1,27 +1,27 @@
-import parser from 'parse5';
+import parser from 'parse5'
 
 export class HtmlStruct {
-  constructor(data) {
-    this._data = data;
+  constructor (data) {
+    this._data = data
   }
 
-  decode() {
+  decode () {
     if (typeof this._data === 'string') {
-      this._data = parser.parse(this._data);
+      this._data = parser.parse(this._data)
     }
 
-    return this._data;
+    return this._data
   }
 
-  encode() {
+  encode () {
     if (typeof this._data !== 'string') {
-      this._data = parser.serialize(this._data);
+      this._data = parser.serialize(this._data)
     }
 
-    return this._data;
+    return this._data
   }
 
-  toString() {
-    return this.encode();
+  toString () {
+    return this.encode()
   }
 }

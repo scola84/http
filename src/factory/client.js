@@ -33,43 +33,43 @@ import {
   TransferEncodingEncoder,
   UrlencodedDecoder,
   UrlencodedEncoder
-} from '../worker';
+} from '../worker'
 
-export function createClient(type = 'values') {
-  const bodyParser = new BodyParser();
-  const bodyWriter = new BodyWriter();
-  const clientConnector = new ClientConnector();
-  const clientMediator = new ClientMediator();
-  const chunkedDecoder = new ChunkedDecoder();
-  const chunkedEncoder = new ChunkedEncoder();
-  const connectionHeader = new ConnectionHeader();
-  const contentEncodingDecoder = new ContentEncodingDecoder();
-  const contentEncodingEncoder = new ContentEncodingEncoder();
-  const contentLengthHeader = new ContentLengthHeader();
-  const contentTypeDecoder = new ContentTypeDecoder();
-  const contentTypeEncoder = new ContentTypeEncoder();
-  const contentTypeHeader = new ContentTypeHeader();
-  const dateHeader = new DateHeader();
-  const formdataEncoder = new FormdataEncoder();
-  const headerFieldsParser = new HeaderFieldsParser();
-  const headerFieldsWriter = new HeaderFieldsWriter();
-  const htmlDecoder = new HtmlDecoder();
-  const htmlEncoder = new HtmlEncoder();
-  const jsonDecoder = new JsonDecoder();
-  const jsonEncoder = new JsonEncoder();
-  const msgpackDecoder = new MsgpackDecoder();
-  const msgpackEncoder = new MsgpackEncoder();
-  const plainDecoder = new PlainDecoder();
-  const plainEncoder = new PlainEncoder();
-  const requestLineWriter = new RequestLineWriter();
-  const responseLineParser = new ResponseLineParser();
-  const responseTransformer = new ResponseTransformer();
-  const trailerFieldsParser = new TrailerFieldsParser();
-  const trailerFieldsWriter = new TrailerFieldsWriter();
-  const transferEncodingDecoder = new TransferEncodingDecoder();
-  const transferEncodingEncoder = new TransferEncodingEncoder();
-  const urlencodedDecoder = new UrlencodedDecoder();
-  const urlencodedEncoder = new UrlencodedEncoder();
+export function createClient (type = 'values') {
+  const bodyParser = new BodyParser()
+  const bodyWriter = new BodyWriter()
+  const clientConnector = new ClientConnector()
+  const clientMediator = new ClientMediator()
+  const chunkedDecoder = new ChunkedDecoder()
+  const chunkedEncoder = new ChunkedEncoder()
+  const connectionHeader = new ConnectionHeader()
+  const contentEncodingDecoder = new ContentEncodingDecoder()
+  const contentEncodingEncoder = new ContentEncodingEncoder()
+  const contentLengthHeader = new ContentLengthHeader()
+  const contentTypeDecoder = new ContentTypeDecoder()
+  const contentTypeEncoder = new ContentTypeEncoder()
+  const contentTypeHeader = new ContentTypeHeader()
+  const dateHeader = new DateHeader()
+  const formdataEncoder = new FormdataEncoder()
+  const headerFieldsParser = new HeaderFieldsParser()
+  const headerFieldsWriter = new HeaderFieldsWriter()
+  const htmlDecoder = new HtmlDecoder()
+  const htmlEncoder = new HtmlEncoder()
+  const jsonDecoder = new JsonDecoder()
+  const jsonEncoder = new JsonEncoder()
+  const msgpackDecoder = new MsgpackDecoder()
+  const msgpackEncoder = new MsgpackEncoder()
+  const plainDecoder = new PlainDecoder()
+  const plainEncoder = new PlainEncoder()
+  const requestLineWriter = new RequestLineWriter()
+  const responseLineParser = new ResponseLineParser()
+  const responseTransformer = new ResponseTransformer()
+  const trailerFieldsParser = new TrailerFieldsParser()
+  const trailerFieldsWriter = new TrailerFieldsWriter()
+  const transferEncodingDecoder = new TransferEncodingDecoder()
+  const transferEncodingEncoder = new TransferEncodingEncoder()
+  const urlencodedDecoder = new UrlencodedDecoder()
+  const urlencodedEncoder = new UrlencodedEncoder()
 
   clientConnector
     .connect(contentTypeHeader)
@@ -91,13 +91,13 @@ export function createClient(type = 'values') {
     .connect(trailerFieldsParser)
     .connect(contentEncodingDecoder)
     .connect(contentTypeDecoder)
-    .connect(responseTransformer);
+    .connect(responseTransformer)
 
   clientConnector
-    .bypass(clientMediator);
+    .bypass(clientMediator)
 
   clientMediator
-    .bypass(responseTransformer);
+    .bypass(responseTransformer)
 
   contentTypeDecoder
     .setStrict(false)
@@ -105,7 +105,7 @@ export function createClient(type = 'values') {
     .manage(jsonDecoder.getType(), jsonDecoder)
     .manage(msgpackDecoder.getType(), msgpackDecoder)
     .manage(urlencodedDecoder.getType(), urlencodedDecoder)
-    .manage(plainDecoder.getType(), plainDecoder);
+    .manage(plainDecoder.getType(), plainDecoder)
 
   contentTypeEncoder
     .setStrict(false)
@@ -114,20 +114,20 @@ export function createClient(type = 'values') {
     .manage(msgpackEncoder.getType(), msgpackEncoder)
     .manage(formdataEncoder.getType(), formdataEncoder)
     .manage(plainEncoder.getType(), plainEncoder)
-    .manage(urlencodedEncoder.getType(), urlencodedEncoder);
+    .manage(urlencodedEncoder.getType(), urlencodedEncoder)
 
   contentTypeHeader
     .addType(jsonEncoder.getType())
-    .addType(formdataEncoder.getType());
+    .addType(formdataEncoder.getType())
 
   transferEncodingDecoder
-    .manage(chunkedDecoder.getEncoding(), chunkedDecoder);
+    .manage(chunkedDecoder.getEncoding(), chunkedDecoder)
 
   transferEncodingEncoder
-    .manage(chunkedEncoder.getEncoding(), chunkedEncoder);
+    .manage(chunkedEncoder.getEncoding(), chunkedEncoder)
 
   return Object[type]({
     connector: clientConnector,
     transformer: responseTransformer
-  });
+  })
 }
