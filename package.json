@@ -1,32 +1,28 @@
 {
-  "name": "@scola/http",
-  "version": "6.0.0",
-  "description": "Request and serve documents over HTTP",
-  "repository": "github:scola84/http",
   "author": "M.C. van den Boogaart <scola@kvdb.name>",
+  "description": "Request and serve documents over HTTP",
   "license": "MIT",
   "main": "./dist/http.cjs.js",
   "module": "./index.js",
+  "name": "@scola/http",
+  "repository": "github:scola84/http",
+  "unpkg": "./dist/http.umd.js",
+  "version": "5.9.11",
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "prepublishOnly": "npm run format && rm -rf dist/ && rollup -c",
+    "format": "glob-run js-beautify -r 'src/**/*.{css,js}' && npx standard --fix"
+  },
   "devDependencies": {
-    "@babel/core": "^7.5.5",
-    "@babel/plugin-transform-runtime": "^7.5.5",
-    "@babel/preset-env": "^7.5.5",
-    "@babel/runtime": "^7.5.5",
     "glob-run": "^0.1.7",
     "js-beautify": "^1.10.2",
     "rollup": "^1.20.2",
-    "rollup-plugin-babel": "^4.3.3",
-    "rollup-plugin-commonjs": "^10.0.2",
-    "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-node-builtins": "^2.1.2",
-    "rollup-plugin-node-resolve": "^5.2.0",
     "standard": "^14.0.2"
   },
-  "scripts": {
-    "build": "rollup -cm",
-    "format": "glob-run js-beautify -r 'src/**/*.{css,js}' && npx standard --fix"
-  },
   "dependencies": {
+    "@scola/worker": "^3.0.2",
     "bcrypt": "^3.0.6",
     "buffer": "^5.4.0",
     "busboy": "^0.3.1",
