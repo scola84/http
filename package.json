@@ -12,19 +12,19 @@
     "dist/"
   ],
   "scripts": {
-    "prepublishOnly": "npm run format && rm -rf dist/ && rollup -c",
-    "format": "glob-run js-beautify -r 'src/**/*.{css,js}' && npx standard --fix"
+    "format": "glob-run js-beautify -r 'src/**/*.{css,js}' && npx standard --fix",
+    "preversion": "npm run format && rm -rf dist/ && rollup -c"
   },
   "devDependencies": {
     "glob-run": "^0.1.7",
     "js-beautify": "^1.10.2",
-    "rollup": "^1.20.2",
-    "standard": "^14.0.2"
+    "rollup": "^1.20.3",
+    "standard": "^14.1.0"
   },
   "dependencies": {
-    "@scola/worker": "^3.0.2",
+    "@scola/worker": "^3.2.0",
     "bcrypt": "^3.0.6",
-    "buffer": "^5.4.0",
+    "buffer": "^5.4.2",
     "busboy": "^0.3.1",
     "fs-extra": "^8.1.0",
     "lodash-es": "^4.17.15",
