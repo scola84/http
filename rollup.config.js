@@ -1,12 +1,4 @@
-import {
-  name,
-  version
-} from './package.json'
-
-const {
-  banner,
-  plugins
-} = require('@scola/worker/rollup')
+const { plugins } = require('@scola/worker/rollup')
 
 const external = [
   '@scola/worker',
@@ -40,7 +32,6 @@ export default [{
   input,
   external,
   output: {
-    banner: banner(name, version),
     extend: true,
     file: 'dist/http.umd.js',
     format: 'umd',
@@ -52,7 +43,6 @@ export default [{
   input,
   external,
   output: {
-    banner: banner(name, version),
     file: 'dist/http.cjs.js',
     format: 'cjs',
     globals
