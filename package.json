@@ -7,7 +7,7 @@
   "name": "@scola/http",
   "repository": "github:scola84/http",
   "unpkg": "./dist/http.umd.js",
-  "version": "6.0.4",
+  "version": "6.0.5",
   "files": [
     "dist/",
     "LICENSE",
