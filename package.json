@@ -26,7 +26,7 @@
     "standard": "^14.1.0"
   },
   "dependencies": {
-    "@scola/worker": "^3.4.2",
+    "@scola/worker": "^3.4.3",
     "bcrypt": "^3.0.6",
     "buffer": "^5.4.2",
     "busboy": "^0.3.1",
