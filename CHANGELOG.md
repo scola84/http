@@ -1,3 +1,7 @@
+## 6.0.10 (Tue Sep 10 2019)
+
+* Update dependencies
+
 ## 6.0.9
 
 * Update scripts
