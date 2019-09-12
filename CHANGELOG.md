@@ -1,3 +1,7 @@
+## 6.0.11 (Thu Sep 12 2019)
+
+* Implement default decoding (octet-stream)
+
 ## 6.0.10 (Tue Sep 10 2019)
 
 * Update dependencies
