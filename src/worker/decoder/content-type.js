@@ -4,8 +4,20 @@ export class ContentTypeDecoder extends Manager {
   constructor (options = {}) {
     super(options)
 
+    this._default = null
     this._strict = null
+
+    this.setDefault(options.default)
     this.setStrict(options.strict)
+  }
+
+  getDefault () {
+    return this._default
+  }
+
+  setDefault (value = null) {
+    this._default = value
+    return this
   }
 
   getStrict () {
@@ -25,13 +37,17 @@ export class ContentTypeDecoder extends Manager {
     const type = message.parseHeader('content-type')
 
     if (typeof type.value === 'undefined') {
-      return false
+      if (this._default === null) {
+        return false
+      }
+
+      type.value = [this._default]
     }
 
     if (typeof this._pool[type.value[0]] === 'undefined') {
       if (this._strict === true) {
-        throw new Error('415 Decoder not implemented ' +
-          ` (${type[0]})`)
+        throw new Error('415 Decoder not implemented' +
+          ` (${type.value[0]})`)
       }
 
       return false

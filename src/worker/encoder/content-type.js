@@ -4,8 +4,20 @@ export class ContentTypeEncoder extends Manager {
   constructor (options = {}) {
     super(options)
 
+    this._default = null
     this._strict = null
+
+    this.setDefault(options.default)
     this.setStrict(options.strict)
+  }
+
+  getDefault () {
+    return this._default
+  }
+
+  setDefault (value = null) {
+    this._default = value
+    return this
   }
 
   getStrict () {
@@ -17,19 +29,19 @@ export class ContentTypeEncoder extends Manager {
     return this
   }
 
-  decide (message, data) {
+  decide (message) {
     if (typeof message.body.type !== 'undefined') {
       return true
-    }
-
-    if (typeof data === 'undefined') {
-      return false
     }
 
     const type = message.parseHeader('content-type')
 
     if (typeof type.value === 'undefined') {
-      return false
+      if (this._default === null) {
+        return false
+      }
+
+      type.value = [this._default]
     }
 
     if (typeof this._pool[type.value[0]] === 'undefined') {

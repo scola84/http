@@ -22,6 +22,7 @@ import {
   JsonEncoder,
   MsgpackDecoder,
   MsgpackEncoder,
+  OctetStreamDecoder,
   PlainDecoder,
   PlainEncoder,
   RequestLineWriter,
@@ -59,6 +60,7 @@ export function createClient (type = 'values') {
   const jsonEncoder = new JsonEncoder()
   const msgpackDecoder = new MsgpackDecoder()
   const msgpackEncoder = new MsgpackEncoder()
+  const octetStreamDecoder = new OctetStreamDecoder()
   const plainDecoder = new PlainDecoder()
   const plainEncoder = new PlainEncoder()
   const requestLineWriter = new RequestLineWriter()
@@ -100,19 +102,21 @@ export function createClient (type = 'values') {
     .bypass(responseTransformer)
 
   contentTypeDecoder
+    .setDefault('application/octet-stream')
     .setStrict(false)
     .manage(htmlDecoder.getType(), htmlDecoder)
     .manage(jsonDecoder.getType(), jsonDecoder)
     .manage(msgpackDecoder.getType(), msgpackDecoder)
-    .manage(urlencodedDecoder.getType(), urlencodedDecoder)
+    .manage(octetStreamDecoder.getType(), octetStreamDecoder)
     .manage(plainDecoder.getType(), plainDecoder)
+    .manage(urlencodedDecoder.getType(), urlencodedDecoder)
 
   contentTypeEncoder
     .setStrict(false)
+    .manage(formdataEncoder.getType(), formdataEncoder)
     .manage(htmlEncoder.getType(), htmlEncoder)
     .manage(jsonEncoder.getType(), jsonEncoder)
     .manage(msgpackEncoder.getType(), msgpackEncoder)
-    .manage(formdataEncoder.getType(), formdataEncoder)
     .manage(plainEncoder.getType(), plainEncoder)
     .manage(urlencodedEncoder.getType(), urlencodedEncoder)
 

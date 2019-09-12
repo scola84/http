@@ -28,6 +28,7 @@ import {
   JsonEncoder,
   MsgpackDecoder,
   MsgpackEncoder,
+  OctetStreamDecoder,
   PlainDecoder,
   PlainEncoder,
   RequestLineParser,
@@ -75,6 +76,7 @@ export function createServer (options = {}) {
   const jsonEncoder = new JsonEncoder()
   const msgpackDecoder = new MsgpackDecoder()
   const msgpackEncoder = new MsgpackEncoder()
+  const octetStreamDecoder = new OctetStreamDecoder()
   const plainDecoder = new PlainDecoder()
   const plainEncoder = new PlainEncoder()
   const requestLineParser = new RequestLineParser()
@@ -118,20 +120,22 @@ export function createServer (options = {}) {
     .connect(bodyWriter)
 
   contentTypeDecoder
+    .setDefault('application/octet-stream')
     .setStrict(false)
+    .manage(formdataDecoder.getType(), formdataDecoder)
     .manage(htmlDecoder.getType(), htmlDecoder)
     .manage(jsonDecoder.getType(), jsonDecoder)
     .manage(msgpackDecoder.getType(), msgpackDecoder)
-    .manage(formdataDecoder.getType(), formdataDecoder)
-    .manage(urlencodedDecoder.getType(), urlencodedDecoder)
+    .manage(octetStreamDecoder.getType(), octetStreamDecoder)
     .manage(plainDecoder.getType(), plainDecoder)
+    .manage(urlencodedDecoder.getType(), urlencodedDecoder)
 
   contentTypeEncoder
     .setStrict(false)
+    .manage(formdataEncoder.getType(), formdataEncoder)
     .manage(htmlEncoder.getType(), htmlEncoder)
     .manage(jsonEncoder.getType(), jsonEncoder)
     .manage(msgpackEncoder.getType(), msgpackEncoder)
-    .manage(formdataEncoder.getType(), formdataEncoder)
     .manage(plainEncoder.getType(), plainEncoder)
     .manage(urlencodedEncoder.getType(), urlencodedEncoder)
 
@@ -142,11 +146,11 @@ export function createServer (options = {}) {
     .manage(chunkedEncoder.getEncoding(), chunkedEncoder)
 
   contentTypeHeader
+    .addType(formdataEncoder.getType())
     .addType(jsonEncoder.getType())
     .addType(msgpackEncoder.getType())
-    .addType(formdataEncoder.getType())
-    .addType(urlencodedEncoder.getType())
     .addType(plainEncoder.getType())
+    .addType(urlencodedEncoder.getType())
 
   if (listen) {
     net.createServer((socket) => {
