@@ -1,3 +1,7 @@
+## 6.0.12 (Fri Sep 13 2019)
+
+* Fix Buffer concat in OctetStreamDecoder
+
 ## 6.0.11 (Thu Sep 12 2019)
 
 * Implement default decoding (octet-stream)
