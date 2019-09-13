@@ -15,7 +15,7 @@ export class ContentEncodingDecoder extends Manager {
     for (let i = 0; i < content.values.length; i += 1) {
       if (typeof this._pool[content.values[i][0]] === 'undefined') {
         throw new Error('501 Decoder not implemented' +
-          ` (${content[i][0]})`)
+          ` (${content.values[i][0]})`)
       }
     }
 
