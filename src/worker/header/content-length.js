@@ -28,7 +28,7 @@ export class ContentLengthHeader extends Worker {
       length = message.body.length
     }
 
-    if (typeof data !== 'undefined' && data !== null) {
+    if (Buffer.isBuffer(data) || typeof data === 'string') {
       length = Buffer.byteLength(data)
     }
 
