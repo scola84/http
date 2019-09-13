@@ -22,7 +22,7 @@ export class OctetStreamDecoder extends Worker {
   concat (message, data) {
     message.parser.octetstream = Buffer.concat([
       message.parser.octetstream || Buffer.from(''),
-      data
+      data || Buffer.from('')
     ])
 
     return message.parser.octetstream
