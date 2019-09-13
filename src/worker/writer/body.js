@@ -17,10 +17,7 @@ export class BodyWriter extends Streamer {
   }
 
   writeData (message, data, callback) {
-    if (
-      Buffer.isBuffer(data) ||
-      typeof data === 'string'
-    ) {
+    if (Buffer.isBuffer(data) || typeof data === 'string') {
       this.write(message, data, callback)
     }
 

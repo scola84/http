@@ -18,10 +18,7 @@ export class ResponseLineParser extends Worker {
   }
 
   act (message, data, callback) {
-    if (
-      data === null ||
-      data.length === 0
-    ) {
+    if (data === null || data.length === 0) {
       throw new Error('Empty reply from server')
     }
 

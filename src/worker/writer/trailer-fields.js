@@ -17,10 +17,7 @@ export class TrailerFieldsWriter extends Worker {
   decide (message) {
     const encoding = message.headers['transfer-encoding'] || ''
 
-    if (
-      message.state.body === true &&
-      encoding.indexOf('chunked') !== -1
-    ) {
+    if (message.state.body === true && encoding.indexOf('chunked') !== -1) {
       return true
     }
 

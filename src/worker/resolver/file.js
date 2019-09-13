@@ -30,10 +30,7 @@ export class FileResolver extends Streamer {
   }
 
   decide (request, data) {
-    if (
-      request.method === 'GET' &&
-      typeof data.file !== 'undefined'
-    ) {
+    if (request.method === 'GET' && typeof data.file !== 'undefined') {
       return true
     }
 

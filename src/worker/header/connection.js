@@ -30,10 +30,7 @@ export class ConnectionHeader extends Worker {
   setResponseHeader (message) {
     message.headers.connection = 'close'
 
-    if (
-      message.protocol.version === '1.1' &&
-      message.status === 200
-    ) {
+    if (message.protocol.version === '1.1' && message.status === 200) {
       message.headers.connection = 'keep-alive'
     }
   }
