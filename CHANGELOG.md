@@ -1,3 +1,11 @@
+## 6.0.13 (Fri Sep 13 2019)
+
+* Fix error handling in writers
+* Fix if syntax
+* Fix data check in ContentLengthHeader
+* Fix variable in ContentEncodingDecoder
+* Fix ContentTypeHeader addType in server factory
+
 ## 6.0.12 (Fri Sep 13 2019)
 
 * Fix Buffer concat in OctetStreamDecoder
