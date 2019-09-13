@@ -12,9 +12,9 @@ export class ResponseLineWriter extends Worker {
     return message.state.line !== true
   }
 
-  err (message, data, callback) {
-    data = this.writeData(message, data)
-    this.fail(message, data, callback)
+  err (message, error, callback) {
+    error.data = this.writeData(message, error.data)
+    this.fail(message, error, callback)
   }
 
   writeData (message, data) {

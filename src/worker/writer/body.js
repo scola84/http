@@ -7,9 +7,9 @@ export class BodyWriter extends Streamer {
     this.pass(message, data, callback)
   }
 
-  err (message, data, callback) {
-    this.writeData(message, data, callback)
-    this.fail(message, data, callback)
+  err (message, error, callback) {
+    this.writeData(message, error.data, callback)
+    this.fail(message, error, callback)
   }
 
   createWriteStream (message, data, callback) {

@@ -11,9 +11,9 @@ export class HeaderFieldsWriter extends Worker {
     return message.state.headers !== true
   }
 
-  err (message, data, callback) {
-    data = this.writeData(message, data)
-    this.fail(message, data, callback)
+  err (message, error, callback) {
+    error.data = this.writeData(message, error.message)
+    this.fail(message, error, callback)
   }
 
   isEmpty (data) {
