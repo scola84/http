@@ -146,7 +146,6 @@ export function createServer (options = {}) {
     .manage(chunkedEncoder.getEncoding(), chunkedEncoder)
 
   contentTypeHeader
-    .addType(formdataEncoder.getType())
     .addType(jsonEncoder.getType())
     .addType(msgpackEncoder.getType())
     .addType(plainEncoder.getType())
