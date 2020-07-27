@@ -122,6 +122,7 @@ export default class Request extends Message {
     this._url = null;
 
     this.method = options.method;
+    this.response = options.response
     this.retry = options.retry;
     this.timestamp = Date.now();
     this.url = options.url;
@@ -131,7 +132,7 @@ export default class Request extends Message {
     options.request = this;
     options.socket = this.socket;
 
-    return new Response(options);
+    return new Response(Object.assign({}, this.response, options));
   }
 
   formatAuth() {
