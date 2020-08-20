@@ -9,7 +9,7 @@
   "jsnext:main": "./index.js",
   "dependencies": {
     "@scola/worker": "^2.15.0",
-    "bcrypt": "^3.0.5",
+    "bcrypt": "^5.0.0",
     "buffer": "^5.2.1",
     "decode-uri-component": "^0.2.0",
     "lodash-es": "^4.17.11",
